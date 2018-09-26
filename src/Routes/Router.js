@@ -8,10 +8,17 @@ import CategoryView  from '../Vistas/CategoryView';
 import LaundryView from '../Vistas/LaundryView';
 import MissingView from '../Vistas/MissingView';
 import Home from '../Vistas/Home';
+import Sets from '../Vistas/Sets';
 
 export const SignedIn = createStackNavigator({
   Home:{
     screen:Home,
+    navigationOptions:{
+      header:null,
+    },
+  },
+  Sets:{
+    screen:Sets,
     navigationOptions:{
       header:null,
     },
