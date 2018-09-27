@@ -9,7 +9,7 @@ export default class Home extends Component{
     super(props)
   }
   onPressCategory = ()=>{
-    this.props.navigation.navigate("Sets")
+    this.props.navigation.navigate("CategoryView")
   }
 
   onPressLaundry = ()=>{

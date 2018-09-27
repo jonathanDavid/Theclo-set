@@ -8,7 +8,7 @@ export default class CategoryView extends Component{
     super(props)
   }
   onPressBack = ()=>{
-    this.props.navigation.navigate("MissingView")
+    this.props.navigation.navigate("CategoriesView")
   }
   render() {
     return (

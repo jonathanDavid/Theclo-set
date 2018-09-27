@@ -4,6 +4,7 @@ import { Root } from "native-base";
 import { Font, AppLoading } from "expo";
 
 import {RootNavigator} from './src/Routes/Router';
+import {isSignedIn} from './src/Auth/Auth';
 
 export default class App extends Component{
   constructor(props){
@@ -16,6 +17,17 @@ export default class App extends Component{
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
     });
     this.setState({ loading: false });
+  }
+
+  componentDidMount(){
+    isSignedIn("USER")
+    .then(theValue => {
+      if(theValue=='empty'){
+        this.setState({signedIn: false, checkedSignIn:true})
+      }else{
+        this.setState({signedIn: true, checkedSignIn:true})
+      }
+    }).catch(err=>alert("Problem"));
   }
 
   render() {

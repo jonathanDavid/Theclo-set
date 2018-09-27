@@ -3,7 +3,7 @@ import {Platform, StyleSheet, Text, View, Image,Button, ScrollView} from 'react-
 
 import Category from "../Componentes/Category";
 
-export default class Sets extends Component{
+export default class CategoriesView extends Component{
   constructor(props){
     super(props);
   }
