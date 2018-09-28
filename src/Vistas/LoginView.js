@@ -41,7 +41,7 @@ export default class LoginView extends Component {
             <CardItem footer bordered>
               <Text>You dont have an account?</Text>
               <Button onPress={this.onPressJoinButton}  transparent info>
-                <Text>Join US</Text>
+                <Text>Join Us</Text>
               </Button>
             </CardItem>
           </Card>

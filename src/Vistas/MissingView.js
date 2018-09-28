@@ -8,7 +8,7 @@ export default class MissingView extends Component{
     super(props)
   }
   onPressBack = ()=>{
-    this.props.navigation.navigate("MenuView")
+    this.props.navigation.goBack();
   }
   render() {
     return (

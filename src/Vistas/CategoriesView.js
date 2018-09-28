@@ -2,8 +2,11 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, View, Image,Button, ScrollView} from 'react-native';
 
 import Category from "../Componentes/Category";
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {actionCreators as Actions} from '../Redux/Actions';
 
-export default class CategoriesView extends Component{
+class CategoriesView extends Component{
   constructor(props){
     super(props);
   }
@@ -26,29 +29,10 @@ export default class CategoriesView extends Component{
               </View>
 
               <View style={styles.duoCategory}>
-                <Category onPress={this.onPressCategory} categoryTitle='Categoria 2' imgSource="./shirt.png"/>
-                <Category onPress={this.onPressCategory} categoryTitle='Categoria 3' imgSource="./shirt.png"/>
+                <Category onPress={this.onPressCategory} categoryTitle={this.props.Categories[2]} imgSource="./shirt.png"/>
+                <Category onPress={this.onPressCategory} categoryTitle={this.props.Categories[3]} imgSource="./shirt.png"/>
               </View>
 
-              <View style={styles.duoCategory}>
-                <Category categoryTitle='Categoria 4' imgSource="./shirt.png"/>
-                <Category categoryTitle='Categoria 5' imgSource="./shirt.png"/>
-              </View>
-
-              <View style={styles.duoCategory}>
-                <Category categoryTitle='Categoria 6' imgSource="./shirt.png"/>
-                <Category categoryTitle='Categoria 7' imgSource="./shirt.png"/>
-              </View>
-
-              <View style={styles.duoCategory}>
-                <Category categoryTitle='Categoria 8' imgSource="./shirt.png"/>
-                <Category categoryTitle='Categoria 9' imgSource="./shirt.png"/>
-              </View>
-
-              <View style={styles.duoCategory}>
-                <Category categoryTitle='Categoria 10' imgSource="./shirt.png"/>
-                <Category categoryTitle='Categoria 11' imgSource="./shirt.png"/>
-              </View>
 
             </ScrollView>
         </View>
@@ -88,3 +72,26 @@ const styles = StyleSheet.create({
   },
 
 });
+
+function mapStateToProps(state){
+    const {Categories,Loundry,Missing} = state;
+    return{
+      Categories,
+      Loundry,
+      Missing
+    };
+
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    addCategory: bindActionCreators(Actions.addCategory,dispatch),
+    sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
+    deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(CategoriesView);

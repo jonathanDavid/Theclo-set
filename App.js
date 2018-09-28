@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 //import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
 import { Root } from "native-base";
 import { Font, AppLoading } from "expo";
-
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
 import {RootNavigator} from './src/Routes/Router';
 import {isSignedIn} from './src/Auth/Auth';
+
+
+import Reducer from './src/Redux/Reducers'
+const store= createStore(Reducer);
 
 export default class App extends Component{
   constructor(props){
@@ -18,7 +23,6 @@ export default class App extends Component{
     });
     this.setState({ loading: false });
   }
-
   componentDidMount(){
     isSignedIn("USER")
     .then(theValue => {
@@ -39,6 +43,10 @@ export default class App extends Component{
      );
    }
    const Layout = RootNavigator();
-   return  <Layout />
+   return (
+      <Provider store={store}>
+        <Layout />
+      </Provider>
+   );
  }
 }

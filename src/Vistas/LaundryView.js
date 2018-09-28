@@ -9,7 +9,7 @@ export default class  LaundryView extends Component{
   }
 
   onPressBack = ()=>{
-    this.props.navigation.navigate("MenuView")
+    this.props.navigation.goBack();
   }
   render() {
     return (
