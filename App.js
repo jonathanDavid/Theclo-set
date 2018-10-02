@@ -6,7 +6,7 @@ import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import {RootNavigator} from './src/Routes/Router';
 import {isSignedIn} from './src/Auth/Auth';
-
+console.disableYellowBox = true;
 
 import Reducer from './src/Redux/Reducers'
 const store= createStore(Reducer);

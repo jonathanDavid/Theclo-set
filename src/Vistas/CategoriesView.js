@@ -4,35 +4,54 @@ import {Platform, StyleSheet, Text, View, Image,Button, ScrollView} from 'react-
 import Category from "../Componentes/Category";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {actionCreators as Actions} from '../Redux/Actions';
+import {actionsCreator as Actions} from '../Redux/Actions';
 
 class CategoriesView extends Component{
   constructor(props){
     super(props);
   }
 
-  onPressCategory=()=>{
+  onPressCategory=(index)=>{
+    this.props.categorySelected(index)
     this.props.navigation.navigate("CategoryView")
+  }
+
+
+  renderFistCategory(){
+    if(this.props.Categories.length > 0){
+       return <Category onPress={this.onPressCategory.bind(this,0)} categoryTitle={this.props.Categories[0][0]} imgSource="./shirt.png"/>;
+     }else{
+     return null;
+   }
+  }
+
+  renderRestCategory(){
+    let code = [];
+	  for (var i=1; i < this.props.Categories.length; i=i+2) {
+		    code.push(
+          <View style={styles.duoCategory}>
+              <Category onPress={this.onPressCategory.bind(this,i)} categoryTitle={this.props.Categories[i][0]} imgSource="./shirt.png"/>
+              <Category onPress={this.onPressCategory.bind(this,i+1)} categoryTitle={this.props.Categories[i+1][0]} imgSource="./shirt.png"/>
+          </View>
+		      )
+	  }
+    return(code)
   }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.topTitle}>
-          <Text style={styles.title}>Preference Sets</Text>
+          <Text style={styles.title}>Categories</Text>
         </View>
         <View style={styles.scrollView}>
           <ScrollView>
               <View style={styles.duoCategory}>
-                <Category  categoryTitle='' imgSource='./plus.png'/>
-                <Category onPress={this.onPressCategory} categoryTitle='Categoria 1' imgSource="./shirt.png"/>
+                <Category  categoryTitle='New' imgSource='./plus.png'/>
+                {this.renderFistCategory()}
               </View>
 
-              <View style={styles.duoCategory}>
-                <Category onPress={this.onPressCategory} categoryTitle={this.props.Categories[2]} imgSource="./shirt.png"/>
-                <Category onPress={this.onPressCategory} categoryTitle={this.props.Categories[3]} imgSource="./shirt.png"/>
-              </View>
-
+              {this.renderRestCategory()}
 
             </ScrollView>
         </View>
@@ -74,11 +93,12 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing} = state;
+    const {Categories,Loundry,Missing,CategorySelected} = state;
     return{
       Categories,
       Loundry,
-      Missing
+      Missing,
+      CategorySelected,
     };
 
 }
@@ -88,6 +108,7 @@ function mapDispatchToProps(dispatch){
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
     sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
     deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
+    categorySelected: bindActionCreators(Actions.categorySelected,dispatch),
   };
 }
 

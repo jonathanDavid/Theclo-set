@@ -1,4 +1,4 @@
-import {ADD_CATEGORY, ADD_CLOTHES, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING} from './Types';
+import {ADD_CATEGORY, ADD_CLOTHES, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED} from './Types';
 
 //Estado Inicial
 const initialState ={
@@ -11,6 +11,7 @@ const initialState ={
               ],
     Loundry:['Prenda 1','Prenda 2','Prenda 3','Prenda 4','Prenda 5'],
     Missing:['Prenda 6','Prenda 7','Prenda 8','Prenda 9','Prenda 10'],
+    CategorySelected:0,
 }
 
 
@@ -32,14 +33,35 @@ function applySendLoundry(state,payload,Loundry){
 function applyDeleteLoundry(state,payload,Loundry){
   return{
     ...state,
-    Loundry: Loundry.filter((todos,i)=>i!=payload),
+    Loundry: Loundry.filter((Loundry,i)=>i!=payload),
   }
+}
+
+function applySendMissing(state,payload,Missing){
+  return{
+    ...state,
+    Missing:[...Missing,payload],
+  };
+}
+
+function applyDeleteMissing(state,payload,Missing){
+  return{
+    ...state,
+    Missing: Missing.filter((Missing,i)=>i!=payload),
+  }
+}
+
+function applyCategorySelected(state,payload,CategorySelected){
+  return{
+    ...state,
+    CategorySelected:payload,
+  };
 }
 
 
 //reducer funtion
 export default Reducer = (state=initialState, action)=>{
-  const {Categories,Loundry,Missing} = state;
+  const {Categories,Loundry,Missing, CategorySelected} = state;
   const {type,payload} = action;
 
   switch (type) {
@@ -53,15 +75,19 @@ export default Reducer = (state=initialState, action)=>{
       return applySendLoundry(state,payload,Loundry);
     break;
     case SEND_MISSING:
-
+      return applySendMissing(state,payload,Missing);
     break;
     case DELETE_LOUNDRY:
       return applyDeleteLoundry(state,payload,Loundry);
     break;
     case DELETE_MISSING:
-
+      return applyDeleteMissing(state,payload,Missing);
+    break;
+    case CATEGORY_SELECTED:
+      return applyCategorySelected(state,payload,CategorySelected)
     break;
     default:
+      return state;
 
   }
 
