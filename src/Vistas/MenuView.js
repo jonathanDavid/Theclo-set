@@ -19,6 +19,10 @@ export default class MenuView extends Component {
     this.props.navigation.navigate("MissingView")
   }
 
+  onPressSets = ()=>{
+    this.props.navigation.navigate("SetsView")
+  }
+
   render() {
     return (
           <View style={[styles.s8ab8b2a6]}>
@@ -26,13 +30,13 @@ export default class MenuView extends Component {
               <View style={styles.s41ccc30f}>
                 <TouchableOpacity onPress={this.onPressCloset}>
                   <Image source={require("./images/closet_icon.png")} style={styles.s98059f0a} />
-                  <Text style={styles.sda221942}>CLOSET</Text>
+                  <Text style={styles.sda221942}> CLOSET</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.sf3785ddd}>
-                <TouchableOpacity onPress={this.onPress}>
+                <TouchableOpacity onPress={this.onPressSets}>
                   <Image source={require("./images/sets_icon.png")} style={styles.s8f443a62} />
-                  <Text style={styles.s73b11ae0}>SETS</Text>
+                  <Text style={styles.s73b11ae0}>     SETS</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -51,26 +55,26 @@ export default class MenuView extends Component {
               <View style={styles.s317ff90f}>
                 <TouchableOpacity onPress={this.onPressLaundry}>
                   <Image source={require("./images/laundry_icon.png")} style={styles.sfc68a166} />
-                  <Text style={styles.sedb32a67}>LAUNDRY</Text>
+                  <Text style={styles.sedb32a67}> LAUNDRY</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.s444f37d1}>
                 <TouchableOpacity onPress={this.onPressMissing}>
                   <Image source={require("./images/socks_icon.png")} style={styles.sc36b1c8e} />
-                  <Text style={styles.s8c9efc64}>MISSING</Text>
+                  <Text style={styles.s8c9efc64}> MISSING</Text>
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={[styles.s923b1cd6, { flexDirection: "row" }]}>
-              <View style={styles.s617c1fc1} />
-              <View style={styles.s4d5fab9b}>
-                <Image source={require("./images/Captura.png")} style={styles.sb6e3e2b9} />
-                <View style={styles.s97acb6cf}>
-                  <Image style={styles.s0d2109e8} />
-                </View>
-              </View>
-              <View style={styles.sb6315268} />
-            </View>
+            {/*            <View style={[styles.s923b1cd6, { flexDirection: "row" }]}>
+                          <View style={styles.s617c1fc1} />
+                          <View style={styles.s4d5fab9b}>
+                            <Image source={require("./images/Captura.png")} style={styles.sb6e3e2b9} />
+                            <View style={styles.s97acb6cf}>
+                              <Image style={styles.s0d2109e8} />
+                            </View>
+                          </View>
+                          <View style={styles.sb6315268} />
+                        </View>*/}
           </View>
     );
   }
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
   },
   s923b1cd6: { backgroundColor: `rgba(255, 255, 255, 1)`, flex: 0.3 },
   s8ab8b2a6: {
-    backgroundColor: `rgba(255, 235, 59, 1)`,
+    backgroundColor: `rgba(255, 235, 59,1)`,
     borderWidth: 2,
     flex: 1,
     flexWrap: `wrap`

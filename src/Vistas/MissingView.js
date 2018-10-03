@@ -13,10 +13,20 @@ class MissingView extends Component{
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
+  onSwipeL=(index)=>{
+    //Send Loundry
+    item = this.props.Missing[index];
+    this.props.sendLoundry(item);
+    this.props.deleteMissing(index);
+  }
+
+  onSwipeR=(index)=>{
+    this.props.deleteMissing(index);
+  }
   render() {
     return (
       <Container>
-          <SwipeableListView onPressButtonBack={this.onPressBack} listViewData={this.props.Missing} btnRBkgColor='#c6c6bd' btnLBkgColor='#215d9a' headerColor='#be1e2d' Title={"Missing"}></SwipeableListView>
+          <SwipeableListView onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR} onPressButtonBack={this.onPressBack} listViewData={this.props.Missing} btnRBkgColor='#6432c8' btnLBkgColor='#0b6623' headerColor='#be1e2d' Title={"Missing"}></SwipeableListView>
       </Container>
     );
   }
@@ -34,9 +44,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    addCategory: bindActionCreators(Actions.addCategory,dispatch),
     sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
-    deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
+    deleteMissing: bindActionCreators(Actions.deleteMissing,dispatch),
   };
 }
 

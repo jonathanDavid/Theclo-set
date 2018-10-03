@@ -2,13 +2,12 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, View, Image} from 'react-native';
 import {Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
 
-import Category from "../Componentes/Category";
 import CardViewer from "../Componentes/CardViewer";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 
-class CategoriesView extends Component{
+class SetsView extends Component{
   constructor(props){
     super(props);
   }
@@ -18,8 +17,8 @@ class CategoriesView extends Component{
   }
 
   onPressItem=(index)=>{
-    this.props.categorySelected(index);
-    this.props.navigation.navigate("CategoryView");
+    this.props.setSelected(index)
+    this.props.navigation.navigate("SetView")
   }
 
 
@@ -27,7 +26,7 @@ class CategoriesView extends Component{
     return (
       <Container>
         <Content>
-            <CardViewer Data={this.props.Categories} onPressItem={this.onPressItem} Title="Categories" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
+            <CardViewer Data={this.props.Sets} onPressItem={this.onPressItem} Title="Sets" onPressButtonBack={this.onPressBack} headerColor='#4596ab'></CardViewer>
         </Content>
       </Container>
     );
@@ -35,12 +34,14 @@ class CategoriesView extends Component{
 }
 
 
+
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing,CategorySelected} = state;
+    const {Categories,Loundry,Missing,Sets,CategorySelected} = state;
     return{
       Categories,
       Loundry,
       Missing,
+      Sets,
       CategorySelected,
     };
 
@@ -48,12 +49,12 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    addCategory: bindActionCreators(Actions.addCategory,dispatch),
-    categorySelected: bindActionCreators(Actions.categorySelected,dispatch),
+    addSet: bindActionCreators(Actions.addSet,dispatch),
+    setSelected: bindActionCreators(Actions.setSelected,dispatch),
   };
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-  )(CategoriesView);
+  )(SetsView);

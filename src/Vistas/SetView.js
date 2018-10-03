@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
 
-import SwipeableListView from '../Componentes/SwipeableListView';
+import ListViewer from '../Componentes/ListViewer';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 
-class  LaundryView extends Component{
+class  SetView extends Component{
   constructor(props){
     super(props)
   }
@@ -14,32 +14,28 @@ class  LaundryView extends Component{
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
-  onSwipeL=(index)=>{
-    //Send Missing
-    item = this.props.Loundry[index];
-    this.props.sendMissing(item);
-    this.props.deleteLoundry(index);
-  }
 
-  onSwipeR=(index)=>{
-    this.props.deleteLoundry(index);
-  }
+
+
 
   render() {
     return (
       <Container>
-          <SwipeableListView onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR} onPressButtonBack={this.onPressBack} listViewData={this.props.Loundry} btnRBkgColor='#6432c8' btnLBkgColor='#be1e2d' headerColor='#0b6623' Title={"Loundry"}></SwipeableListView>
+          <ListViewer  onPressButtonBack={this.onPressBack} listViewData={this.props.Sets[this.props.SetSelected].slice(1)} btnRBkgColor='#6432c8' btnLBkgColor='#be1e2d' headerColor='#4596ab' Title={this.props.Sets[this.props.SetSelected][0]}></ListViewer>
       </Container>
     );
   }
 }
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing} = state;
+    const {Categories,Loundry,Missing,Sets,CategorySelected,SetSelected} = state;
     return{
       Categories,
       Loundry,
-      Missing
+      Missing,
+      Sets,
+      CategorySelected,
+      SetSelected
     };
 
 }
@@ -54,4 +50,4 @@ function mapDispatchToProps(dispatch){
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-  )(LaundryView);
+)(SetView);

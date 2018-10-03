@@ -24,7 +24,7 @@ class CategoryView extends Component{
   render() {
     return (
       <Container>
-          <SwipeableListView onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()} btnRBkgColor='#be1e2d' btnLBkgColor='#215d9a' headerColor='#c6c6bd' Title={"Class"}></SwipeableListView>
+          <SwipeableListView onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()} btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8' Title={this.props.Categories[this.props.CategorySelected][0]}></SwipeableListView>
       </Container>
     );
   }

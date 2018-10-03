@@ -5,7 +5,8 @@ import {
 } from 'react-navigation';
 
 import MenuView from '../Vistas/MenuView';
-import Home from '../Vistas/Home';
+import SetsView from '../Vistas/SetsView';
+import SetView from '../Vistas/SetView';
 import CategoriesView from '../Vistas/CategoriesView';
 import CategoryView  from '../Vistas/CategoryView';
 import LaundryView from '../Vistas/LaundryView';
@@ -13,7 +14,7 @@ import MissingView from '../Vistas/MissingView';
 
 import LoginView from '../Vistas/LoginView';
 import CreateAccountView from '../Vistas/CreateAccountView';
-
+import CardViewer from '../Componentes/CardViewer';
 
 
 export const SignedIn = createStackNavigator({
@@ -23,8 +24,14 @@ export const SignedIn = createStackNavigator({
       header:null,
     },
   },
-  Home:{
-    screen:Home,
+  SetsView:{
+    screen:SetsView,
+    navigationOptions:{
+      header:null,
+    },
+  },
+  SetView:{
+    screen:SetView,
     navigationOptions:{
       header:null,
     },

@@ -21,7 +21,10 @@ function mapDispatchToProps(dispatch){
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
     sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
     deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
-    categorySelected: bindActionCreators(Actions.categorySelected,dispatch),    
+    categorySelected: bindActionCreators(Actions.categorySelected,dispatch),
+    addChothes: bindActionCreators(Actions.addChothes,dispatch),
+    sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
+    deleteMissing: bindActionCreators(Actions.categorySelected,dispatch), 
   };
 }
 
