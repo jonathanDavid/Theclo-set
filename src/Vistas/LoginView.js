@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import {StyleSheet,StatusBar } from 'react-native';
-import { Container,Card,Label, Header,Form, Content,Button,Text,CardItem , Item,Body,Title, Input, Icon } from 'native-base';
+import { Container,Card,Label, Header,Form, Content,Button,Text,CardItem , Item,Body,Title, Input, Icon,Right } from 'native-base';
 
 export default class LoginView extends Component {
   constructor(props){
     super(props);
   }
   onPressJoinButton=()=>{
-    this.props.navigation.navigate("CreateAccountView")
+    this.props.navigation.navigate("CreateAccountView");
+  }
+  goMenu=()=>{
+    this.props.navigation.navigate("SignedIn");
   }
   render() {
     return (
@@ -15,8 +18,14 @@ export default class LoginView extends Component {
         <Header style={{backgroundColor: "#cccc00"}}>
           <StatusBar backgroundColor={"#cccc00"} barStyle="light-content"/>
           <Body>
-             <Title>Log In</Title>
+            <Title>Log In</Title>
           </Body>
+          <Right >
+            <Button onPress={this.goMenu} transparent>
+              <Icon active name='home' />
+            </Button>
+
+          </Right>
         </Header>
         <Content style ={styles.cardLayout}>
           <Card>
@@ -24,18 +33,18 @@ export default class LoginView extends Component {
               <Text>Welcome</Text>
             </CardItem>
             <Form>
-                <Item style ={styles.inputLayout} floatingLabel>
-                  <Label>User Name</Label>
-                  <Icon active name='person' />
-                  <Input/>
-                </Item>
+              <Item style ={styles.inputLayout} floatingLabel>
+                <Label>User Name</Label>
+                <Icon active name='person' />
+                <Input/>
+              </Item>
 
-                <Item style ={styles.inputLayout} floatingLabel>
-                  <Label>Password</Label>
-                  <Icon active name='lock' />
-                  <Input/>
-                </Item>
-                <Button style ={styles.buttonLayout} block warning><Text> Go </Text></Button>
+              <Item style ={styles.inputLayout} floatingLabel>
+                <Label>Password</Label>
+                <Icon active name='lock' />
+                <Input/>
+              </Item>
+              <Button style ={styles.buttonLayout} block warning><Text> Go </Text></Button>
             </Form>
 
             <CardItem footer bordered>

@@ -46,7 +46,7 @@ export default class CardViewer extends Component {
             </Button>
           </Left>
           <Body>
-             <Title>{this.props.Title}</Title>
+            <Title>{this.props.Title}</Title>
           </Body>
         </Header>
         <Content>

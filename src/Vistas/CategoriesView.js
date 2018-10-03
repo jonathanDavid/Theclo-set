@@ -27,7 +27,7 @@ class CategoriesView extends Component{
     return (
       <Container>
         <Content>
-            <CardViewer Data={this.props.Categories} onPressItem={this.onPressItem} Title="Categories" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
+          <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categories} onPressItem={this.onPressItem} Title="Categories" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
         </Content>
       </Container>
     );
