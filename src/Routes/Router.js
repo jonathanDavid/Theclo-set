@@ -7,6 +7,7 @@ import {
 import MenuView from '../Vistas/MenuView';
 import SetsView from '../Vistas/SetsView';
 import SetView from '../Vistas/SetView';
+import AddSetView from '../Vistas/AddSetView';
 import CategoriesView from '../Vistas/CategoriesView';
 import CategoryView  from '../Vistas/CategoryView';
 import LaundryView from '../Vistas/LaundryView';
@@ -20,6 +21,12 @@ import CardViewer from '../Componentes/CardViewer';
 export const SignedIn = createStackNavigator({
   MenuView:{
     screen:MenuView,
+    navigationOptions:{
+      header:null,
+    },
+  },
+  AddSetView:{
+    screen:AddSetView,
     navigationOptions:{
       header:null,
     },

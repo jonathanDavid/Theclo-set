@@ -14,17 +14,6 @@ export default class ListViewer extends Component {
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: this.props.headerColor}}>
-          <StatusBar backgroundColor={this.props.headerColor} barStyle="light-content"/>
-          <Left>
-            <Button onPress={this.props.onPressButtonBack} transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body>
-             <Title>{this.props.Title}</Title>
-          </Body>
-        </Header>
         <Content>
           <List
             leftOpenValue={0}

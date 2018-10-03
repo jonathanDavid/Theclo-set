@@ -17,8 +17,12 @@ class SetsView extends Component{
   }
 
   onPressItem=(index)=>{
-    this.props.setSelected(index)
-    this.props.navigation.navigate("SetView")
+    this.props.setSelected(index);
+    this.props.navigation.navigate("SetView");
+  }
+  
+  onPressNew=()=>{
+    this.props.navigation.navigate("AddSetView")
   }
 
 
@@ -26,7 +30,7 @@ class SetsView extends Component{
     return (
       <Container>
         <Content>
-            <CardViewer Data={this.props.Sets} onPressItem={this.onPressItem} Title="Sets" onPressButtonBack={this.onPressBack} headerColor='#4596ab'></CardViewer>
+            <CardViewer Data={this.props.Sets} onPressNew={this.onPressNew} onPressItem={this.onPressItem} Title="Sets" onPressButtonBack={this.onPressBack} headerColor='#4596ab'></CardViewer>
         </Content>
       </Container>
     );

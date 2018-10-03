@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
+import { Container, Header, Title,Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import { StyleSheet,StatusBar } from 'react-native';
 
 import ListViewer from '../Componentes/ListViewer';
 import {connect} from 'react-redux';
@@ -16,12 +17,23 @@ class  SetView extends Component{
   }
 
 
-
-
   render() {
     return (
       <Container>
-          <ListViewer  onPressButtonBack={this.onPressBack} listViewData={this.props.Sets[this.props.SetSelected].slice(1)} btnRBkgColor='#6432c8' btnLBkgColor='#be1e2d' headerColor='#4596ab' Title={this.props.Sets[this.props.SetSelected][0]}></ListViewer>
+        <Header style={{backgroundColor: '#4596ab'}}>
+          <StatusBar backgroundColor={'#4596ab'} barStyle="light-content"/>
+          <Left>
+            <Button onPress={this.onPressBack} transparent>
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
+          <Body>
+             <Title>{this.props.Sets[this.props.SetSelected][0]}</Title>
+          </Body>
+        </Header>
+        <Content>
+          <ListViewer  listViewData={this.props.Sets[this.props.SetSelected].slice(1)}  ></ListViewer>
+        </Content>
       </Container>
     );
   }

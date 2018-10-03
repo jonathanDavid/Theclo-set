@@ -21,31 +21,44 @@ class CategoryView extends Component{
     return prendas;
   }
 
+  onSwipeL=(index)=>{
+
+    prendas = this.prendasActivas();
+    item = prendas[index];
+    this.props.sendLoundry(item);
+
+  }
+
+  onSwipeR=(index)=>{
+    prendas = this.prendasActivas();
+    item = prendas[index];
+    this.props.sendMissing(item);
+  }
+
   render() {
     return (
       <Container>
-          <SwipeableListView onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()} btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8' Title={this.props.Categories[this.props.CategorySelected][0]}></SwipeableListView>
+          <SwipeableListView onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR} onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()} btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8' Title={this.props.Categories[this.props.CategorySelected][0]}></SwipeableListView>
       </Container>
     );
   }
 }
 
 function mapStateToProps(state){
-    const {Categories,CategorySelected,Loundry,Missing} = state;
+    const {Categories,Loundry,Missing,CategorySelected} = state;
     return{
       Categories,
-      CategorySelected,
       Loundry,
-      Missing
+      Missing,
+      CategorySelected,
     };
 
 }
 
 function mapDispatchToProps(dispatch){
   return{
-    addCategory: bindActionCreators(Actions.addCategory,dispatch),
     sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
-    deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
+    sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
   };
 }
 
