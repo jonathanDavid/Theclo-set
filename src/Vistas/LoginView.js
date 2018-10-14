@@ -1,59 +1,105 @@
+/*React*/
 import React, { Component } from 'react';
-import {StyleSheet,StatusBar } from 'react-native';
-import { Container,Card,Label, Header,Form, Content,Button,Text,CardItem , Item,Body,Title, Input, Icon,Right } from 'native-base';
+import { StyleSheet,StatusBar } from 'react-native';
+/*Components*/
+import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right } from 'native-base';
+import { Spinner } from '../Componentes/Spinner';
+/*Database and Auth*/
+import firebase from 'firebase';
+
 
 export default class LoginView extends Component {
+  state = {email: '', password: '', error: '', authRequest: false}
+
   constructor(props){
     super(props);
   }
+
   onPressJoinButton=()=>{
     this.props.navigation.navigate("CreateAccountView");
   }
+
+  onLoginPress=()=>{
+    this.setState({error: '', authRequest: true});
+    const {email, password} = this.state;
+    emailRegexp = /^([\w-_]+)@(\w+.)+(\w{2,})$/;
+    passRegexp = /^[\w-_]+$/;
+    if(emailRegexp.test(email)){
+      if(passRegexp.test(password)){
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then( () => {
+            this.setState({email: '', password: '', error:'', authRequest: false});
+            this.props.navigation.navigate("SignedIn");
+          })
+          .catch( (error) => {
+            this.setState({authRequest: false});
+            this.setState({error: error.message});
+          });
+      }else{
+        this.setState({error: 'Clave invalida', authRequest: false});
+      }
+    }else{
+        this.setState({error: 'Correo invalido', authRequest: false});
+    }
+
+  }
+
   goMenu=()=>{
     this.props.navigation.navigate("SignedIn");
   }
+
+  renderFormComponents(){
+    //Si esta realizando peticion a la base de datos
+    if(this.state.authRequest){
+      return(<Spinner size='small'/>);
+    }
+    //De lo contrario
+    return(
+      <Form>
+        <Item style ={styles.inputLayout} floatingLabel>
+          <Label>Correo</Label>
+          <Icon active name='person' />
+          <Input onChangeText={ (email) => {this.setState({email: email})} }/>
+        </Item>
+        <Item style ={styles.inputLayout} floatingLabel>
+          <Label>Clave</Label>
+          <Icon active name='lock' />
+          <Input onChangeText={ (passw) => {this.setState({password: passw})} } />
+        </Item>
+        <Button onPress={this.onLoginPress} style ={styles.buttonLayout} block info>
+          <Text> Entrar </Text>
+        </Button>
+      </Form>
+    );
+  }
+
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: "#cccc00"}}>
-          <StatusBar backgroundColor={"#cccc00"} barStyle="light-content"/>
+        <Header style={{backgroundColor: "#03A9F4"}}>
+          <StatusBar backgroundColor={"#0288D1"} barStyle="light-content"/>
           <Body>
-            <Title>Log In</Title>
+            <Title>Theclo-set</Title>
           </Body>
-          <Right >
-            <Button onPress={this.goMenu} transparent>
-              <Icon active name='home' />
-            </Button>
-
-          </Right>
         </Header>
         <Content style ={styles.cardLayout}>
           <Card>
             <CardItem header bordered>
-              <Text>Welcome</Text>
+              <Text>Inicio de sesion</Text>
             </CardItem>
-            <Form>
-              <Item style ={styles.inputLayout} floatingLabel>
-                <Label>User Name</Label>
-                <Icon active name='person' />
-                <Input/>
-              </Item>
 
-              <Item style ={styles.inputLayout} floatingLabel>
-                <Label>Password</Label>
-                <Icon active name='lock' />
-                <Input/>
-              </Item>
-              <Button style ={styles.buttonLayout} block warning><Text> Go </Text></Button>
-            </Form>
+            {this.renderFormComponents()}
 
             <CardItem footer bordered>
-              <Text>You dont have an account?</Text>
-              <Button onPress={this.onPressJoinButton}  transparent info>
-                <Text>Join Us</Text>
+              <Text>Aun no tienes cuenta?</Text>
+              <Button onPress={this.onPressJoinButton}  transparent>
+                <Text>CREA UNA</Text>
               </Button>
             </CardItem>
           </Card>
+          <CardItem header bordered>
+            <Text style={styles.errorMessage}>{this.state.error}</Text>
+          </CardItem>
 
         </Content>
       </Container>
@@ -69,6 +115,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight:10,
     padding: 5,
+  },
+
+  errorMessage:{
+    color: '#F44336',
   },
 
   inputLayout:{

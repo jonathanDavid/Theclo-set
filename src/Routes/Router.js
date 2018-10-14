@@ -95,7 +95,7 @@ export const RootNavigator=(value=false)=>{
     },
   },
   {
-    initialRouteName: value ? "SignedIn":"SignedIn"
+    initialRouteName: value ? "SignedIn":"SignedOut"
   });
 
 }

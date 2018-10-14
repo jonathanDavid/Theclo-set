@@ -1,21 +1,40 @@
+/*-------------------------------------*/
+/*-------------Librerias---------------*/
+/*-------------------------------------*/
+/*Base y depuracion*/
 import React, { Component } from 'react';
-//import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
 import { Root } from "native-base";
 import { Font, AppLoading } from "expo";
+/*Storage*/
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
-import {RootNavigator} from './src/Routes/Router';
-import {isSignedIn} from './src/Auth/Auth';
-console.disableYellowBox = true;
-
 import Reducer from './src/Redux/Reducers'
+/*Componentes*/
+//import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
+import Spinner from './src/Componentes/Spinner';
+//import {isSignedIn} from './src/Auth/Auth';
+/*Navegacion*/
+import {RootNavigator} from './src/Routes/Router';
+/*Base de datos*/
+import ApiKeys from './src/Database/ApiKeys';
+import firebase from 'firebase';
+/*-------------------------------------*/
+/*-----------Funcionalidades-----------*/
+/*-------------------------------------*/
+console.disableYellowBox = true;
 const store= createStore(Reducer);
+
 
 export default class App extends Component{
   constructor(props){
     super(props);
     this.state = { loading: true };
+    //Inicializar conexion con base de datos
+    if(!firebase.apps.length){
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
+    }
   }
+
   async componentWillMount() {
     await Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
@@ -23,15 +42,21 @@ export default class App extends Component{
     });
     this.setState({ loading: false });
   }
+
   componentDidMount(){
-    isSignedIn("USER")
-    .then(theValue => {
-      if(theValue=='empty'){
-        this.setState({signedIn: false, checkedSignIn:true})
+    //Inicializar authentication listener
+    this.authListener = firebase.auth().onAuthStateChanged( (loggedUser) => {
+      if(loggedUser){
+        this.setState({signedIn: true, checkedSignIn: true});
       }else{
-        this.setState({signedIn: true, checkedSignIn:true})
+        this.setState({signedIn: false, checkedSignIn: true});
       }
-    }).catch(err=>alert("Problem"));
+    });
+  }
+
+  /*Stop listening auth changes*/
+  componentWillUnmount() {
+    this.authListener();
   }
 
   render() {
@@ -42,7 +67,7 @@ export default class App extends Component{
        </Root>
      );
    }
-   const Layout = RootNavigator();
+   const Layout = RootNavigator(this.state.signedIn);
    return (
       <Provider store={store}>
         <Layout />
