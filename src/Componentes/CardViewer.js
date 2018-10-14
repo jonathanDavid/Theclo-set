@@ -70,15 +70,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     height: 180,
     margin: 5,
-    padding: 10,
   },
   oneCategory:{
     flexDirection: 'row',
     justifyContent: 'center',
     height: 180,
     width: 185,
-    margin: 5,
-    padding: 10,
+    margin: 0,
+    padding: 5,
   },
 
   titleText: {

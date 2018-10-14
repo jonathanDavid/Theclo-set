@@ -26,6 +26,11 @@
     "ios": {
       "supportsTablet": true
     },
+    "androidStatusBarColor": "#000000",
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#000000"
+    },
     "githubUrl": "https://github.com/Schurches/Theclo-set"
   }
 }

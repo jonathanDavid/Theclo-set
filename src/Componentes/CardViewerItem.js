@@ -7,7 +7,7 @@ export default class CardViewerItem extends Component {
 
   render() {
     return (
-      <Container>
+      <Container style={styles.viewMargin}>
         <Content>
           <TouchableOpacity onPress={this.props.onPress}>
             <Card>
@@ -28,3 +28,10 @@ export default class CardViewerItem extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+
+  viewMargin:{
+    margin: 5,
+  },
+});

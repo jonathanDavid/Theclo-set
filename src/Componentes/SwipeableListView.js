@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView,StyleSheet,StatusBar } from 'react-native';
+import { ListView,StyleSheet,StatusBar,Image } from 'react-native';
 import { Container, Header,Title,Left, Content,Body, Button, Icon, List, ListItem, Text } from 'native-base';
 import ItemList from './ItemList';
 
@@ -46,11 +46,13 @@ export default class SwipeableListView extends Component {
               </ListItem>}
             renderLeftHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressL(secId, rowId, rowMap)}  style={{backgroundColor: this.props.btnLBkgColor}}>
-                <Icon active type="Feather" name="arrow-left" />
+                {/*<Icon active type="Feather" name="arrow-left" />*/}
+                <Image source={this.props.UrlImageL} style={{ height: 50, width: 50 }} />
               </Button>}
             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressR(secId, rowId, rowMap)} style={{backgroundColor: this.props.btnRBkgColor}}>
-                <Icon active type="Feather"  name="arrow-right" />
+                {/*<Icon active type="Feather"  name="arrow-right">*/}
+                <Image source={this.props.UrlImageR} style={{ height: 50, width: 50 }} />
               </Button>}
           />
         </Content>

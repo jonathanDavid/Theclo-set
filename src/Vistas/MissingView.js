@@ -26,7 +26,11 @@ class MissingView extends Component{
   render() {
     return (
       <Container>
-          <SwipeableListView onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR} onPressButtonBack={this.onPressBack} listViewData={this.props.Missing} btnRBkgColor='#6432c8' btnLBkgColor='#0b6623' headerColor='#be1e2d' Title={"Missing"}></SwipeableListView>
+          <SwipeableListView UrlImageL={require("./images/laundry_icon.png")}
+          UrlImageR={require("./images/closet_icon.png")}
+          onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
+          onPressButtonBack={this.onPressBack} listViewData={this.props.Missing}
+          btnRBkgColor='#6432c8' btnLBkgColor='#0b6623' headerColor='#be1e2d' Title={"Missing"}></SwipeableListView>
       </Container>
     );
   }

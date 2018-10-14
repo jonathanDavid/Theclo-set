@@ -54,7 +54,13 @@ class CategoryView extends Component{
   render() {
     return (
       <Container>
-        <SwipeableListView onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR} onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()} btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8' Title={this.props.Categories[this.props.CategorySelected][0]}></SwipeableListView>
+        <SwipeableListView UrlImageL={require("./images/laundry_icon.png")}
+        UrlImageR={require("./images/socks_icon.png")}
+        onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
+        onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()}
+        btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8'
+        Title={this.props.Categories[this.props.CategorySelected][0]}></SwipeableListView>
+
         <Item>
           <Input  onChangeText={this.onChangeText} placeholder='Set Name'/>
         </Item>

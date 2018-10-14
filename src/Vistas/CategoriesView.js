@@ -25,11 +25,8 @@ class CategoriesView extends Component{
 
   render() {
     return (
-      <Container>
-        <Content>
-          <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categories} onPressItem={this.onPressItem} Title="Categories" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
-        </Content>
-      </Container>
+    <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categories} onPressItem={this.onPressItem}
+            Title="Categories" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
     );
   }
 }

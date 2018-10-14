@@ -1,5 +1,5 @@
 import React, { Component,Fragment } from "react";
-import { Image, StyleSheet,TouchableOpacity, Text, View } from "react-native";
+import { Image, StatusBar,StyleSheet,TouchableOpacity, Text, View } from "react-native";
 
 
 export default class MenuView extends Component {
@@ -26,6 +26,7 @@ export default class MenuView extends Component {
   render() {
     return (
           <View style={[styles.s8ab8b2a6]}>
+            <StatusBar backgroundColor={"#000000"} barStyle="light-content"/>
             <View style={[styles.sfc13888e, { flexDirection: "row" }]}>
               <View style={styles.s41ccc30f}>
                 <TouchableOpacity onPress={this.onPressCloset}>

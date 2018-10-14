@@ -28,7 +28,11 @@ class  LaundryView extends Component{
   render() {
     return (
       <Container>
-          <SwipeableListView onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR} onPressButtonBack={this.onPressBack} listViewData={this.props.Loundry} btnRBkgColor='#6432c8' btnLBkgColor='#be1e2d' headerColor='#0b6623' Title={"Loundry"}></SwipeableListView>
+          <SwipeableListView UrlImageL={require("./images/socks_icon.png")}
+          UrlImageR={require("./images/closet_icon.png")}
+          onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
+          onPressButtonBack={this.onPressBack} listViewData={this.props.Loundry}
+          btnRBkgColor='#6432c8' btnLBkgColor='#be1e2d' headerColor='#0b6623' Title={"Loundry"}></SwipeableListView>
       </Container>
     );
   }
