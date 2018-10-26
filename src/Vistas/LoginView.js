@@ -22,25 +22,15 @@ export default class LoginView extends Component {
   onLoginPress=()=>{
     this.setState({error: '', authRequest: true});
     const {email, password} = this.state;
-    emailRegexp = /^([\w-_]+)@(\w+.)+(\w{2,})$/;
-    passRegexp = /^[\w-_]+$/;
-    if(emailRegexp.test(email)){
-      if(passRegexp.test(password)){
-        firebase.auth().signInWithEmailAndPassword(email, password)
-          .then( () => {
-            this.setState({email: '', password: '', error:'', authRequest: false});
-            this.props.navigation.navigate("SignedIn");
-          })
-          .catch( (error) => {
-            this.setState({authRequest: false});
-            this.setState({error: error.message});
-          });
-      }else{
-        this.setState({error: 'Clave invalida', authRequest: false});
-      }
-    }else{
-        this.setState({error: 'Correo invalido', authRequest: false});
-    }
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then( () => {
+        this.setState({email: '', password: '', error:'', authRequest: false});
+        this.props.navigation.navigate("SignedIn");
+      })
+      .catch( (error) => {
+        this.setState({authRequest: false});
+        this.setState({error: error.message});
+      });
 
   }
 
@@ -64,9 +54,9 @@ export default class LoginView extends Component {
         <Item style ={styles.inputLayout} floatingLabel>
           <Label>Clave</Label>
           <Icon active name='lock' />
-          <Input onChangeText={ (passw) => {this.setState({password: passw})} } />
+          <Input secureTextEntry={true} onChangeText={ (passw) => {this.setState({password: passw})} } />
         </Item>
-        <Button onPress={this.onLoginPress} style ={styles.buttonLayout} block info>
+        <Button  onPress={this.onLoginPress} style ={styles.buttonLayout} block info>
           <Text> Entrar </Text>
         </Button>
       </Form>

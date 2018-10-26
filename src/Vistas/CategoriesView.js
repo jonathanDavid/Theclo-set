@@ -18,24 +18,24 @@ class CategoriesView extends Component{
   }
 
   onPressItem=(index)=>{
-    this.props.categorySelected(index);
-    this.props.navigation.navigate("CategoryView");
+  //this.props.categorySelected(index);
+    this.props.navigation.navigate("CategoryView", {CategorySelected: index});
   }
 
 
   render() {
     return (
-    <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categories} onPressItem={this.onPressItem}
-            Title="Categories" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
+    <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categorias} onPressItem={this.onPressItem}
+            Title="Categorias" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
     );
   }
 }
 
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing,CategorySelected} = state;
+    const {Categorias,Loundry,Missing,CategorySelected} = state;
     return{
-      Categories,
+      Categorias,
       Loundry,
       Missing,
       CategorySelected,

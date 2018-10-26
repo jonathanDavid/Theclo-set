@@ -7,7 +7,6 @@ export default class SwipeableListView extends Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
   }
   onPressL=(secId, rowId, rowMap)=>{
     rowMap[`${secId}${rowId}`].props.closeRow();
@@ -42,7 +41,7 @@ export default class SwipeableListView extends Component {
             dataSource={this.ds.cloneWithRows(this.props.listViewData)}
             renderRow={data =>
               <ListItem style={styles.listView}>
-                <ItemList itemCategory={'Clothes Category'} itemTitle={data} imageUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}/>
+                <ItemList itemCategory={data.Descripcion} itemTitle={data.Titulo} imageUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}/>
               </ListItem>}
             renderLeftHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressL(secId, rowId, rowMap)}  style={{backgroundColor: this.props.btnLBkgColor}}>

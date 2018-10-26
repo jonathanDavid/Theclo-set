@@ -1,4 +1,8 @@
-import {ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING,CATEGORY_SELECTED,SET_SELECTED} from './Types';
+import {SET_STATE,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING,CATEGORY_SELECTED,SET_SELECTED} from './Types';
+
+function setState(state){
+    return {type: SET_STATE, payload: state};
+}
 
 function addCategory(item){
     return {type: ADD_CATEGORY, payload: item};
@@ -35,7 +39,7 @@ function setSelected(index){
 
 
 const actionsCreator ={
-  addCategory,addChothes,addSet,sendLoundry,sendMissing,deleteLoundry,deleteMissing,categorySelected,categorySelected,setSelected
+  addCategory,setState,addChothes,addSet,sendLoundry,sendMissing,deleteLoundry,deleteMissing,categorySelected,categorySelected,setSelected
 
 };
 

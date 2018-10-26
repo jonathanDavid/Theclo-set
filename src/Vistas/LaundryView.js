@@ -5,6 +5,7 @@ import SwipeableListView from '../Componentes/SwipeableListView';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
+import _ from 'lodash'
 
 class  LaundryView extends Component{
   constructor(props){
@@ -25,13 +26,20 @@ class  LaundryView extends Component{
     this.props.deleteLoundry(index);
   }
 
+  loadPrendas=()=>{
+    let prendas = this.props.Prendas;
+    prendas = _.filter(prendas, ['Estado', 1]);
+    console.log(prendas)
+    return prendas
+  }
+
   render() {
     return (
       <Container>
           <SwipeableListView UrlImageL={require("./images/socks_icon.png")}
           UrlImageR={require("./images/closet_icon.png")}
           onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
-          onPressButtonBack={this.onPressBack} listViewData={this.props.Loundry}
+          onPressButtonBack={this.onPressBack} listViewData={this.loadPrendas()}
           btnRBkgColor='#6432c8' btnLBkgColor='#be1e2d' headerColor='#0b6623' Title={"Loundry"}></SwipeableListView>
       </Container>
     );
@@ -39,11 +47,10 @@ class  LaundryView extends Component{
 }
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing} = state;
+    const {Categories,Prendas} = state;
     return{
       Categories,
-      Loundry,
-      Missing
+      Prendas
     };
 
 }

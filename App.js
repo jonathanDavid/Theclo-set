@@ -30,9 +30,6 @@ export default class App extends Component{
     super(props);
     this.state = { loading: true };
     //Inicializar conexion con base de datos
-    if(!firebase.apps.length){
-      firebase.initializeApp(ApiKeys.FirebaseConfig);
-    }
   }
 
   async componentWillMount() {
@@ -45,6 +42,9 @@ export default class App extends Component{
 
   componentDidMount(){
     //Inicializar authentication listener
+    if(!firebase.apps.length){
+      firebase.initializeApp(ApiKeys.FirebaseConfig);
+    }
     this.authListener = firebase.auth().onAuthStateChanged( (loggedUser) => {
       if(loggedUser){
         this.setState({signedIn: true, checkedSignIn: true});

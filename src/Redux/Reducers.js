@@ -1,32 +1,46 @@
-import {ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
+import {SET_STATE,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
+import firebase from 'firebase';
+import ApiKeys from '../Database/ApiKeys';
+
 
 //Estado Inicial
-const initialState ={
-    Categories:[
-                ['Camisa', 'Prenda 1','Prenda 2','Prenda 3'],
-                ['Pantalon', 'Prenda 4','Prenda 8','Prenda 9'],
-                ['Zapatos', 'Prenda 5','Prenda 6','Prenda 14'],
-                ['Ropa Interior', 'Prenda 7','Prenda 12','Prenda 13'],
-                ['Medias', 'Prenda 10','Prenda 11','Prenda 15']
-              ],
-    Loundry:['Prenda 2','Prenda 3','Prenda 9'],
-    Missing:['Prenda 6','Prenda 8'],
-    Sets:[
-          ['Set 1', 'Prenda 1','Prenda 4','Prenda 5','Prenda 7','Prenda 10'],
-          ['Set 2', 'Prenda 2','Prenda 8','Prenda 6','Prenda 12','Prenda 11'],
-          ['Set 4', 'Prenda 2','Prenda 9','Prenda 14','Prenda 13','Prenda 15'],
-          ['Set 5', 'Prenda 1','Prenda 8','Prenda 14','Prenda 12','Prenda 10'],
-        ],
-    CategorySelected:0,
-    SetSelected:0,
-}
+const initialState = {};
+//  ={
+//     Categorias:[
+//                 ['Camisa', 'Prenda 1','Prenda 2','Prenda 3'],
+//                 ['Pantalon', 'Prenda 4','Prenda 8','Prenda 9'],
+//                 ['Zapatos', 'Prenda 5','Prenda 6','Prenda 14'],
+//                 ['Ropa Interior', 'Prenda 7','Prenda 12','Prenda 13'],
+//                 ['Medias', 'Prenda 10','Prenda 11','Prenda 15']
+//               ],
+//     Loundry:['Prenda 2','Prenda 3','Prenda 9'],
+//     Missing:['Prenda 6','Prenda 8'],
+//     Sets:[
+//           ['Set 1', 'Prenda 1','Prenda 4','Prenda 5','Prenda 7','Prenda 10'],
+//           ['Set 2', 'Prenda 2','Prenda 8','Prenda 6','Prenda 12','Prenda 11'],
+//           ['Set 4', 'Prenda 2','Prenda 9','Prenda 14','Prenda 13','Prenda 15'],
+//           ['Set 5', 'Prenda 1','Prenda 8','Prenda 14','Prenda 12','Prenda 10'],
+//         ],
+//     CategorySelected:0,
+//     SetSelected:0,
+// }
 
 
 //Funciones
-function applyAddCathegory(state,payload,Categories){
+function applyAddCategory(state,payload,Categorias){
   return{
     ...state,
-    Categories:[...Categories,payload],
+    Categorias:[...Categorias,payload],
+  };
+}
+
+function applySetState(state,payload){
+  console.log('Current State')
+  console.log(state)
+  console.log('Next state')
+  console.log(payload);
+  return{
+    ...payload
   };
 }
 
@@ -37,10 +51,12 @@ function applyAddSet(state,payload,Sets){
   };
 }
 
-function applySendLoundry(state,payload,Loundry){
+function applySendLoundry(state,payload,Prendas){
+  //let prendas = Prendas;
+  //prendas=prendas.Estado = 1;
   return{
     ...state,
-    Loundry:[...Loundry,payload],
+    Prendas:[...Prendas]
   };
 }
 
@@ -51,11 +67,11 @@ function applyDeleteLoundry(state,payload,Loundry){
   }
 }
 
-function applyAddClothes(state,payload,Categories,CategorySelected){
-  Categories[CategorySelected].push(payload);
+function applyAddClothes(state,payload,Categorias,CategorySelected){
+  Categorias[CategorySelected].push(payload);
   return{
     ...state,
-    Categories:[...Categories],
+    Categorias:[...Categorias],
   };
 }
 
@@ -90,21 +106,21 @@ function applySetSelected(state,payload){
 
 //reducer funtion
 export default Reducer = (state=initialState, action)=>{
-  const {Categories,Loundry,Missing, Sets, CategorySelected} = state;
+  const {Categorias,Prendas,Loundry,Missing, Sets, CategorySelected} = state;
   const {type,payload} = action;
 
   switch (type) {
     case ADD_CATEGORY:
-      return applyAddCathegory(state,payload,Categories);
+      return applyAddCathegory(state,payload,Categorias);
     break;
     case ADD_CLOTHES:
-      return applyAddClothes(state,payload,Categories,CategorySelected);
+      return applyAddClothes(state,payload,Categorias,CategorySelected);
     break;
     case ADD_SET:
       return applyAddSet(state,payload,Sets);
     break;
     case SEND_LOUNDRY:
-      return applySendLoundry(state,payload,Loundry);
+      return applySendLoundry(state,payload,Prendas);
     break;
     case SEND_MISSING:
       return applySendMissing(state,payload,Missing);
@@ -120,6 +136,9 @@ export default Reducer = (state=initialState, action)=>{
     break;
     case SET_SELECTED:
       return applySetSelected(state,payload)
+    break;
+    case SET_STATE:
+      return applySetState(state,payload)
     break;
     default:
       return state;

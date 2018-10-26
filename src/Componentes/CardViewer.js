@@ -7,7 +7,7 @@ export default class CardViewer extends Component {
 
   renderFistCategory(){
     if(this.props.Data.length > 0){
-       return <CardViewerItem onPress={this.props.onPressItem.bind(this,0)} Title={this.props.Data[0][0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>;
+       return <CardViewerItem onPress={this.props.onPressItem.bind(this,0)} Title={this.props.Data[0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>;
      }else{
      return null;
    }
@@ -19,14 +19,14 @@ export default class CardViewer extends Component {
       if(i+1 < this.props.Data.length){
           code.push(
             <View style={styles.duoCategory}>
-              <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i][0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
-              <CardViewerItem onPress={this.props.onPressItem.bind(this,i+1)} Title={this.props.Data[i+1][0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+              <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+              <CardViewerItem onPress={this.props.onPressItem.bind(this,i+1)} Title={this.props.Data[i+1]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
             </View>
             )
       }else{
           code.push(
             <View style={styles.oneCategory}>
-              <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i][0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+              <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
             </View>
           )
         }

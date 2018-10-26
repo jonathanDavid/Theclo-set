@@ -7,13 +7,13 @@ import SwipeableListView from '../Componentes/SwipeableListView';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
+import _ from 'lodash'
 
 class CategoryView extends Component{
   constructor(props){
     super(props)
     this.state={
       inputText:"",
-
     }
   }
   onPressBack = ()=>{
@@ -21,23 +21,21 @@ class CategoryView extends Component{
   }
 
   prendasActivas=()=>{
-    let prendas = this.props.Categories[this.props.CategorySelected].slice(1);
-    prendas = prendas.filter(f => !this.props.Loundry.includes(f));
-    prendas = prendas.filter(f => !this.props.Missing.includes(f));
+    let prendas = this.props.Prendas;
+    let cat= this.props.Categorias[this.props.navigation.state.params.CategorySelected];
+    prendas = _.filter(prendas, ['Categoria', cat]);
+    prendas = _.filter(prendas, ['Estado', 0]);
     return prendas;
   }
 
   onSwipeL=(index)=>{
-
-    prendas = this.prendasActivas();
-    item = prendas[index];
-    this.props.sendLoundry(item);
-
+    this.props.sendLoundry(index);
   }
 
   onSwipeR=(index)=>{
     prendas = this.prendasActivas();
     item = prendas[index];
+    item.Estado=2;
     this.props.sendMissing(item);
   }
 
@@ -59,7 +57,7 @@ class CategoryView extends Component{
         onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
         onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()}
         btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8'
-        Title={this.props.Categories[this.props.CategorySelected][0]}></SwipeableListView>
+        Title={this.props.Categorias[this.props.navigation.state.params.CategorySelected]}></SwipeableListView>
 
         <Item>
           <Input  onChangeText={this.onChangeText} placeholder='Set Name'/>
@@ -93,12 +91,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing,CategorySelected} = state;
+    const {Categorias,Prendas} = state;
     return{
-      Categories,
-      Loundry,
-      Missing,
-      CategorySelected,
+      Categorias,
+      Prendas
     };
 
 }

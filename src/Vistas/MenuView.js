@@ -1,8 +1,13 @@
 import React, { Component,Fragment } from "react";
 import { Image, StatusBar,StyleSheet,TouchableOpacity, Text, View } from "react-native";
+import { Toast } from 'native-base';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {actionsCreator as Actions} from '../Redux/Actions';
+import firebase from 'firebase'
 
-
-export default class MenuView extends Component {
+ class MenuView extends Component {
+  state = {name: ''};
   static navigationOptions = { title: "Main" };
   constructor(props) {
     super(props);
@@ -21,6 +26,26 @@ export default class MenuView extends Component {
 
   onPressSets = ()=>{
     this.props.navigation.navigate("SetsView")
+  }
+
+  onPressLogOut = ()=>{
+    firebase.auth().signOut()
+    .then(()=>{
+      this.props.navigation.navigate("SignedOut");
+    })
+    .catch((error) => {
+      alert('Error intentando cerrar sesion');
+    })
+  }
+
+  componentDidMount(){
+    currentUser = firebase.auth().currentUser;
+    firebase.database().ref(`Users/${currentUser.uid}`).once('value', (dataSnapshot) => {
+      this.props.setState(dataSnapshot.val());
+      //console.log(Categories[0]);
+      //console.log(dataSnapshot.val().Prendas);
+    });
+    this.setState({ name : currentUser.displayName});
   }
 
   render() {
@@ -66,20 +91,40 @@ export default class MenuView extends Component {
                 </TouchableOpacity>
               </View>
             </View>
-            {/*            <View style={[styles.s923b1cd6, { flexDirection: "row" }]}>
-                          <View style={styles.s617c1fc1} />
-                          <View style={styles.s4d5fab9b}>
-                            <Image source={require("./images/Captura.png")} style={styles.sb6e3e2b9} />
-                            <View style={styles.s97acb6cf}>
-                              <Image style={styles.s0d2109e8} />
-                            </View>
-                          </View>
-                          <View style={styles.sb6315268} />
-                        </View>*/}
+              <View style={[styles.s923b1cd6, { flexDirection: "row" }]}>
+                <View style={styles.s617c1fc1} />
+                <View style={styles.s4d5fab9b}>
+                  <TouchableOpacity onPress={this.onPressLogOut}>
+                    <Image source={require("./images/Captura.png")} style={styles.sb6e3e2b9} />
+                  </TouchableOpacity>
+                  <View style={styles.s97acb6cf}>
+                    <Image style={styles.s0d2109e8} />
+                  </View>
+                </View>
+                <View style={styles.sb6315268} />
+              </View>
+              <Text>Bienvenido, usuario {this.state.name} !</Text>
           </View>
     );
   }
 }
+
+function mapStateToProps(state){
+    const {Categories} = state;
+    return{
+      Categories
+    };
+
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    setState: bindActionCreators(Actions.setState,dispatch)
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(MenuView);
+
 const styles = StyleSheet.create({
   s98059f0a: { height: 100, width: 100 },
   sda221942: {

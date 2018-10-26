@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import {StyleSheet,StatusBar } from 'react-native';
 /*Components*/
-import { Container,Card,Label, Header,Form, Content,Button,Text,CardItem , Item,Body,Title, Input, Icon } from 'native-base';
+import { Container,Card,Label, Header,Form, Content,Left,Button,Text,CardItem , Item,Body,Title, Input, Icon } from 'native-base';
 import { Spinner } from '../Componentes/Spinner';
 /*Database and Auth*/
 import firebase from 'firebase';
@@ -13,6 +13,11 @@ export default class CreateAccountView extends Component {
 
   constructor(props){
     super(props);
+    this.iniWithDatabaseInfo();
+  }
+
+  onPressBack = ()=>{
+    this.props.navigation.goBack();
   }
 
   onReturnPress = () => {
@@ -20,18 +25,27 @@ export default class CreateAccountView extends Component {
   }
 
   onRegisterPress = () => {
-    const {email, password1, password2} = this.state;
+    const {user, email, password1, password2} = this.state;
     this.setState({dbRequest: true});
     if(password1 === password2){
       if(password1 == ""){
-        console.log('alo');
         this.setState({error: 'Las claves no pueden estar vacias', dbRequest:false});
       }else{
-        console.log('Valid pass');
         firebase.auth().createUserWithEmailAndPassword(email,password1)
         .then( () => {
-          this.setState({error: '', dbRequest: false});
-          this.props.navigation.navigate("LoginView");
+          loggedUser = firebase.auth().currentUser;
+          loggedUser.updateProfile({ displayName: user})
+          .then(() => {
+            this.setState({error: '', dbRequest: false});
+            //console.log(`Display name: ${loggedUser.displayName}`);
+            console.log(loggedUser);
+            firebase.database().ref('Users/').child(loggedUser.uid).set({id:loggedUser.uid}).then(()=>{
+              this.props.navigation.navigate("LoginView");
+            });
+          })
+          .catch((error) => {
+            this.setState({error: error.message, dbRequest: false});
+          });
         })
         .catch( (error) => {
           this.setState({error: error.message, dbRequest: false});
@@ -61,12 +75,12 @@ export default class CreateAccountView extends Component {
           <Item style ={styles.inputLayout} floatingLabel>
             <Label>Clave</Label>
             <Icon active name='lock' />
-            <Input value={this.state.password1} onChangeText={(password1) => {this.setState({password1: password1})}}/>
+            <Input secureTextEntry={true} value={this.state.password1} onChangeText={(password1) => {this.setState({password1: password1})}}/>
           </Item>
           <Item style ={styles.inputLayout} floatingLabel>
             <Label>Confirmar clave</Label>
             <Icon active name='lock' />
-            <Input value={this.state.password2} onChangeText={(password2) => {this.setState({password2: password2})}}/>
+            <Input secureTextEntry={true} value={this.state.password2} onChangeText={(password2) => {this.setState({password2: password2})}}/>
           </Item>
           <Button onPress={this.onRegisterPress} style={styles.buttonLayout} block info>
             <Text> Registrarse </Text>
@@ -80,6 +94,11 @@ export default class CreateAccountView extends Component {
       <Container>
         <Header style={{backgroundColor: "#03A9F4"}}>
           <StatusBar backgroundColor={"#0288D1"} barStyle="light-content"/>
+          <Left>
+            <Button onPress={this.onPressBack} transparent>
+              <Icon name='arrow-back' />
+            </Button>
+          </Left>
           <Body>
              <Title>Create Account</Title>
           </Body>
