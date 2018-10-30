@@ -13,7 +13,7 @@ export default class CreateAccountView extends Component {
 
   constructor(props){
     super(props);
-    this.iniWithDatabaseInfo();
+    //this.iniWithDatabaseInfo();
   }
 
   onPressBack = ()=>{

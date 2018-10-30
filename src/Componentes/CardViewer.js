@@ -6,31 +6,34 @@ import CardViewerItem from './CardViewerItem';
 export default class CardViewer extends Component {
 
   renderFistCategory(){
-    if(this.props.Data.length > 0){
-       return <CardViewerItem onPress={this.props.onPressItem.bind(this,0)} Title={this.props.Data[0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>;
-     }else{
-     return null;
+    if(this.props.Data!=null){
+      if(this.props.Data.length > 0){
+         return <CardViewerItem onPress={this.props.onPressItem.bind(this,0)} Title={this.props.Data[0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>;
+      }else{
+       return null;
+     }
    }
   }
 
   renderRestCategory(){
     let code = [];
-    for (var i=1; i < this.props.Data.length; i=i+2) {
-      if(i+1 < this.props.Data.length){
-          code.push(
-            <View style={styles.duoCategory}>
-              <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
-              <CardViewerItem onPress={this.props.onPressItem.bind(this,i+1)} Title={this.props.Data[i+1]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
-            </View>
+    if(this.props.Data!=null){
+      for (var i=1; i < this.props.Data.length; i=i+2) {
+        if(i+1 < this.props.Data.length){
+            code.push(
+              <View style={styles.duoCategory}>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,i+1)} Title={this.props.Data[i+1]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+              </View>
+              )
+        }else{
+            code.push(
+              <View style={styles.oneCategory}>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+              </View>
             )
-      }else{
-          code.push(
-            <View style={styles.oneCategory}>
-              <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
-            </View>
-          )
-        }
-
+          }
+      }
     }
     return(code)
   }
@@ -51,7 +54,7 @@ export default class CardViewer extends Component {
         </Header>
         <Content>
           <View style={styles.duoCategory}>
-            <CardViewerItem onPress={this.props.onPressNew} Title={'New'} imgUrl={'https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/plus-big-512.png'}></CardViewerItem>
+            {/*<CardViewerItem onPress={this.props.onPressNew} Title={'New'} imgUrl={'https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/plus-big-512.png'}></CardViewerItem>*/}
             {this.renderFistCategory()}
           </View>
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, View, Image} from 'react-native';
-import {Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import {Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text,Fab } from 'native-base';
 
 import Category from "../Componentes/Category";
 import CardViewer from "../Componentes/CardViewer";
@@ -11,6 +11,9 @@ import {actionsCreator as Actions} from '../Redux/Actions';
 class CategoriesView extends Component{
   constructor(props){
     super(props);
+    this.state = {
+      active: false
+    };
   }
 
   onPressBack = ()=>{
@@ -22,11 +25,38 @@ class CategoriesView extends Component{
     this.props.navigation.navigate("CategoryView", {CategorySelected: index});
   }
 
+  onPressNew=()=>{
+    this.props.navigation.navigate("AddCategoryView");
+  }
 
   render() {
     return (
-    <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categorias} onPressItem={this.onPressItem}
-            Title="Categorias" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
+        <Container>
+          <CardViewer addNewClothes={this.addNewClothes} Data={this.props.Categorias} onPressItem={this.onPressItem}
+                  Title="Categorias" onPressButtonBack={this.onPressBack} headerColor='#6432c8'></CardViewer>
+          <View style={{ flex: 1 }}>
+            <Fab
+              active={this.state.active}
+              direction="up"
+              containerStyle={{ }}
+              style={{ backgroundColor: '#6432c8' }}
+              position="bottomRight"
+              onPress={() => this.setState({ active: !this.state.active })}>
+            <Icon type="FontAwesome" name="bars" />
+
+            <Button  style={{ backgroundColor: '#DD5144' }}>
+              <Icon type="FontAwesome"  name="trash" />
+            </Button>
+            <Button style={{ backgroundColor: '#3B5998' }}>
+              <Icon type="FontAwesome"  name="edit" />
+            </Button>
+            <Button onPress={this.onPressNew}  style={{ backgroundColor: '#34A34F' }}>
+              <Icon  type="FontAwesome" name="plus" />
+            </Button>
+          </Fab>
+          </View>
+
+        </Container>
     );
   }
 }
