@@ -18,7 +18,7 @@ import CameraView from '../Vistas/CameraView';
 import LoginView from '../Vistas/LoginView';
 import CreateAccountView from '../Vistas/CreateAccountView';
 import CardViewer from '../Componentes/CardViewer';
-
+import AccManagementView from '../Vistas/AccManagementView';
 
 export const SignedIn = createStackNavigator({
   MenuView:{
@@ -83,6 +83,12 @@ export const SignedIn = createStackNavigator({
   },
   MissingView:{
     screen:MissingView,
+    navigationOptions:{
+      header:null,
+    },
+  },
+   AccManagementView:{
+    screen:AccManagementView,
     navigationOptions:{
       header:null,
     },

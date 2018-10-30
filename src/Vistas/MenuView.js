@@ -29,13 +29,14 @@ import firebase from 'firebase'
   }
 
   onPressLogOut = ()=>{
-    firebase.auth().signOut()
+    this.props.navigation.navigate("AccManagementView")
+/*    firebase.auth().signOut()
     .then(()=>{
       this.props.navigation.navigate("SignedOut");
     })
     .catch((error) => {
       alert('Error intentando cerrar sesion');
-    })
+    })*/
   }
 
   componentDidMount(){
