@@ -33,9 +33,11 @@ class AddCategoryView extends Component {
       pushID = userReference.push().key;
     }
     let category = {Nombre: this.state.Name, Descripcion: `${this.state.Description}`, id: pushID}
-
-
-    this.props.addCategory(category)
+    if(data){
+      this.props.editCategory(category)
+    }else{
+      this.props.addCategory(category)
+    }
 
 
     userReference.child(pushID).set(category)
@@ -86,7 +88,7 @@ class AddCategoryView extends Component {
               <Icon name='close-circle' />
             </Item>
             <View style ={styles.buttonView}>
-              <Button style ={styles.inputLayout} onPress= {this.addNewCategory} style={styles.buttonLayoutBottom} >
+              <Button  onPress= {this.addNewCategory} style={styles.buttonLayoutBottom} >
                 <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Category</Text>
               </Button>
             </View>
@@ -131,6 +133,7 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
+    editCategory: bindActionCreators(Actions.editCategory,dispatch),
   };
 }
 

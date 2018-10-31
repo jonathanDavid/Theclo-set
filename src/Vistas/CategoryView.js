@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Header, Content,Footer,Button,FooterTab, Card,Item,Input, CardItem, Body,Icon, Text } from 'native-base';
+import { Container, Header, Content,Footer,Fab,Button,FooterTab, Card,Item,Input, CardItem, Body,Icon, Text } from 'native-base';
 
 import {Platform, StyleSheet, View, Image} from 'react-native';
 
@@ -16,6 +16,7 @@ class CategoryView extends Component{
     super(props)
     this.state={
       inputText:"",
+      active: false
     }
   }
   onPressBack = ()=>{
@@ -56,6 +57,12 @@ class CategoryView extends Component{
     })
   }
 
+  onPressNew = () => {
+    this.setState({ active: !this.state.active });
+    //this.props.onPressNew();
+    this.props.navigation.navigate("AddPrendaView",{ prendaData: null});
+  }
+
   render() {
     return (
       <Container>
@@ -69,6 +76,23 @@ class CategoryView extends Component{
         btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8'
         Title={this.props.navigation.state.params.CategorySelected.Nombre}></SwipeableListView>
 
+        <View>
+          <Fab
+            active={this.state.active}
+            direction="up"
+            containerStyle={{ }}
+            style={{ backgroundColor: '#6432c8' }}
+            position="bottomRight"
+            onPress={this.onPressNew/*() => this.setState(onPressNew{ active: !this.state.active })*/}>
+          <Icon  type="FontAwesome" name="plus" />
+
+
+          {/*<Button onPress={this.onPressNew}  style={{ backgroundColor: '#34A34F' }}>
+            <Icon  type="FontAwesome" name="plus" />
+          </Button>*/}
+        </Fab>
+        </View>
+        {/*
         <Item>
           <Input onChangeText={this.onChangeText} placeholder='Set Name'/>
         </Item>
@@ -78,7 +102,7 @@ class CategoryView extends Component{
               <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Clothes</Text>
             </Button>
           </FooterTab>
-        </Footer>
+        </Footer>*/}
       </Container>
     );
   }

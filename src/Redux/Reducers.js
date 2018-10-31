@@ -1,7 +1,7 @@
 import {SET_STATE,EDIT_CATEGORY,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
 import firebase from 'firebase';
 import ApiKeys from '../Database/ApiKeys';
-
+import _ from 'lodash'
 
 //Estado Inicial
 const initialState = {};
@@ -35,7 +35,7 @@ function applyAddCategory(state,payload,Categorias){
 }
 
 function applyEditCategory(state,payload,Categorias){
-  const newCategorias = state.Categorias.map(item => {
+  const newCategorias = _map(Categorias, item => {
         if(item.id === payload.id){
           return { ...item, ...payload }
         }

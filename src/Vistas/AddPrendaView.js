@@ -43,32 +43,30 @@ export default class AddPrendaView extends Component {
             <Title>Add Clothes</Title>
           </Body>
         </Header>
-          <Form>
-            <Card>
-              <CardItem cardBody button onPress={this.OpenCamera}>
-                <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
-                  <Icon type="FontAwesome" name='camera-retro' />
-                </Body>
-              </CardItem>
-            </Card>
-              <Item style ={styles.inputLayout} floatingLabel require>
-                <Label>Name</Label>
-                <Input value={this.props.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
-              </Item>
-              <Item style ={styles.inputLayout} floatingLabel require>
-                <Label>Description</Label>
-                <Input value={this.props.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
-              </Item>
-              <View style={{flexDirection: 'row'}}>
-                <Button onPress={this.onRegisterPress} style={styles.buttonLayout} block info>
-                  <Text> Take a Picture! </Text>
-                </Button>
-                <Button onPress={this.onRegisterPress} style={styles.buttonLayout} block info>
-                  <Text> Gallery </Text>
-                </Button>
-              </View>
-          </Form>
-
+          <Content>
+            <Form>
+              <Card>
+                <CardItem cardBody button onPress={this.OpenCamera}>
+                  <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
+                    <Icon type="FontAwesome" name='camera-retro' />
+                  </Body>
+                </CardItem>
+              </Card>
+                <Item style ={styles.inputLayout} floatingLabel require>
+                  <Label>Name</Label>
+                  <Input value={this.props.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
+                </Item>
+                <Item style ={styles.inputLayout} floatingLabel require>
+                  <Label>Description</Label>
+                  <Input value={this.props.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
+                </Item>
+                <View style ={styles.buttonView}>
+                  <Button onPress= {this.addNewCategory} style={styles.buttonLayoutBottom} >
+                    <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Category</Text>
+                  </Button>
+                </View>
+            </Form>
+          </Content>
         </Container>
 
 
@@ -87,7 +85,11 @@ const styles = StyleSheet.create({
     paddingRight:10,
     padding: 5,
   },
-
+  buttonLayoutBottom:{
+    marginTop: 50,
+    padding: 5,
+    backgroundColor: '#6432c8',
+  },
   errorMessage:{
     color: '#F44336',
   },
@@ -105,6 +107,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center'
   },
+  buttonView:{
+    flex:1,
+    flexDirection: "row",
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   capture: {
     flex: 0,
     backgroundColor: '#fff',
@@ -113,5 +122,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     alignSelf: 'center',
     margin: 20
-  }
+  },
 });
