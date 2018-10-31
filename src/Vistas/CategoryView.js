@@ -9,6 +9,8 @@ import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash'
 
+
+
 class CategoryView extends Component{
   constructor(props){
     super(props)
@@ -22,7 +24,7 @@ class CategoryView extends Component{
 
   prendasActivas=()=>{
     let prendas = this.props.Prendas;
-    let cat= this.props.Categorias[this.props.navigation.state.params.CategorySelected];
+    let cat= this.props.navigation.state.params.CategorySelected.Nombre;
     prendas = _.filter(prendas, ['Categoria', cat]);
     prendas = _.filter(prendas, ['Estado', 0]);
     return prendas;
@@ -30,6 +32,11 @@ class CategoryView extends Component{
 
   onSwipeL=(index)=>{
     this.props.sendLoundry(index);
+  }
+
+  onEditCategory = () => {
+    let currentCategory = this.props.navigation.state.params.CategorySelected;
+    this.navigation.navigate("AddCategoryView",{ categoryData: currentCategory});
   }
 
   onSwipeR=(index)=>{
@@ -52,15 +59,18 @@ class CategoryView extends Component{
   render() {
     return (
       <Container>
-        <SwipeableListView UrlImageL={require("./images/laundry_icon.png")}
+        <SwipeableListView
+        isEditor={true}
+        onEditCategory={this.onEditCategory}
+        UrlImageL={require("./images/laundry_icon.png")}
         UrlImageR={require("./images/socks_icon.png")}
         onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
         onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()}
         btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8'
-        Title={this.props.Categorias[this.props.navigation.state.params.CategorySelected]}></SwipeableListView>
+        Title={this.props.navigation.state.params.CategorySelected.Nombre}></SwipeableListView>
 
         <Item>
-          <Input  onChangeText={this.onChangeText} placeholder='Set Name'/>
+          <Input onChangeText={this.onChangeText} placeholder='Set Name'/>
         </Item>
         <Footer>
           <FooterTab style ={{backgroundColor: '#ffffff',height: 100}}>

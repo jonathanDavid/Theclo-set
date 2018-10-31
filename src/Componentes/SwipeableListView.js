@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ListView,StyleSheet,StatusBar,Image } from 'react-native';
-import { Container, Header,Title,Left, Content,Body, Button, Icon, List, ListItem, Text } from 'native-base';
+import { Container, Header,Title,Left, Right, Content,Body, Button, Icon, List, ListItem, Text } from 'native-base';
 import ItemList from './ItemList';
 
 export default class SwipeableListView extends Component {
@@ -13,11 +13,33 @@ export default class SwipeableListView extends Component {
     this.props.onSwipeL(rowId);
 
   }
-
+  
   onPressR=(secId, rowId, rowMap)=>{
     rowMap[`${secId}${rowId}`].props.closeRow();
     this.props.onSwipeR(rowId);
 
+  }
+
+  onEditCategory = () => {
+    this.props.onEditCategory();
+  }
+
+  renderActionButtons(){
+    let code = [];
+    if( this.props.isEditor ){
+      code.push(
+        <Right>
+          <Button transparent>
+            <Icon type="FontAwesome" name="trash" />
+          </Button>
+          <Button onPress={this.onEditCategory} transparent>
+            <Icon type="FontAwesome" name="edit" />
+          </Button>
+        </Right>);
+      return code;
+    }else{
+      return null;
+    }
   }
 
   render() {
@@ -33,6 +55,9 @@ export default class SwipeableListView extends Component {
           <Body>
              <Title>{this.props.Title}</Title>
           </Body>
+
+          {this.renderActionButtons()}
+
         </Header>
         <Content>
           <List

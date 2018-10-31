@@ -1,35 +1,32 @@
 import React, { Component } from 'react';
-import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Text } from 'native-base';
+import { Container, Header, Title, Content, Button, Left, Right, Body, Icon, Text, Fab } from 'native-base';
 import { StyleSheet, View, ScrollView, StatusBar} from 'react-native';
 import CardViewerItem from './CardViewerItem';
 
 export default class CardViewer extends Component {
 
-  renderFistCategory(){
-    if(this.props.Data!=null){
-      if(this.props.Data.length > 0){
-         return <CardViewerItem onPress={this.props.onPressItem.bind(this,0)} Title={this.props.Data[0]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>;
-      }else{
-       return null;
-     }
-   }
+  constructor(props){
+    super(props);
+    this.state = {
+      active: false
+    };
   }
 
   renderRestCategory(){
     let code = [];
     if(this.props.Data!=null){
-      for (var i=1; i < this.props.Data.length; i=i+2) {
+      for (var i=0; i < this.props.Data.length; i=i+2) {
         if(i+1 < this.props.Data.length){
             code.push(
               <View style={styles.duoCategory}>
-                <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
-                <CardViewerItem onPress={this.props.onPressItem.bind(this,i+1)} Title={this.props.Data[i+1]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i+1])} Title={this.props.Data[i+1]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
               </View>
               )
         }else{
             code.push(
               <View style={styles.oneCategory}>
-                <CardViewerItem onPress={this.props.onPressItem.bind(this,i)} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
               </View>
             )
           }
@@ -37,6 +34,11 @@ export default class CardViewer extends Component {
     }
     return(code)
   }
+
+  onPressNew = () => {
+    this.props.onPressNew();
+  }
+
 
   render() {
     return (
@@ -53,14 +55,31 @@ export default class CardViewer extends Component {
           </Body>
         </Header>
         <Content>
-          <View style={styles.duoCategory}>
-            {/*<CardViewerItem onPress={this.props.onPressNew} Title={'New'} imgUrl={'https://cdn3.iconfinder.com/data/icons/glypho-generic-icons/64/plus-big-512.png'}></CardViewerItem>*/}
-            {this.renderFistCategory()}
-          </View>
 
           {this.renderRestCategory()}
 
         </Content>
+        <View>
+          <Fab
+            active={this.state.active}
+            direction="up"
+            containerStyle={{ }}
+            style={{ backgroundColor: '#6432c8' }}
+            position="bottomRight"
+            onPress={() => this.setState({ active: !this.state.active })}>
+          <Icon type="FontAwesome" name="bars" />
+
+          <Button  style={{ backgroundColor: '#DD5144' }}>
+            <Icon type="FontAwesome"  name="trash" />
+          </Button>
+          <Button style={{ backgroundColor: '#3B5998' }}>
+            <Icon type="FontAwesome"  name="edit" />
+          </Button>
+          <Button onPress={this.onPressNew}  style={{ backgroundColor: '#34A34F' }}>
+            <Icon  type="FontAwesome" name="plus" />
+          </Button>
+        </Fab>
+        </View>
       </Container>
     );
   }

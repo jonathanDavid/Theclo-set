@@ -5,27 +5,42 @@ import ListViewer from '../Componentes/ListViewer';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
-
-
+import firebase from 'firebase';
 
 class AddCategoryView extends Component {
   constructor(props) {
     super(props);
     state={Name:'',Description:'',Photo:''};
   }
-  onPressBack = ()=>{
-    this.props.navigation.goBack();
+
+  componentDidMount(){
+    if(data){
+      this.setState({Name: data.Nombre, Description: data.Descripcion});
+    }
   }
-  addNewCategory=()=>{
-    this.props.addSet(this.state.miSet)
+
+  addNewCategory = () => {
+    let data = this.props.navigation.state.params.categoryData;
+    loggedUser = firebase.auth().currentUser;
+    userReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
+    if(data){
+      pushID = data.id;
+    }else{
+      pushID = userReference.push().key;
+    }
+    userReference.child(pushID).set({Nombre: this.state.Name, Descripcion: `${this.state.Description}`, id: pushID})
+    .then( () => {
+      this.props.navigation.goBack();
+    });
+  }
+
+  onPressBack = ()=>{
     this.props.navigation.goBack();
   }
 
   OpenCamera=()=>{
     this.props.navigation.navigate("CameraView")
   }
-
-
 
   render() {
     return (
@@ -42,34 +57,30 @@ class AddCategoryView extends Component {
           </Body>
         </Header>
         <Content>
-
           <Form>
-
-                  <Card>
-                    <CardItem cardBody button onPress={this.OpenCamera}>
-                      <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
-                        <Icon type="FontAwesome" name='camera-retro' />
-                      </Body>
-                    </CardItem>
-                  </Card>
-                  <Item style ={styles.inputLayout} floatingLabel require>
-                    <Label>Name</Label>
-                    <Input value={this.props.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
-                    <Icon name='close-circle' />
-                  </Item>
-                  <Item style ={styles.inputLayout} floatingLabel require>
-                    <Label>Description</Label>
-                    <Input value={this.props.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
-                    <Icon name='close-circle' />
-                  </Item>
-                  <View style ={styles.buttonView}>
-                    <Button style ={styles.inputLayout} onPress= {this.addNewCategory} style={styles.buttonLayoutBottom} >
-                      <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Category</Text>
-                    </Button>
-                  </View>
-
+            <Card>
+              <CardItem cardBody button onPress={this.OpenCamera}>
+                <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
+                  <Icon type="FontAwesome" name='camera-retro' />
+                </Body>
+              </CardItem>
+            </Card>
+            <Item style ={styles.inputLayout} floatingLabel require>
+              <Label>Name</Label>
+              <Input value={this.props.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
+              <Icon name='close-circle' />
+            </Item>
+            <Item style ={styles.inputLayout} floatingLabel require>
+              <Label>Description</Label>
+              <Input value={this.props.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
+              <Icon name='close-circle' />
+            </Item>
+            <View style ={styles.buttonView}>
+              <Button style ={styles.inputLayout} onPress= {this.addNewCategory} style={styles.buttonLayoutBottom} >
+                <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Category</Text>
+              </Button>
+            </View>
           </Form>
-
         </Content>
       </Container>
     );
@@ -100,14 +111,9 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing,Sets,CategorySelected,SetSelected} = state;
+    const {Categorias} = state;
     return{
-      Categories,
-      Loundry,
-      Missing,
-      Sets,
-      CategorySelected,
-      SetSelected,
+      Categorias
     };
 
 }

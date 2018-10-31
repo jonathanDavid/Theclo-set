@@ -43,8 +43,6 @@ export default class AddPrendaView extends Component {
             <Title>Add Clothes</Title>
           </Body>
         </Header>
-
-
           <Form>
             <Card>
               <CardItem cardBody button onPress={this.OpenCamera}>
@@ -61,7 +59,6 @@ export default class AddPrendaView extends Component {
                 <Label>Description</Label>
                 <Input value={this.props.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
               </Item>
-
               <View style={{flexDirection: 'row'}}>
                 <Button onPress={this.onRegisterPress} style={styles.buttonLayout} block info>
                   <Text> Take a Picture! </Text>
