@@ -54,7 +54,8 @@ export default class AddElement extends Component {
   }
 
   addNew=()=>{
-    let data ={Nombre: this.state.Nombre, Description: this.state.Descripcion, Photo: this.state.Photo}
+
+    let data ={Nombre: this.state.Name, Description: this.state.Description, Photo: this.state.Photo}
     this.props.addNew(data);
   }
 

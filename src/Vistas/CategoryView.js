@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash'
+import firebase from 'firebase';
 
 
 
@@ -40,6 +41,20 @@ class CategoryView extends Component{
     this.props.navigation.navigate("AddCategoryView",{ categoryData: currentCategory});
   }
 
+  onDeleteCategory = ()=>{
+    let currentCategory = this.props.navigation.state.params.CategorySelected;
+    loggedUser = firebase.auth().currentUser;
+    this.props.editCategory(currentCategory.id)
+    userReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/${currentCategory.id}`);
+    userReference.remove().then(() => {
+      firebase.database().ref(`Users/${loggedUser.uid}`).once('value', (dataSnapshot) => {
+        this.props.setState(dataSnapshot.val());
+        this.props.navigation.navigate("CategoriesView");
+      })
+    });
+
+  }
+
   onSwipeR=(index)=>{
     prendas = this.prendasActivas();
     item = prendas[index];
@@ -48,7 +63,6 @@ class CategoryView extends Component{
   }
 
   addNewClothes=()=>{
-    alert(this.state.inputText);
     this.props.addChothes(this.state.inputText);
   }
   onChangeText=(input)=>{
@@ -59,8 +73,7 @@ class CategoryView extends Component{
 
   onPressNew = () => {
     this.setState({ active: !this.state.active });
-    //this.props.onPressNew();
-    this.props.navigation.navigate("AddPrendaView",{ prendaData: null});
+    this.props.navigation.navigate("AddPrendaView",{ prendaData: null,CategorySelected: this.props.navigation.state.params.CategorySelected});
   }
 
   render() {
@@ -68,7 +81,8 @@ class CategoryView extends Component{
       <Container>
         <SwipeableListView
         isEditor={true}
-        onEditCategory={this.onEditCategory}
+        onEdit={this.onEditCategory}
+        onDelete={this.onDeleteCategory}
         UrlImageL={require("./images/laundry_icon.png")}
         UrlImageR={require("./images/socks_icon.png")}
         onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
@@ -83,26 +97,12 @@ class CategoryView extends Component{
             containerStyle={{ }}
             style={{ backgroundColor: '#6432c8' }}
             position="bottomRight"
-            onPress={this.onPressNew/*() => this.setState(onPressNew{ active: !this.state.active })*/}>
+            onPress={this.onPressNew}>
           <Icon  type="FontAwesome" name="plus" />
 
-
-          {/*<Button onPress={this.onPressNew}  style={{ backgroundColor: '#34A34F' }}>
-            <Icon  type="FontAwesome" name="plus" />
-          </Button>*/}
         </Fab>
         </View>
-        {/*
-        <Item>
-          <Input onChangeText={this.onChangeText} placeholder='Set Name'/>
-        </Item>
-        <Footer>
-          <FooterTab style ={{backgroundColor: '#ffffff',height: 100}}>
-            <Button onPress={this.addNewClothes} style={[styles.buttonLayoutBottom,{backgroundColor: '#6432c8'}]}  block>
-              <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Clothes</Text>
-            </Button>
-          </FooterTab>
-        </Footer>*/}
+
       </Container>
     );
   }
@@ -137,6 +137,8 @@ function mapDispatchToProps(dispatch){
   return{
     sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
     sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
+    setState: bindActionCreators(Actions.setState,dispatch),
+    editCategory: bindActionCreators(Actions.editCategory,dispatch),
     addChothes: bindActionCreators(Actions.addChothes,dispatch),
   };
 }

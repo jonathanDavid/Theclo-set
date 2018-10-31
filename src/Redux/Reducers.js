@@ -35,17 +35,14 @@ function applyAddCategory(state,payload,Categorias){
 }
 
 function applyEditCategory(state,payload,Categorias){
-  const newCategorias = _map(Categorias, item => {
-        if(item.id === payload.id){
-          return { ...item, ...payload }
-        }
-        return item
-      })
+  let index = Object.keys(Categorias).indexOf(payload)
+  console.log(Object.values(Categorias))
 
   return{
     ...state,
-    Categorias:{...Categorias, ...newCategorias},
-  };
+    //Categorias: Categorias.keys().filter((Loundry,i)=>i!=payload),
+    Categorias: Object.values(Categorias).filter((Categorias,i)=>i!==index),
+  }
 }
 
 

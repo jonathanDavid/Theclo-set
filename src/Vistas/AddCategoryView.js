@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {StyleSheet,StatusBar,View, Image } from 'react-native';
 import { Container, Header,Label, Title, Content, Footer, Item, Input,FooterTab,Form, Button,Picker, Left, Right, Body, Icon, Text, DeckSwiper, Card, CardItem, Thumbnail } from 'native-base';
 import ListViewer from '../Componentes/ListViewer';
+import AddElement from '../Componentes/AddElement';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
@@ -12,7 +13,7 @@ class AddCategoryView extends Component {
     super(props);
     state={Name:'',Description:'',Photo:''};
   }
-
+/*
   componentWillMount(){
     let data = this.props.navigation.state.params.categoryData;
     if(data){
@@ -20,9 +21,9 @@ class AddCategoryView extends Component {
     }else{
       this.setState({Name:'',Description:'',Photo:''});
     }
-  }
+  }*/
 
-  addNewCategory = () => {
+  addNewCategory = (myData) => {
     let data = this.props.navigation.state.params.categoryData;
     loggedUser = firebase.auth().currentUser;
     userReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
@@ -32,17 +33,15 @@ class AddCategoryView extends Component {
     }else{
       pushID = userReference.push().key;
     }
-    let category = {Nombre: this.state.Name, Descripcion: `${this.state.Description}`, id: pushID}
-    if(data){
-      this.props.editCategory(category)
-    }else{
-      this.props.addCategory(category)
-    }
-
+    console.log(myData.Descripcion)
+    let category = {Nombre: myData.Nombre, Descripcion: myData.Description, id: pushID}
 
     userReference.child(pushID).set(category)
     .then( () => {
-      this.props.navigation.goBack();
+      firebase.database().ref(`Users/${loggedUser.uid}`).once('value', (dataSnapshot) => {
+        this.props.setState(dataSnapshot.val());
+        this.props.navigation.navigate("CategoriesView");
+      })
     });
   }
 
@@ -57,46 +56,13 @@ class AddCategoryView extends Component {
   render() {
     return (
       <Container>
-        <Header style={{backgroundColor: '#6432c8'}}>
-          <StatusBar backgroundColor={'#6432c8'} barStyle="light-content"/>
-          <Left>
-            <Button onPress={this.onPressBack} transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>New Category</Title>
-          </Body>
-        </Header>
-        <Content>
-          <Form>
-            <Card>
-              <CardItem cardBody button onPress={this.OpenCamera}>
-                <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
-                  <Icon type="FontAwesome" name='camera-retro' />
-                </Body>
-              </CardItem>
-            </Card>
-            <Item style ={styles.inputLayout} floatingLabel require>
-              <Label>Name</Label>
-              <Input value={this.state.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
-              <Icon name='close-circle' />
-            </Item>
-            <Item style ={styles.inputLayout} floatingLabel require>
-              <Label>Description</Label>
-              <Input value={this.state.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
-              <Icon name='close-circle' />
-            </Item>
-            <View style ={styles.buttonView}>
-              <Button  onPress= {this.addNewCategory} style={styles.buttonLayoutBottom} >
-                <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Category</Text>
-              </Button>
-            </View>
-          </Form>
-        </Content>
+        <AddElement Title= {'Agregar Categoria'} onPressBack={this.onPressBack} OpenCamera={this.OpenCamera} addNew={this.addNewCategory}
+         dataEdit={this.props.navigation.state.params.categoryData} ></AddElement>
       </Container>
     );
   }
+
+
 }
 
 const styles = StyleSheet.create({
@@ -134,6 +100,7 @@ function mapDispatchToProps(dispatch){
   return{
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
     editCategory: bindActionCreators(Actions.editCategory,dispatch),
+    setState: bindActionCreators(Actions.setState,dispatch),
   };
 }
 

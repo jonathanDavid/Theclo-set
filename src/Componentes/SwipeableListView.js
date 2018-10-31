@@ -13,15 +13,18 @@ export default class SwipeableListView extends Component {
     this.props.onSwipeL(rowId);
 
   }
-  
+
   onPressR=(secId, rowId, rowMap)=>{
     rowMap[`${secId}${rowId}`].props.closeRow();
     this.props.onSwipeR(rowId);
 
   }
 
-  onEditCategory = () => {
-    this.props.onEditCategory();
+  onEdit = () => {
+    this.props.onEdit();
+  }
+  onDelete = () => {
+    this.props.onDelete();
   }
 
   renderActionButtons(){
@@ -29,10 +32,10 @@ export default class SwipeableListView extends Component {
     if( this.props.isEditor ){
       code.push(
         <Right>
-          <Button transparent>
+          <Button onPress={this.onDelete} transparent>
             <Icon type="FontAwesome" name="trash" />
           </Button>
-          <Button onPress={this.onEditCategory} transparent>
+          <Button onPress={this.onEdit} transparent>
             <Icon type="FontAwesome" name="edit" />
           </Button>
         </Right>);
