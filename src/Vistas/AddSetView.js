@@ -14,7 +14,7 @@ class AddSetView extends Component {
     super(props);
     this.state = {
       setName:"",
-      selectedCategorie: 0,
+      selectedCategoria: 0,
       selectedPrenda: 0,
       miSet:["NewSet"]
     };
@@ -22,7 +22,7 @@ class AddSetView extends Component {
 
   onValueChangeCat(value) {
     this.setState({
-      selectedCategorie: value
+      selectedCategoria: value
     });
   }
 
@@ -32,26 +32,42 @@ class AddSetView extends Component {
     });
   }
 
-  renderCategories=()=>{
+  categoriasNames = () => {
+    let data = this.props.Categorias;
+    data = _.map(data, 'Nombre');
+    return data;
+  }
+
+  pendasValue = () => {
+    let data = this.props.Prendas;
+    data = _.map(data, 'Titulo');
+    return data;
+  }
+
+  renderCategorias=()=>{
+    let data = categoriasNames;
     let code = [];
-    for (var i=0; i < this.props.Categories.length; i++) {
-       code.push( <Picker.Item label={this.props.Categories[i][0]} value={i} />);
+    for (var i=0; i < data.length; i++) {
+       code.push( <Picker.Item label={data[i]} value={i} />);
      }
-      return code;
+    return code;
   }
 
   renderClothes=()=>{
+    let data = prendasValue;
     let code=[];
-    prendas = this.props.Categories[this.state.selectedCategorie].slice(1);
+    //prendas = this.props.Categorias[this.state.selectedCategorie].slice(1);
+    prendas = data[this.state.selectedCategoria].slice(1);
     prendas = prendas.filter(f => !this.state.miSet.includes(f));
     for(var i=0; i < prendas.length; i++){
       code.push(<Picker.Item label={prendas[i]} value={i} />)
     }
     return code;
-
   }
+
   addClothesToSet=()=>{
-    prendas = this.props.Categories[this.state.selectedCategorie].slice(1);
+    let data = prendasValue;
+    prendas = data[this.state.selectedCategoria].slice(1);
     prendas = prendas.filter(f => !this.state.miSet.includes(f));
     item=prendas[this.state.selectedPrenda];
     this.setState({
@@ -105,7 +121,7 @@ class AddSetView extends Component {
                 selectedValue={this.state.selectedCategorie}
                 onValueChange={this.onValueChangeCat.bind(this)}
               >
-                {this.renderCategories()}
+                {this.renderCategorias()}
               </Picker>
               <Picker
                 note={false}
@@ -157,14 +173,10 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state){
-    const {Categories,Loundry,Missing,Sets,CategorySelected,SetSelected} = state;
+    const {Categorias,Prendas} = state;
     return{
-      Categories,
-      Loundry,
-      Missing,
-      Sets,
-      CategorySelected,
-      SetSelected,
+      Categorias,
+
     };
 
 }
