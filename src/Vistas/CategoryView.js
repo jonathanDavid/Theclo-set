@@ -36,7 +36,7 @@ class CategoryView extends Component{
 
   onEditCategory = () => {
     let currentCategory = this.props.navigation.state.params.CategorySelected;
-    this.navigation.navigate("AddCategoryView",{ categoryData: currentCategory});
+    this.props.navigation.navigate("AddCategoryView",{ categoryData: currentCategory});
   }
 
   onSwipeR=(index)=>{

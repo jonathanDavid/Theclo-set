@@ -13,10 +13,12 @@ class AddCategoryView extends Component {
     state={Name:'',Description:'',Photo:''};
   }
 
-  componentDidMount(){
+  componentWillMount(){
     let data = this.props.navigation.state.params.categoryData;
     if(data){
       this.setState({Name: data.Nombre, Description: data.Descripcion});
+    }else{
+      this.setState({Name:'',Description:'',Photo:''});
     }
   }
 
@@ -31,11 +33,13 @@ class AddCategoryView extends Component {
       pushID = userReference.push().key;
     }
     let category = {Nombre: this.state.Name, Descripcion: `${this.state.Description}`, id: pushID}
-    console.log(this.props.Categorias)
+
+
     this.props.addCategory(category)
+
+
     userReference.child(pushID).set(category)
     .then( () => {
-      console.log(this.props.Categorias)
       this.props.navigation.goBack();
     });
   }
@@ -73,12 +77,12 @@ class AddCategoryView extends Component {
             </Card>
             <Item style ={styles.inputLayout} floatingLabel require>
               <Label>Name</Label>
-              <Input value={this.props.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
+              <Input value={this.state.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
               <Icon name='close-circle' />
             </Item>
             <Item style ={styles.inputLayout} floatingLabel require>
               <Label>Description</Label>
-              <Input value={this.props.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
+              <Input value={this.state.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
               <Icon name='close-circle' />
             </Item>
             <View style ={styles.buttonView}>
