@@ -30,9 +30,10 @@ const initialState = {};
 function applyAddCategory(state,payload,Categorias){
   return{
     ...state,
-    Categorias:[...Categorias,payload],
+    Categorias:{...Categorias,payload},
   };
 }
+
 
 function applySetState(state,payload){
   console.log('Current State')
@@ -111,7 +112,7 @@ export default Reducer = (state=initialState, action)=>{
 
   switch (type) {
     case ADD_CATEGORY:
-      return applyAddCathegory(state,payload,Categorias);
+      return applyAddCategory(state,payload,Categorias);
     break;
     case ADD_CLOTHES:
       return applyAddClothes(state,payload,Categorias,CategorySelected);

@@ -14,6 +14,7 @@ class AddCategoryView extends Component {
   }
 
   componentDidMount(){
+    let data = this.props.navigation.state.params.categoryData;
     if(data){
       this.setState({Name: data.Nombre, Description: data.Descripcion});
     }
@@ -23,13 +24,18 @@ class AddCategoryView extends Component {
     let data = this.props.navigation.state.params.categoryData;
     loggedUser = firebase.auth().currentUser;
     userReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
+
     if(data){
       pushID = data.id;
     }else{
       pushID = userReference.push().key;
     }
-    userReference.child(pushID).set({Nombre: this.state.Name, Descripcion: `${this.state.Description}`, id: pushID})
+    let category = {Nombre: this.state.Name, Descripcion: `${this.state.Description}`, id: pushID}
+    console.log(this.props.Categorias)
+    this.props.addCategory(category)
+    userReference.child(pushID).set(category)
     .then( () => {
+      console.log(this.props.Categorias)
       this.props.navigation.goBack();
     });
   }
@@ -120,9 +126,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
-    sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
-    addSet: bindActionCreators(Actions.addSet,dispatch),
+    addCategory: bindActionCreators(Actions.addCategory,dispatch),
   };
 }
 

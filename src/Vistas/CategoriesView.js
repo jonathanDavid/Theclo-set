@@ -23,7 +23,7 @@ class CategoriesView extends Component{
   }
 
   onPressNew=()=>{
-    this.props.navigation.navigate("AddCategoryView");
+    this.props.navigation.navigate("AddCategoryView",{ categoryData: null});
   }
 
   categoriesNames = () => {
