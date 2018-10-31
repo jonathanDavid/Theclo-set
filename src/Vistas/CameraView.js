@@ -91,7 +91,7 @@ export default class CameraView extends React.Component {
     return ratios;
   };
 
-  toggleView = () => this.this.props.navigation.goBack();//this.setState({ showGallery: !this.state.showGallery, newPhotos: false });
+  toggleView = () => this.props.navigation.goBack();//this.setState({ showGallery: !this.state.showGallery, newPhotos: false });
 
   toggleMoreOptions = () => this.setState({ showMoreOptions: !this.state.showMoreOptions });
 
@@ -267,22 +267,17 @@ export default class CameraView extends React.Component {
   renderBottomBar = () =>
     <View
       style={styles.bottomBar}>
-      <TouchableOpacity style={styles.bottomButton} onPress={this.toggleMoreOptions}>
-        <Octicons name="kebab-horizontal" size={30} color="white"/>
-      </TouchableOpacity>
       <View style={{ flex: 0.4 }}>
         <TouchableOpacity
           onPress={this.takePicture}
-          style={{ alignSelf: 'center' }}
+          style={{ alignSelf: 'center'}}
         >
           <Ionicons name="ios-radio-button-on" size={70} color="white" />
         </TouchableOpacity>
       </View>
       <TouchableOpacity style={styles.bottomButton} onPress={this.toggleView}>
         <View>
-        <Icon type={'FontAwesome'} name={'ban'} ></Icon>
-          {/*<Foundation name="thumbnails" size={30} color="white" />
-          {this.state.newPhotos && <View style={styles.newPhotosDot}/>}*/}
+        <Foundation name="x" size={30} color="white" />
         </View>
       </TouchableOpacity>
     </View>
