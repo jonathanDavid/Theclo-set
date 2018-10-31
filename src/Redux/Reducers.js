@@ -1,7 +1,7 @@
-import {SET_STATE,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
+import {SET_STATE,EDIT_CATEGORY,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
 import firebase from 'firebase';
 import ApiKeys from '../Database/ApiKeys';
-
+import _ from 'lodash'
 
 //Estado Inicial
 const initialState = {};
@@ -34,12 +34,22 @@ function applyAddCategory(state,payload,Categorias){
   };
 }
 
+function applyEditCategory(state,payload,Categorias){
+  const newCategorias = _map(Categorias, item => {
+        if(item.id === payload.id){
+          return { ...item, ...payload }
+        }
+        return item
+      })
+
+  return{
+    ...state,
+    Categorias:{...Categorias, ...newCategorias},
+  };
+}
+
 
 function applySetState(state,payload){
-  console.log('Current State')
-  console.log(state)
-  console.log('Next state')
-  console.log(payload);
   return{
     ...payload
   };
@@ -113,6 +123,9 @@ export default Reducer = (state=initialState, action)=>{
   switch (type) {
     case ADD_CATEGORY:
       return applyAddCategory(state,payload,Categorias);
+    break;
+    case EDIT_CATEGORY:
+      return applyEditCategory(state,payload,Categorias);
     break;
     case ADD_CLOTHES:
       return applyAddClothes(state,payload,Categorias,CategorySelected);

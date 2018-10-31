@@ -36,6 +36,7 @@ export default class CardViewer extends Component {
   }
 
   onPressNew = () => {
+    this.setState({ active: !this.state.active });
     this.props.onPressNew();
   }
 
@@ -66,18 +67,13 @@ export default class CardViewer extends Component {
             containerStyle={{ }}
             style={{ backgroundColor: '#6432c8' }}
             position="bottomRight"
-            onPress={() => this.setState({ active: !this.state.active })}>
-          <Icon type="FontAwesome" name="bars" />
+            onPress={this.onPressNew /*() => this.setState({ active: !this.state.active })*/}>
+          <Icon  type="FontAwesome" name="plus" />
 
-          <Button  style={{ backgroundColor: '#DD5144' }}>
-            <Icon type="FontAwesome"  name="trash" />
-          </Button>
-          <Button style={{ backgroundColor: '#3B5998' }}>
-            <Icon type="FontAwesome"  name="edit" />
-          </Button>
+          {/*
           <Button onPress={this.onPressNew}  style={{ backgroundColor: '#34A34F' }}>
             <Icon  type="FontAwesome" name="plus" />
-          </Button>
+          </Button>*/}
         </Fab>
         </View>
       </Container>
