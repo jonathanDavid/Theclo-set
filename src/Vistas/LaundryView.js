@@ -7,23 +7,39 @@ import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash'
 
+const STATUS_CLOSET =  0;
+const STATUS_LAUNDRY = 1;
+const STATUS_MISSING = 2;
+
 class  LaundryView extends Component{
   constructor(props){
     super(props)
   }
 
+  onPrendaStatusChange = (prendaID,statusID) => {
+    const userID = firebase.auth().currentUser.uid;
+    const route = `Users/${userID}/Prendas/${prendaID}/Estado`
+    prendaReference = firebase.database().ref(route).set(statusID).then( () => {
+      //Aqui llamar al metodo de render (Podria ser spinner por mientras)
+    });
+  }
+
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
+
   onSwipeL=(index)=>{
     //Send Missing
     item = this.props.Loundry[index];
-    this.props.sendMissing(item);
-    this.props.deleteLoundry(index);
+    // this.props.sendMissing(item);
+    // this.props.deleteLoundry(index);
+    this.onPrendaStatusChange(item.id,STATUS_MISSING)
   }
 
   onSwipeR=(index)=>{
-    this.props.deleteLoundry(index);
+    //this.props.deleteLoundry(index);
+    item = this.props.Loundry[index];
+    this.onPrendaStatusChange(item.id,STATUS_CLOSET)
   }
 
   loadPrendas=()=>{

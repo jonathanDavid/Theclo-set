@@ -10,9 +10,12 @@ import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash'
 import firebase from 'firebase';
 
-
+const STATUS_CLOSET =  0;
+const STATUS_LAUNDRY = 1;
+const STATUS_MISSING = 2;
 
 class CategoryView extends Component{
+
   constructor(props){
     super(props)
     this.state={
@@ -20,19 +23,26 @@ class CategoryView extends Component{
       active: false
     }
   }
+  
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
 
   prendasActivas=()=>{
     let prendas = this.props.Prendas;
-    let cat= this.props.navigation.state.params.CategorySelected.Nombre;
+    let cat= this.props.navigation.state.params.CategorySelected.id;
     prendas = _.filter(prendas, ['Categoria', cat]);
     prendas = _.filter(prendas, ['Estado', 0]);
     return prendas;
   }
 
-
+  onPrendaStatusChange = (prendaID,statusID) => {
+    const userID = firebase.auth().currentUser.uid;
+    const route = `Users/${userID}/Prendas/${prendaID}/Estado`
+    prendaReference = firebase.database().ref(route).set(statusID).then( () => {
+      //Aqui llamar al metodo de render (Podria ser spinner por mientras)
+    });
+  }
 
   onEditCategory = () => {
     let currentCategory = this.props.navigation.state.params.CategorySelected;
@@ -82,11 +92,16 @@ class CategoryView extends Component{
   onSwipeR=(index)=>{
     prendas = this.prendasActivas();
     item = prendas[index];
-    item.Estado=2;
-    this.props.sendMissing(item);
+    //item.Estado=2;
+    this.onPrendaStatusChange(item.id,STATUS_MISSING);
+    //this.props.sendMissing(item);
   }
   onSwipeL=(index)=>{
-    this.props.sendLoundry(index);
+    prendas = this.prendasActivas();
+    item = prendas[index];
+    //item.Estado=1;
+    this.onPrendaStatusChange(item.id,STATUS_LAUNDRY);
+    //this.props.sendLoundry(index);
   }
 
   addNewClothes=()=>{

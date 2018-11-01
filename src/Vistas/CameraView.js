@@ -81,9 +81,9 @@ export default class CameraView extends React.Component {
   }
 
   componentDidMount() {
-    FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
-      console.log(e, 'Directory exists');
-    });
+    // FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
+    //   console.log(e, 'Directory exists');
+    // });
   }
 
   getRatios = async () => {

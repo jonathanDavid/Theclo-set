@@ -30,10 +30,6 @@ export default class AddPrendaView extends Component {
     });
   }
 
-  onPressBack = ()=>{
-    this.props.navigation.goBack();
-  }
-
   OpenCamera=(event)=>{
     this.props.navigation.navigate("CameraView",{returnData: event})
   }

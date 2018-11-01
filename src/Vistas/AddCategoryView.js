@@ -11,35 +11,57 @@ import firebase from 'firebase';
 class AddCategoryView extends Component {
   constructor(props) {
     super(props);
-    state={Name:'',Description:'',Photo:''};
+    state={Name:'',Description:'',Photo:'', isAccessingDb:false, isAccessingStg:false};
   }
 
+  async uploadImage(uri, imageName, userId){
+     //const uploadUri =  Platform.OS === 'ios' ? uri.replace('file://','') : uri;
+     this.setState({isAccessingStg:true})
+     mime = 'image/jpeg'
+     const uploadUri = uri;
+     const imageStorage = firebase.storage().ref(`Users/${userId}/Categorias/`).child(imageName);
+     await fetch(uploadUri).then((response) => {
+       response.blob().then((blobResponse) => {
+         imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
+           this.setState({isAccessingStg:false})
+           this.props.navigation.goBack();
+         });
+       })
+     });
+   }
+
   addNewCategory = (myData) => {
-    let data = this.props.navigation.state.params.categoryData;
-    loggedUser = firebase.auth().currentUser;
-    categoryReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
-    if(data){
-      pushID = data.id;
-    }else{
+    this.setState({isAccessingDb:true});
+    const userId = firebase.auth().currentUser.uid;
+    const dbRoute = `Users/${userId}/Categorias/`
+    categoryReference = firebase.database().ref(dbRoute);
+    let pushID = myData.id;
+    if(!pushID){
       pushID = categoryReference.push().key;
     }
-    console.log(myData.Descripcion)
-    let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID}
-    categoryReference.child(pushID).set(category)
-    .then( () => {
-      categoryReference.once('value', (dataSnapshot) => {
-        this.props.addCategory(dataSnapshot.val());
-        this.props.navigation.navigate("CategoriesView");
-      })
-    });
+    let route = myData.Foto;
+    if(route){
+      this.uploadImage(route,pushID,userId);
+      const photoRoute = dbRoute+pushID;
+      let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: photoRoute}
+      categoryReference.child(pushID).set(category).then( () => {
+        this.setState({isAccessingDb:false})
+      });
+    }else{
+      let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: ''}
+      categoryReference.child(pushID).set(category).then( () => {
+        this.setState({isAccessingDb:false})
+      });
+    }
+
   }
 
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
 
-  OpenCamera=()=>{
-    this.props.navigation.navigate("CameraView")
+  OpenCamera=(event)=>{
+    this.props.navigation.navigate("CameraView", {returnData: event} )
   }
 
   render() {
