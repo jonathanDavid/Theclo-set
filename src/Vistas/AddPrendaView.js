@@ -8,11 +8,26 @@ import AddElement  from '../Componentes/AddElement';
 /*Database and Auth*/
 import firebase from 'firebase';
 
-
 export default class AddPrendaView extends Component {
   constructor(props){
     super(props);
-    state={Name:'',Description:'',Photo:''};
+    state={Name:'',Description:'',Photo:'', id:'', isAccessingDb:false, isAccessingStg:false};
+  }
+
+ async uploadImage(uri, imageName, userId, categoryId){
+    //const uploadUri =  Platform.OS === 'ios' ? uri.replace('file://','') : uri;
+    this.setState({isAccessingStg:true})
+    mime = 'image/jpeg'
+    const uploadUri = uri;
+    const imageStorage = firebase.storage().ref(`Users/${userId}/Prendas/`).child(imageName);
+    await fetch(uploadUri).then((response) => {
+      response.blob().then((blobResponse) => {
+        imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
+          this.setState({isAccessingStg:false})
+          this.props.navigation.goBack();
+        });
+      })
+    });
   }
 
   onPressBack = ()=>{
@@ -26,12 +41,35 @@ export default class AddPrendaView extends Component {
     this.props.navigation.goBack();
   }
 
-
   addNewPrenda=(myData)=>{
     //Aqui se agrega el metodo de agregar prenda
-    alert(myData.Nombre)
-  }
+    this.setState({isAccessingDb:true});
+    const userId = firebase.auth().currentUser.uid;
+    const dbRoute = `Users/${userId}/Prendas/`
+    let category = this.props.navigation.state.params.categorySelected;
+    prendaReference = firebase.database().ref(dbRoute);
+    let pushID = myData.id;
+    if(!pushID){
+      pushID = prendaReference.push().key;
+    }
+    let route = myData.Foto;
+    console.log(route)
+    if(route){
+      this.uploadImage(route,pushID,userId,category.id);
+      const photoRoute = dbRoute+pushID;
+      let prenda = {Titulo: myData.Nombre, Descripcion: myData.Descripcion, Estado: 0, Categoria: category.id, Foto: photoRoute, id: pushID}
+      prendaReference.child(pushID).set(prenda).then( () => {
+        this.setState({isAccessingDb:false})
+      });
+    }else{
+      let prenda = {Titulo: myData.Nombre, Descripcion: myData.Descripcion, Estado: 0, Categoria: category.id, Foto: '',id: pushID}
+      prendaReference.child(pushID).set(prenda)
+      .then( () => {
+        this.setState({isAccessingDb:false})
+      });
+    }
 
+  }
 
   render() {
     return (

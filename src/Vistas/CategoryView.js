@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content,Footer,Fab,Button,FooterTab, Card,Item,Input, CardItem, Body,Icon, Text } from 'native-base';
 
-import {Platform, StyleSheet, View, Image} from 'react-native';
+import {Platform, StyleSheet, View, Image,Alert} from 'react-native';
 
 import SwipeableListView from '../Componentes/SwipeableListView';
 import {connect} from 'react-redux';
@@ -32,27 +32,51 @@ class CategoryView extends Component{
     return prendas;
   }
 
-  onSwipeL=(index)=>{
-    this.props.sendLoundry(index);
-  }
+
 
   onEditCategory = () => {
     let currentCategory = this.props.navigation.state.params.CategorySelected;
     this.props.navigation.navigate("AddCategoryView",{ categoryData: currentCategory});
   }
 
-  onDeleteCategory = ()=>{
+  onDeleteAlert = ()=>{
+    Alert.alert(
+    'Eliminar Categoria',
+    '¿Esta seguro de eliminar esta Cateoria?',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Eliminar', onPress: this.onDeleteAlertPrendas},
+    ],
+    { cancelable: false }
+  )
+
+  }
+
+  onDeleteAlertPrendas = ()=>{
+    Alert.alert(
+    'Eliminar Categoria',
+    '¿Desea conservar sus prendas?',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Conservar', onPress:  this.deleteCategory },
+      {text: 'Eliminar TODO', onPress: ()=>{}},
+    ],
+    { cancelable: false }
+  )
+
+  }
+
+  deleteCategory=()=>{
     let currentCategory = this.props.navigation.state.params.CategorySelected;
     loggedUser = firebase.auth().currentUser;
-    this.props.editCategory(currentCategory.id)
-    userReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/${currentCategory.id}`);
-    userReference.remove().then(() => {
-      firebase.database().ref(`Users/${loggedUser.uid}`).once('value', (dataSnapshot) => {
-        this.props.setState(dataSnapshot.val());
+    categoryReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
+    currentCategoryReference = categoryReference.child(`${currentCategory.id}`);
+    currentCategoryReference.remove().then(() => {
+      categoryReference.once('value', (dataSnapshot) => {
+        this.props.addCategory(dataSnapshot.val());
         this.props.navigation.navigate("CategoriesView");
       })
     });
-
   }
 
   onSwipeR=(index)=>{
@@ -60,6 +84,9 @@ class CategoryView extends Component{
     item = prendas[index];
     item.Estado=2;
     this.props.sendMissing(item);
+  }
+  onSwipeL=(index)=>{
+    this.props.sendLoundry(index);
   }
 
   addNewClothes=()=>{
@@ -73,7 +100,7 @@ class CategoryView extends Component{
 
   onPressNew = () => {
     this.setState({ active: !this.state.active });
-    this.props.navigation.navigate("AddPrendaView",{ prendaData: null,CategorySelected: this.props.navigation.state.params.CategorySelected});
+    this.props.navigation.navigate("AddPrendaView",{ prendaData: null, categorySelected: this.props.navigation.state.params.CategorySelected});
   }
 
   render() {
@@ -82,7 +109,7 @@ class CategoryView extends Component{
         <SwipeableListView
         isEditor={true}
         onEdit={this.onEditCategory}
-        onDelete={this.onDeleteCategory}
+        onDelete={this.onDeleteAlert}
         UrlImageL={require("./images/laundry_icon.png")}
         UrlImageR={require("./images/socks_icon.png")}
         onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
@@ -137,8 +164,7 @@ function mapDispatchToProps(dispatch){
   return{
     sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
     sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
-    setState: bindActionCreators(Actions.setState,dispatch),
-    editCategory: bindActionCreators(Actions.editCategory,dispatch),
+    addCategory: bindActionCreators(Actions.addCategory,dispatch),
     addChothes: bindActionCreators(Actions.addChothes,dispatch),
   };
 }

@@ -9,7 +9,7 @@ import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body
 export default class AddElement extends Component {
   constructor(props){
     super(props);
-    state={Name:'',Description:'',Photo:''};
+    state={Nombre:'',Descripcion:'',Foto:null};
   }
 
   onPressBack = ()=>{
@@ -19,14 +19,14 @@ export default class AddElement extends Component {
   componentWillMount(){
     let data = this.props.dataEdit;
     if(data){
-      this.setState({Name: data.Nombre, Description: data.Descripcion, Photo:data.Photo});
+      this.setState({Nombre: data.Nombre, Descripcion: data.Descripcion, Foto:data.Foto});
     }else{
-      this.setState({Name:'',Description:'',Photo:null});
+      this.setState({Nombre:'',Descripcion:'',Foto:null});
     }
   }
 
   returnData(uri) {
-    this.setState({Photo: uri});
+    this.setState({Foto: uri});
   }
 
   OpenCamera=()=>{
@@ -36,26 +36,24 @@ export default class AddElement extends Component {
   renderImageCamera=()=>{
     let code= [];
 
-    if(this.state.Photo !== null){
+    if(this.state.Foto !== null){
       code.push(
         <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
-         <Image source={{uri: this.state.Photo}} style={{height: 200, width: null, flex: 1}}/>
+         <Image source={{uri: this.state.Foto}} style={{height: 200, width: null, flex: 1}}/>
         </Body>
       )
     }else{
       code.push(
-        <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
+        <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200}}>
           <Icon type="FontAwesome" name='camera-retro'/>
         </Body>
       )
     }
-
     return code
   }
 
   addNew=()=>{
-
-    let data ={Nombre: this.state.Name, Description: this.state.Description, Photo: this.state.Photo}
+    let data ={Nombre: this.state.Nombre, Descripcion: this.state.Descripcion, Foto: this.state.Foto}
     this.props.addNew(data);
   }
 
@@ -82,11 +80,11 @@ export default class AddElement extends Component {
               </Card>
                 <Item style ={styles.inputLayout} floatingLabel require>
                   <Label>Nombre</Label>
-                  <Input value={this.state.Name} onChangeText={(info) => {this.setState({Name:info})}}/>
+                  <Input value={this.state.Nombre} onChangeText={(info) => {this.setState({Nombre:info})}}/>
                 </Item>
                 <Item style ={styles.inputLayout} floatingLabel require>
                   <Label>Descripcion</Label>
-                  <Input value={this.state.Description} onChangeText={(info) => {this.setState({Description:info})}}/>
+                  <Input value={this.state.Descripcion} onChangeText={(info) => {this.setState({Descripcion:info})}}/>
                 </Item>
                 <View style ={styles.buttonView}>
                   <Button onPress= {this.addNew} style={styles.buttonLayoutBottom} >

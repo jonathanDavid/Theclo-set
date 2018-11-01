@@ -1,49 +1,21 @@
-import {SET_STATE,EDIT_CATEGORY,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
+import {SET_STATE,ADD_CATEGORY, ADD_CLOTHES,ADD_SET, SEND_LOUNDRY, SEND_MISSING, DELETE_LOUNDRY, DELETE_MISSING, CATEGORY_SELECTED,SET_SELECTED} from './Types';
 import firebase from 'firebase';
 import ApiKeys from '../Database/ApiKeys';
 import _ from 'lodash'
 
-//Estado Inicial
+
 const initialState = {};
-//  ={
-//     Categorias:[
-//                 ['Camisa', 'Prenda 1','Prenda 2','Prenda 3'],
-//                 ['Pantalon', 'Prenda 4','Prenda 8','Prenda 9'],
-//                 ['Zapatos', 'Prenda 5','Prenda 6','Prenda 14'],
-//                 ['Ropa Interior', 'Prenda 7','Prenda 12','Prenda 13'],
-//                 ['Medias', 'Prenda 10','Prenda 11','Prenda 15']
-//               ],
-//     Loundry:['Prenda 2','Prenda 3','Prenda 9'],
-//     Missing:['Prenda 6','Prenda 8'],
-//     Sets:[
-//           ['Set 1', 'Prenda 1','Prenda 4','Prenda 5','Prenda 7','Prenda 10'],
-//           ['Set 2', 'Prenda 2','Prenda 8','Prenda 6','Prenda 12','Prenda 11'],
-//           ['Set 4', 'Prenda 2','Prenda 9','Prenda 14','Prenda 13','Prenda 15'],
-//           ['Set 5', 'Prenda 1','Prenda 8','Prenda 14','Prenda 12','Prenda 10'],
-//         ],
-//     CategorySelected:0,
-//     SetSelected:0,
-// }
 
 
-//Funciones
-function applyAddCategory(state,payload,Categorias){
+
+function applyAddCategory(state,payload){
+  console.log(payload);
   return{
     ...state,
-    Categorias:{...Categorias,payload},
+    Categorias:{...payload},
   };
 }
 
-function applyEditCategory(state,payload,Categorias){
-  let index = Object.keys(Categorias).indexOf(payload)
-  console.log(Object.values(Categorias))
-
-  return{
-    ...state,
-    //Categorias: Categorias.keys().filter((Loundry,i)=>i!=payload),
-    Categorias: Object.values(Categorias).filter((Categorias,i)=>i!==index),
-  }
-}
 
 
 function applySetState(state,payload){
@@ -119,10 +91,7 @@ export default Reducer = (state=initialState, action)=>{
 
   switch (type) {
     case ADD_CATEGORY:
-      return applyAddCategory(state,payload,Categorias);
-    break;
-    case EDIT_CATEGORY:
-      return applyEditCategory(state,payload,Categorias);
+      return applyAddCategory(state,payload);
     break;
     case ADD_CLOTHES:
       return applyAddClothes(state,payload,Categorias,CategorySelected);

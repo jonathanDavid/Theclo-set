@@ -25,8 +25,9 @@ export default class CardViewer extends Component {
               )
         }else{
             code.push(
-              <View style={styles.oneCategory}>
+              <View style={styles.duoCategory}>
                 <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem isTransparent={true} ></CardViewerItem>
               </View>
             )
           }
@@ -65,15 +66,10 @@ export default class CardViewer extends Component {
             active={this.state.active}
             direction="up"
             containerStyle={{ }}
-            style={{ backgroundColor: '#6432c8' }}
+            style={{ backgroundColor:  this.props.headerColor }}
             position="bottomRight"
-            onPress={this.onPressNew /*() => this.setState({ active: !this.state.active })*/}>
+            onPress={this.onPressNew}>
           <Icon  type="FontAwesome" name="plus" />
-
-          {/*
-          <Button onPress={this.onPressNew}  style={{ backgroundColor: '#34A34F' }}>
-            <Icon  type="FontAwesome" name="plus" />
-          </Button>*/}
         </Fab>
         </View>
       </Container>
@@ -93,7 +89,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     height: 180,
-    width: 185,
     margin: 0,
     padding: 5,
   },

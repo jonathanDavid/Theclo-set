@@ -13,33 +13,22 @@ class AddCategoryView extends Component {
     super(props);
     state={Name:'',Description:'',Photo:''};
   }
-/*
-  componentWillMount(){
-    let data = this.props.navigation.state.params.categoryData;
-    if(data){
-      this.setState({Name: data.Nombre, Description: data.Descripcion});
-    }else{
-      this.setState({Name:'',Description:'',Photo:''});
-    }
-  }*/
 
   addNewCategory = (myData) => {
     let data = this.props.navigation.state.params.categoryData;
     loggedUser = firebase.auth().currentUser;
-    userReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
-
+    categoryReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
     if(data){
       pushID = data.id;
     }else{
-      pushID = userReference.push().key;
+      pushID = categoryReference.push().key;
     }
     console.log(myData.Descripcion)
-    let category = {Nombre: myData.Nombre, Descripcion: myData.Description, id: pushID}
-
-    userReference.child(pushID).set(category)
+    let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID}
+    categoryReference.child(pushID).set(category)
     .then( () => {
-      firebase.database().ref(`Users/${loggedUser.uid}`).once('value', (dataSnapshot) => {
-        this.props.setState(dataSnapshot.val());
+      categoryReference.once('value', (dataSnapshot) => {
+        this.props.addCategory(dataSnapshot.val());
         this.props.navigation.navigate("CategoriesView");
       })
     });
@@ -99,8 +88,6 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
-    editCategory: bindActionCreators(Actions.editCategory,dispatch),
-    setState: bindActionCreators(Actions.setState,dispatch),
   };
 }
 

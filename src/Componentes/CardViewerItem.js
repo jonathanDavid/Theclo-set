@@ -10,11 +10,11 @@ export default class CardViewerItem extends Component {
       <Container style={styles.viewMargin}>
         <Content>
           <TouchableOpacity onPress={this.props.onPress}>
-            <Card>
+            <Card transparent={this.props.isTransparent}>
               <CardItem>
                 <Left>
                   <Body>
-                    <Text style={{fontWeight: 'bold'}}>{this.props.Title}</Text>
+                    <Text numberOfLines={1} style={{fontWeight: 'bold'}}>{this.props.Title}</Text>
                   </Body>
                 </Left>
               </CardItem>
