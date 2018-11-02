@@ -5,6 +5,8 @@ import SwipeableListView from '../Componentes/SwipeableListView';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
+
+import firebase from 'firebase';
 import _ from 'lodash'
 
 const STATUS_CLOSET =  0;
@@ -23,26 +25,30 @@ class MissingView extends Component{
   onPrendaStatusChange = (prendaID,statusID) => {
     const userID = firebase.auth().currentUser.uid;
     const route = `Users/${userID}/Prendas/${prendaID}/Estado`
+    const prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
     prendaReference = firebase.database().ref(route).set(statusID).then( () => {
       //Aqui llamar al metodo de render (Podria ser spinner por mientras)
+      prendasReference.once('value', (dataSnapshot) => {
+        this.props.refreshPrendas(dataSnapshot.val());
+      })
     });
   }
 
   onSwipeL=(index)=>{
-    //Send Loundry
-    item = this.props.Missing[index];
+    let misPrendas = this.loadPrendas()
+    item = misPrendas[index];
     this.onPrendaStatusChange(item.id,STATUS_LAUNDRY)
   }
 
   onSwipeR=(index)=>{
-    //this.props.deleteMissing(index);
-    item = this.props.Missing[index];
+    let misPrendas = this.loadPrendas()
+    item = misPrendas[index];
     this.onPrendaStatusChange(item.id,STATUS_CLOSET)
   }
 
   loadPrendas=()=>{
     let prendas = this.props.Prendas;
-        prendas = _.filter(prendas, ['Estado',2]);
+    prendas = _.filter(prendas, ['Estado',2]);
     console.log(prendas)
     return prendas
   }
@@ -61,9 +67,8 @@ class MissingView extends Component{
 }
 
 function mapStateToProps(state){
-    const {Categories,Prendas} = state;
+    const {Prendas} = state;
     return{
-      Categories,
       Prendas
     };
 
@@ -71,8 +76,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
-    deleteMissing: bindActionCreators(Actions.deleteMissing,dispatch),
+    refreshPrendas: bindActionCreators(Actions.refreshPrendas,dispatch),
   };
 }
 

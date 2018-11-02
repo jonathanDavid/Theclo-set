@@ -23,7 +23,7 @@ class CategoryView extends Component{
       active: false
     }
   }
-  
+
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
@@ -39,8 +39,12 @@ class CategoryView extends Component{
   onPrendaStatusChange = (prendaID,statusID) => {
     const userID = firebase.auth().currentUser.uid;
     const route = `Users/${userID}/Prendas/${prendaID}/Estado`
+    const prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
     prendaReference = firebase.database().ref(route).set(statusID).then( () => {
       //Aqui llamar al metodo de render (Podria ser spinner por mientras)
+      prendasReference.once('value', (dataSnapshot) => {
+        this.props.refreshPrendas(dataSnapshot.val());
+      })
     });
   }
 
@@ -92,21 +96,18 @@ class CategoryView extends Component{
   onSwipeR=(index)=>{
     prendas = this.prendasActivas();
     item = prendas[index];
-    //item.Estado=2;
     this.onPrendaStatusChange(item.id,STATUS_MISSING);
-    //this.props.sendMissing(item);
   }
   onSwipeL=(index)=>{
     prendas = this.prendasActivas();
     item = prendas[index];
-    //item.Estado=1;
     this.onPrendaStatusChange(item.id,STATUS_LAUNDRY);
-    //this.props.sendLoundry(index);
   }
 
   addNewClothes=()=>{
     this.props.addChothes(this.state.inputText);
   }
+
   onChangeText=(input)=>{
     this.setState({
       inputText:input,
@@ -131,7 +132,6 @@ class CategoryView extends Component{
         onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()}
         btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#6432c8'
         Title={this.props.navigation.state.params.CategorySelected.Nombre}></SwipeableListView>
-
         <View>
           <Fab
             active={this.state.active}
@@ -141,10 +141,8 @@ class CategoryView extends Component{
             position="bottomRight"
             onPress={this.onPressNew}>
           <Icon  type="FontAwesome" name="plus" />
-
         </Fab>
         </View>
-
       </Container>
     );
   }
@@ -177,10 +175,8 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    sendLoundry: bindActionCreators(Actions.sendLoundry,dispatch),
-    sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
-    addChothes: bindActionCreators(Actions.addChothes,dispatch),
+    refreshPrendas: bindActionCreators(Actions.refreshPrendas,dispatch),
   };
 }
 

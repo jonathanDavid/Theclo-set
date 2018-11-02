@@ -20,10 +20,14 @@ class AddCategoryView extends Component {
      mime = 'image/jpeg'
      const uploadUri = uri;
      const imageStorage = firebase.storage().ref(`Users/${userId}/Categorias/`).child(imageName);
+     const categoryReference = firebase.database().ref(`Users/${userId}/Categorias/`);
      await fetch(uploadUri).then((response) => {
        response.blob().then((blobResponse) => {
          imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
            this.setState({isAccessingStg:false})
+           categoryReference.once('value', (dataSnapshot) => {
+             this.props.addCategory(dataSnapshot.val());
+           })
            this.props.navigation.goBack();
          });
        })

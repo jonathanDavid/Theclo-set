@@ -5,10 +5,12 @@ import { StyleSheet,StatusBar,View,Image } from 'react-native';
 import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right,Left } from 'native-base';
 import { Spinner } from '../Componentes/Spinner';
 import AddElement  from '../Componentes/AddElement';
-/*Database and Auth*/
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {actionsCreator as Actions} from '../Redux/Actions';
 import firebase from 'firebase';
 
-export default class AddPrendaView extends Component {
+class AddPrendaView extends Component {
   constructor(props){
     super(props);
     state={Name:'',Description:'',Photo:'', id:'', isAccessingDb:false, isAccessingStg:false};
@@ -20,10 +22,14 @@ export default class AddPrendaView extends Component {
     mime = 'image/jpeg'
     const uploadUri = uri;
     const imageStorage = firebase.storage().ref(`Users/${userId}/Prendas/`).child(imageName);
+    const prendasReference = firebase.database().ref(`Users/${userId}/Prendas/`);
     await fetch(uploadUri).then((response) => {
       response.blob().then((blobResponse) => {
         imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
           this.setState({isAccessingStg:false})
+          prendasReference.once('value', (dataSnapshot) => {
+            this.props.refreshPrendas(dataSnapshot.val());
+          })
           this.props.navigation.goBack();
         });
       })
@@ -75,3 +81,22 @@ export default class AddPrendaView extends Component {
     );
   }
 }
+
+function mapStateToProps(state){
+    const {Prendas} = state;
+    return{
+      Prendas
+    };
+
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    refreshPrendas: bindActionCreators(Actions.refreshPrendas,dispatch),
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(AddPrendaView);

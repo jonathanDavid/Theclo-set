@@ -5,6 +5,7 @@ import SwipeableListView from '../Componentes/SwipeableListView';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
+import firebase from 'firebase';
 import _ from 'lodash'
 
 const STATUS_CLOSET =  0;
@@ -19,8 +20,12 @@ class  LaundryView extends Component{
   onPrendaStatusChange = (prendaID,statusID) => {
     const userID = firebase.auth().currentUser.uid;
     const route = `Users/${userID}/Prendas/${prendaID}/Estado`
+    const prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
     prendaReference = firebase.database().ref(route).set(statusID).then( () => {
       //Aqui llamar al metodo de render (Podria ser spinner por mientras)
+      prendasReference.once('value', (dataSnapshot) => {
+        this.props.refreshPrendas(dataSnapshot.val());
+      })
     });
   }
 
@@ -29,16 +34,14 @@ class  LaundryView extends Component{
   }
 
   onSwipeL=(index)=>{
-    //Send Missing
-    item = this.props.Loundry[index];
-    // this.props.sendMissing(item);
-    // this.props.deleteLoundry(index);
+    let misPrendas = this.loadPrendas()
+    item = misPrendas[index];
     this.onPrendaStatusChange(item.id,STATUS_MISSING)
   }
 
   onSwipeR=(index)=>{
-    //this.props.deleteLoundry(index);
-    item = this.props.Loundry[index];
+    let misPrendas = this.loadPrendas()
+    item = misPrendas[index];
     this.onPrendaStatusChange(item.id,STATUS_CLOSET)
   }
 
@@ -63,9 +66,8 @@ class  LaundryView extends Component{
 }
 
 function mapStateToProps(state){
-    const {Categories,Prendas} = state;
+    const {Prendas} = state;
     return{
-      Categories,
       Prendas
     };
 
@@ -73,8 +75,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-    deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
-    sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
+    refreshPrendas: bindActionCreators(Actions.refreshPrendas,dispatch),
   };
 }
 

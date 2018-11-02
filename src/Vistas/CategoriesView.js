@@ -53,7 +53,6 @@ function mapStateToProps(state){
 function mapDispatchToProps(dispatch){
   return{
     addCategory: bindActionCreators(Actions.addCategory,dispatch),
-    categorySelected: bindActionCreators(Actions.categorySelected,dispatch),
   };
 }
 
