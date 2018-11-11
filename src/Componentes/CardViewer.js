@@ -19,14 +19,14 @@ export default class CardViewer extends Component {
         if(i+1 < this.props.Data.length){
             code.push(
               <View style={styles.duoCategory}>
-                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
-                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i+1])} Title={this.props.Data[i+1]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={this.props.DataFoto[i]}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i+1])} Title={this.props.Data[i+1]} imgUrl={this.props.DataFoto[i]}></CardViewerItem>
               </View>
               )
         }else{
             code.push(
               <View style={styles.duoCategory}>
-                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}></CardViewerItem>
+                <CardViewerItem onPress={this.props.onPressItem.bind(this,this.props.Data[i])} Title={this.props.Data[i]} imgUrl={this.props.DataFoto[i]}></CardViewerItem>
                 <CardViewerItem isTransparent={true} ></CardViewerItem>
               </View>
             )

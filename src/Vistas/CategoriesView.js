@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash';
+import firebase from 'firebase';
 
 class CategoriesView extends Component{
 
@@ -32,10 +33,24 @@ class CategoriesView extends Component{
     return data;
   }
 
+  async function getDownloadUrlFromPaths(data){
+    firebase.storage().ref(data).getDownloadURL().then((url) => {
+      return url;
+    });
+  }
+
+  categoriesPhoto = () => {
+    let data = this.props.Categorias;
+    data = _.map(data, 'Foto');
+    for i = 0
+    data = getDownloadUrlFromPaths(data)
+
+  }
+
   render() {
     return (
         <Container>
-          <CardViewer addNewClothes={this.addNewClothes} Data={this.categoriesNames()} onPressItem={this.onPressItem}
+          <CardViewer addNewClothes={this.addNewClothes} Data={this.categoriesNames()} DataFoto={this.categoriesPhoto()} onPressItem={this.onPressItem}
                   Title="Categorias" onPressButtonBack={this.onPressBack} headerColor='#6432c8' onPressNew={this.onPressNew}></CardViewer>
         </Container>
     );
