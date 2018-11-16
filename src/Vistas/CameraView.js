@@ -9,8 +9,6 @@ import {
   Slider,
   Platform
 } from 'react-native';
-//import GalleryScreen from './GalleryScreen';
-//import isIPhoneX from 'react-native-is-iphonex';
 import {Icon} from 'native-base'
 import {
   Ionicons,
@@ -126,12 +124,6 @@ export default class CameraView extends React.Component {
 
   onPictureSaved = async photo => {
     this.props.navigation.state.params.returnData(photo.uri);
-
-    //await FileSystem.moveAsync({
-    //  from: photo.uri,
-    //  to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
-    //});
-    //this.setState({ newPhotos: true });
   }
 
   onBarCodeScanned = code => {
@@ -151,7 +143,6 @@ export default class CameraView extends React.Component {
       if (Platform.OS === 'ios') {
         pictureSizeId = pictureSizes.indexOf('High');
       } else {
-        // returned array is sorted in ascending order - default size is the largest one
         pictureSizeId = pictureSizes.length-1;
       }
       this.setState({ pictureSizes, pictureSizeId, pictureSize: pictureSizes[pictureSizeId] });
@@ -172,9 +163,6 @@ export default class CameraView extends React.Component {
     this.setState({ pictureSize: this.state.pictureSizes[newId], pictureSizeId: newId });
   }
 
-  //renderGallery() {
-    //return <GalleryScreen onPress={this.toggleView.bind(this)} />;
-//  }
 
   renderFace({ bounds, faceID, rollAngle, yawAngle }) {
     return (

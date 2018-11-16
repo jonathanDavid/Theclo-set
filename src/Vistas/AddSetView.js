@@ -5,6 +5,7 @@ import ListViewer from '../Componentes/ListViewer';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
+import _ from 'lodash';
 
 class AddSetView extends Component {
   onPressBack = ()=>{
@@ -38,14 +39,14 @@ class AddSetView extends Component {
     return data;
   }
 
-  pendasValue = () => {
+  prendasValue = () => {
     let data = this.props.Prendas;
     data = _.map(data, 'Titulo');
     return data;
   }
 
   renderCategorias=()=>{
-    let data = categoriasNames;
+    let data = this.categoriasNames();
     let code = [];
     for (var i=0; i < data.length; i++) {
        code.push( <Picker.Item label={data[i]} value={i} />);
@@ -54,11 +55,11 @@ class AddSetView extends Component {
   }
 
   renderClothes=()=>{
-    let data = prendasValue;
+    let data = this.prendasValue();
     let code=[];
     //prendas = this.props.Categorias[this.state.selectedCategorie].slice(1);
     prendas = data[this.state.selectedCategoria].slice(1);
-    prendas = prendas.filter(f => !this.state.miSet.includes(f));
+    //prendas = prendas.filter(f => !this.state.miSet.includes(f));
     for(var i=0; i < prendas.length; i++){
       code.push(<Picker.Item label={prendas[i]} value={i} />)
     }
@@ -66,7 +67,7 @@ class AddSetView extends Component {
   }
 
   addClothesToSet=()=>{
-    let data = prendasValue;
+    let data = this.prendasValue();
     prendas = data[this.state.selectedCategoria].slice(1);
     prendas = prendas.filter(f => !this.state.miSet.includes(f));
     item=prendas[this.state.selectedPrenda];
@@ -76,9 +77,6 @@ class AddSetView extends Component {
 
   }
   addNewSet=()=>{
-  /*  this.setState({
-      miSet: [this.state.setName,...this.state.miSet]
-    })*/
     this.props.addSet(this.state.miSet)
     this.props.navigation.goBack();
   }
@@ -176,16 +174,14 @@ function mapStateToProps(state){
     const {Categorias,Prendas} = state;
     return{
       Categorias,
-
+      Prendas,
     };
 
 }
 
 function mapDispatchToProps(dispatch){
   return{
-    deleteLoundry: bindActionCreators(Actions.deleteLoundry,dispatch),
-    sendMissing: bindActionCreators(Actions.sendMissing,dispatch),
-    addSet: bindActionCreators(Actions.addSet,dispatch),
+
   };
 }
 

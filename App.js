@@ -3,16 +3,13 @@
 /*-------------------------------------*/
 /*Base y depuracion*/
 import React, { Component } from 'react';
-import { Root } from "native-base";
+import { Root,Spinner,View,Text } from "native-base";
 import { Font, AppLoading } from "expo";
 /*Storage*/
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import Reducer from './src/Redux/Reducers'
-/*Componentes*/
-//import { Container, Header, Content, Card, CardItem, Body, Text } from 'native-base';
-import Spinner from './src/Componentes/Spinner';
-//import {isSignedIn} from './src/Auth/Auth';
+
 /*Navegacion*/
 import {RootNavigator} from './src/Routes/Router';
 /*Base de datos*/
@@ -68,10 +65,21 @@ export default class App extends Component{
      );
    }
    const Layout = RootNavigator(this.state.signedIn);
-   return (
-      <Provider store={store}>
-        <Layout />
-      </Provider>
-   );
+   if(this.state.checkedSignIn){
+     return (
+        <Provider store={store}>
+          <Layout />
+        </Provider>
+     );
+   }else{
+     return (
+        <Provider store={store}>
+          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch',}}>
+            <Spinner color='black'/>
+            <Text style={{fontSize: 20, textAlign: 'center' , fontWeight: `bold`}}>Espere...</Text>
+          </View>
+        </Provider>
+     );
+   }
  }
 }

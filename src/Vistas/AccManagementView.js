@@ -2,10 +2,15 @@
 import React, { Component } from 'react';
 import { StatusBar,Image } from 'react-native';
 /*components*/
-import { Container, Header, Title, Content, Button, Left, Body, Icon, Card, Label, Item, Input, CardItem, Text } from 'native-base';
+import { Container, Header, Title, Content, Button, Left, Body, Icon, Card, Label, Item, Input, CardItem, Text,Accordion  } from 'native-base';
 /*Firebase*/
 import firebase from 'firebase';
 /*Redux*/
+const infoArray = [
+  { title: "Que es Theclo-set?", content: "Una pequeña aplicacion desarrollada para facilitar la organizacion de TU ropa" },
+  { title: "Quienes Somos?", content: "Somos estudiantes de la Universidad del Norte, en busqueda de conocimeinto y renombre" },
+  { title: "Github link", content: "https://github.com/Schurches/Theclo-set" }
+];
 
 export default class AccManagementView extends Component {
   state = {user: '', email: '', password: '', error: '', dbRequest: false}
@@ -29,6 +34,7 @@ export default class AccManagementView extends Component {
     });
   }
 
+
   render() {
     return (
       <Container>
@@ -48,31 +54,41 @@ export default class AccManagementView extends Component {
               <Text>Information</Text>
             </CardItem>
             <CardItem>
-              <Item /*style ={styles.inputModifyLayout}*/ floatingLabel>
+              <Item floatingLabel>
                <Label>Email</Label>
                <Icon active name='mail' />
                <Input value={this.state.email} onChangeText={(email) => {this.setState({email: email})}}/>
               </Item>
             </CardItem>
             <CardItem>
-              <Item /*style ={styles.inputModifyLayout}*/ floatingLabel>
+              <Item floatingLabel>
                 <Label>Password</Label>
                 <Icon active name='lock' />
                 <Input value={this.state.password} onChangeText={(password) => {this.setState({password: password})}}/>
               </Item>
             </CardItem>
           </Card>
-          <Card>
 
+          <Card>
+            <CardItem header>
+              <Text>FAQ's</Text>
+            </CardItem>
+            <CardItem style={{justifyContent: 'center',}}>
+               <Accordion style={{borderRadius: 0,borderWidth: 0}} headerStyle={{backgroundColor: 'transparent'}} contentStyle={{backgroundColor: 'transparent'}} dataArray={infoArray} />
+            </CardItem>
+          </Card>
+
+          <Card>
             <CardItem header>
               <Text>Session</Text>
             </CardItem>
             <CardItem style={{justifyContent: 'center',}}>
-              <Button block danger onPress={this.onSignOutPress} /*style={styles.buttonLayout}*/ block>
+              <Button block danger onPress={this.onSignOutPress}  block>
                 <Text> Sign Out </Text>
               </Button>
             </CardItem>
           </Card>
+
         </Content>
       </Container>
     );

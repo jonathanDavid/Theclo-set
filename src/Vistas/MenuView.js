@@ -1,5 +1,6 @@
 import React, { Component,Fragment } from "react";
-import { Image, StatusBar,StyleSheet,TouchableOpacity, Text, View } from "react-native";
+import { Image, StatusBar,StyleSheet,TouchableOpacity,TouchableWithoutFeedback, Text, View } from "react-native";
+import {Icon} from 'native-base';
 import { Toast } from 'native-base';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -30,21 +31,12 @@ import firebase from 'firebase'
 
   onPressLogOut = ()=>{
     this.props.navigation.navigate("AccManagementView")
-/*    firebase.auth().signOut()
-    .then(()=>{
-      this.props.navigation.navigate("SignedOut");
-    })
-    .catch((error) => {
-      alert('Error intentando cerrar sesion');
-    })*/
   }
 
   componentDidMount(){
     currentUser = firebase.auth().currentUser;
     firebase.database().ref(`Users/${currentUser.uid}`).once('value', (dataSnapshot) => {
       this.props.setState(dataSnapshot.val());
-      //console.log(Categories[0]);
-      //console.log(dataSnapshot.val().Prendas);
     });
     this.setState({ name : currentUser.displayName});
   }
@@ -95,16 +87,18 @@ import firebase from 'firebase'
               <View style={[styles.s923b1cd6, { flexDirection: "row" }]}>
                 <View style={styles.s617c1fc1} />
                 <View style={styles.s4d5fab9b}>
-                  <TouchableOpacity onPress={this.onPressLogOut}>
+
+                  <TouchableWithoutFeedback onPress={this.onPressLogOut}>
+
                     <Image source={require("./images/Captura.png")} style={styles.sb6e3e2b9} />
-                  </TouchableOpacity>
+                  </TouchableWithoutFeedback>
                   <View style={styles.s97acb6cf}>
                     <Image style={styles.s0d2109e8} />
                   </View>
                 </View>
                 <View style={styles.sb6315268} />
               </View>
-              <Text>Bienvenido, usuario {this.state.name} !</Text>
+              {/*<Text>Bienvenido, usuario {this.state.name} !</Text>*/}
           </View>
     );
   }
@@ -130,10 +124,9 @@ const styles = StyleSheet.create({
   s98059f0a: { height: 100, width: 100 },
   sda221942: {
     backgroundColor: `rgba(224, 223, 235, 0)`,
-    borderLeftWidth: 2,
-    borderTopWidth: 2,
     color: `rgba(255, 255, 255, 1)`,
     fontSize: 20,
+    textAlign: 'center' ,
     fontWeight: `bold`
   },
   s41ccc30f: {
@@ -252,7 +245,7 @@ const styles = StyleSheet.create({
     borderLeftWidth: 2,
     flex: 1
   },
-  sb6e3e2b9: { height: `100%`, width: `100%` },
+  sb6e3e2b9: { height: `100%`, width: `100%`,backgroundColor: 'transparent' },
   s0d2109e8: { height: 100, width: 100 },
   s97acb6cf: { flex: 1 },
   s4d5fab9b: {
