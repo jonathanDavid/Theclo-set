@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Platform, StyleSheet, View, Image} from 'react-native';
 import {Container, Header, Title, Content, Footer, FooterTab, Button, Left, Right, Body, Icon, Text,Fab } from 'native-base';
 
-import Category from "../Componentes/Category";
 import CardViewer from "../Componentes/CardViewer";
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';

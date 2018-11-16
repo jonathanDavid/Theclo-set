@@ -1,6 +1,6 @@
 /*React*/
 import React, { Component } from 'react';
-import { StyleSheet,StatusBar } from 'react-native';
+import { StyleSheet,StatusBar,Image,View } from 'react-native';
 /*Components*/
 import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right } from 'native-base';
 import { Spinner } from '../Componentes/Spinner';
@@ -47,49 +47,51 @@ export default class LoginView extends Component {
     return(
       <Form>
         <Item style ={styles.inputLayout} floatingLabel>
-          <Label>Correo</Label>
-          <Icon active name='person' />
-          <Input onChangeText={ (email) => {this.setState({email: email})} }/>
+          <Label style={{fontSize: 13, color: '#809AAD'}}>Correo Electronico</Label>
+          <Input  onChangeText={ (email) => {this.setState({email: email})} }/>
         </Item>
         <Item style ={styles.inputLayout} floatingLabel>
-          <Label>Clave</Label>
-          <Icon active name='lock' />
-          <Input secureTextEntry={true} onChangeText={ (passw) => {this.setState({password: passw})} } />
+          <Label style={{fontSize: 13,color: '#809AAD'}}>Clave</Label>
+          <Input  secureTextEntry={true} onChangeText={ (passw) => {this.setState({password: passw})} } />
         </Item>
-        <Button  onPress={this.onLoginPress} style ={styles.buttonLayout} block info>
-          <Text> Entrar </Text>
-        </Button>
       </Form>
     );
   }
 
   render() {
     return (
-      <Container>
-        <Header style={{backgroundColor: "#03A9F4"}}>
+      <Container style={styles.colorBG}>
+      <StatusBar backgroundColor={"#003459"} barStyle="light-content"/>
+        {/*<Header style={{backgroundColor: "#03A9F4"}}>
           <StatusBar backgroundColor={"#0288D1"} barStyle="light-content"/>
           <Body>
             <Title>Theclo-set</Title>
           </Body>
-        </Header>
-        <Content style ={styles.cardLayout}>
-          <Card>
-            <CardItem header bordered>
-              <Text>Inicio de sesion</Text>
-            </CardItem>
-
+        </Header>*/}
+        <Content style ={styles.contentStyle}>
+          <View style={styles.containerCentered}>
+            <Image style={{ height: 100, width: 100 }} source={require("./images/App_Icon.png")} />
+            <Text style={{fontSize: 12,fontWeight: 'bold',color: '#003459'}}>Theclo-set</Text>
+          </View>
+          <Card style ={styles.cardMainLayout}>
             {this.renderFormComponents()}
+          </Card>
 
-            <CardItem footer bordered>
-              <Text>Aun no tienes cuenta?</Text>
+          <Button  onPress={this.onLoginPress} style ={styles.buttonLayout} block>
+            <Text uppercase={false} style={{fontSize: 13}}> Iniciar Sesion </Text>
+          </Button>
+
+          <Card  transparent>
+            <CardItem style={styles.colorBG} header>
+              <Text style={{fontSize: 13,color: '#003459'}}>¿Aun no tienes cuenta?</Text>
               <Button onPress={this.onPressJoinButton}  transparent>
-                <Text>CREA UNA</Text>
+                <Text style={{fontSize: 13,color: '#809AAD'}}>CREA UNA</Text>
               </Button>
             </CardItem>
+            <CardItem style={styles.colorBG} footer>
+              <Text style={styles.errorMessage}>{this.state.error}</Text>
+            </CardItem>
           </Card>
-          <CardItem header bordered>
-            <Text style={styles.errorMessage}>{this.state.error}</Text>
-          </CardItem>
 
         </Content>
       </Container>
@@ -100,18 +102,40 @@ export default class LoginView extends Component {
 
 const styles = StyleSheet.create({
   buttonLayout:{
-    margin: 15,
-    marginTop: 55,
-    paddingLeft: 10,
-    paddingRight:10,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 15,
     padding: 5,
+    backgroundColor: "#264573"
+  },
+
+  containerCentered: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginBottom: 20,
+  },
+
+  colorBG:{
+    backgroundColor: "#fafafa"
+  },
+
+  cardMainLayout:{
+     borderRadius: 15,
+     paddingBottom: 35,
+  },
+
+  contentStyle:{
+     padding: 25,
   },
 
   errorMessage:{
     color: '#F44336',
+    fontSize: 13,
   },
 
   inputLayout:{
     marginRight:15,
+    borderColor: 'transparent',
   },
 });
