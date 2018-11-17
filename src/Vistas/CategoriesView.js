@@ -47,7 +47,6 @@ class CategoriesView extends Component{
   categoriesPhoto = () => {
     let data = this.props.Categorias;
     let dataUrl=[]
-    console.log("algo")
     data = _.map(data, 'Foto');
     return data
   }

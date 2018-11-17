@@ -62,36 +62,30 @@ export default class CreateAccountView extends Component {
     return(
       <Form>
           <Item style ={styles.inputLayout} floatingLabel require>
-            <Label>Usuario</Label>
-            <Icon active name='person' />
+            <Label style={{fontSize: 13, color: '#809AAD'}}>Usuario</Label>
             <Input value={this.state.user} onChangeText={(user) => {this.setState({user: user})}}/>
           </Item>
           <Item style ={styles.inputLayout} floatingLabel>
-            <Label>Correo</Label>
-            <Icon active name='mail' />
+            <Label style={{fontSize: 13, color: '#809AAD'}}>Correo</Label>
             <Input value={this.state.email} onChangeText={(email) => {this.setState({email: email})}}/>
           </Item>
           <Item style ={styles.inputLayout} floatingLabel>
-            <Label>Clave</Label>
-            <Icon active name='lock' />
+            <Label style={{fontSize: 13, color: '#809AAD'}}>Contraseña</Label>
             <Input secureTextEntry={true} value={this.state.password1} onChangeText={(password1) => {this.setState({password1: password1})}}/>
           </Item>
           <Item style ={styles.inputLayout} floatingLabel>
-            <Label>Confirmar clave</Label>
-            <Icon active name='lock' />
+            <Label style={{fontSize: 13, color: '#809AAD'}}>Confirmar Contraseña</Label>
             <Input secureTextEntry={true} value={this.state.password2} onChangeText={(password2) => {this.setState({password2: password2})}}/>
           </Item>
-          <Button onPress={this.onRegisterPress} style={styles.buttonLayout} block info>
-            <Text> Registrarse </Text>
-          </Button>
       </Form>
     );
   }
 
   render() {
     return (
-      <Container>
-        <Header style={{backgroundColor: "#03A9F4"}}>
+      <Container style={styles.colorBG}>
+        <StatusBar backgroundColor={"#003459"} barStyle="light-content"/>
+        {/*<Header style={{backgroundColor: "#03A9F4"}}>
           <StatusBar backgroundColor={"#0288D1"} barStyle="light-content"/>
           <Left>
             <Button onPress={this.onPressBack} transparent>
@@ -101,19 +95,29 @@ export default class CreateAccountView extends Component {
           <Body>
              <Title>Create Account</Title>
           </Body>
-        </Header>
-        <Content>
-          <Card>
-            <CardItem header bordered>
-              <Text>Registro</Text>
-            </CardItem>
-
+        </Header>*/}
+        <Content style ={styles.contentStyle}>
+          <Card  style ={styles.cardMainLayout}>
             {this.renderRegister()}
 
-            <CardItem header bordered>
+          </Card>
+
+          <Button onPress={this.onRegisterPress} style={styles.buttonLayout} block info>
+            <Text uppercase={false} style={{fontSize: 15,fontWeight: 'bold',color: '#cffff3'}}> Registrarse </Text>
+          </Button>
+
+          <Card  transparent>
+            <CardItem style={styles.colorBG} header>
+              <Text style={{fontSize: 13,color: '#809AAD'}}>¿Ya tienes una cuenta?</Text>
+              <Button onPress={this.onPressBack}  transparent>
+                <Text uppercase={false} style={{fontSize: 13,fontWeight: 'bold',color: '#003459'}}>Inicia</Text>
+              </Button>
+            </CardItem>
+            <CardItem style={styles.colorBG} header bordered>
               <Text style={styles.errorMessage}>{this.state.error}</Text>
             </CardItem>
           </Card>
+
         </Content>
       </Container>
     );
@@ -123,11 +127,24 @@ export default class CreateAccountView extends Component {
 
 const styles = StyleSheet.create({
   buttonLayout:{
-    margin: 15,
-    marginTop: 55,
-    paddingLeft: 10,
-    paddingRight:10,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 15,
     padding: 5,
+    backgroundColor: "#0061a6"
+  },
+
+  contentStyle:{
+     padding: 25,
+  },
+
+  cardMainLayout:{
+     borderRadius: 15,
+     paddingBottom: 35,
+  },
+
+  colorBG:{
+    backgroundColor: "#fafafa"
   },
 
   errorMessage:{
@@ -136,5 +153,6 @@ const styles = StyleSheet.create({
 
   inputLayout:{
     marginRight:15,
+    borderColor: 'transparent',
   },
 });

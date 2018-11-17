@@ -25,12 +25,14 @@ class AddCategoryView extends Component {
        response.blob().then((blobResponse) => {
          imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
            this.setState({isAccessingStg:false})
-           categoryReference.once('value', (dataSnapshot) => {
-             this.props.addCategory(dataSnapshot.val());
-           })
-           this.props.navigation.goBack();
          });
        })
+     });
+   }
+
+   async getDownloadUrlFromPaths(data){
+     await firebase.storage().ref(data).getDownloadURL().then((url) => {
+       return url;
      });
    }
 
@@ -39,24 +41,29 @@ class AddCategoryView extends Component {
     const userId = firebase.auth().currentUser.uid;
     const dbRoute = `Users/${userId}/Categorias/`
     categoryReference = firebase.database().ref(dbRoute);
-    let pushID = myData.id;
-    if(!pushID){
+    let pushID;
+    let categoryData = this.props.navigation.state.params.categoryData;
+    if(categoryData == null){
       pushID = categoryReference.push().key;
+    }else{
+      pushID = categoryData.id;
     }
     let route = myData.Foto;
+    let photoRoute='';
     if(route){
-      this.uploadImage(route,pushID,userId);
-      const photoRoute = dbRoute+pushID;
-      let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: photoRoute}
-      categoryReference.child(pushID).set(category).then( () => {
-        this.setState({isAccessingDb:false})
-      });
-    }else{
-      let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: ''}
-      categoryReference.child(pushID).set(category).then( () => {
-        this.setState({isAccessingDb:false})
-      });
+      if(categoryData!=null && route!=categoryData.Foto){
+        this.uploadImage(route,pushID,userId);
+      }
+      photoRoute = dbRoute+pushID;// Aqui se daberia buscar la ruta en BD
     }
+    let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: photoRoute}
+    categoryReference.child(pushID).set(category).then( () => {
+      this.setState({isAccessingDb:false})
+      categoryReference.once('value', (dataSnapshot) => {
+        this.props.addCategory(dataSnapshot.val());
+      })
+      this.props.navigation.navigate("CategoriesView");
+    });
 
   }
 

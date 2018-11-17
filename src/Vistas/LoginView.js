@@ -62,33 +62,27 @@ export default class LoginView extends Component {
     return (
       <Container style={styles.colorBG}>
       <StatusBar backgroundColor={"#003459"} barStyle="light-content"/>
-        {/*<Header style={{backgroundColor: "#03A9F4"}}>
-          <StatusBar backgroundColor={"#0288D1"} barStyle="light-content"/>
-          <Body>
-            <Title>Theclo-set</Title>
-          </Body>
-        </Header>*/}
         <Content style ={styles.contentStyle}>
           <View style={styles.containerCentered}>
             <Image style={{ height: 100, width: 100 }} source={require("./images/App_Icon.png")} />
-            <Text style={{fontSize: 12,fontWeight: 'bold',color: '#003459'}}>Theclo-set</Text>
+            <Text style={{fontSize: 12,fontWeight: 'bold',color: '#809AAD'}}>Theclo-set</Text>
           </View>
           <Card style ={styles.cardMainLayout}>
             {this.renderFormComponents()}
           </Card>
 
           <Button  onPress={this.onLoginPress} style ={styles.buttonLayout} block>
-            <Text uppercase={false} style={{fontSize: 13}}> Iniciar Sesion </Text>
+            <Text uppercase={false} style={{fontSize: 15,fontWeight: 'bold',color: '#cffff3'}}> Iniciar Sesion </Text>
           </Button>
 
           <Card  transparent>
             <CardItem style={styles.colorBG} header>
-              <Text style={{fontSize: 13,color: '#003459'}}>¿Aun no tienes cuenta?</Text>
+              <Text style={{fontSize: 13,color: '#809AAD'}}>¿Aun no tienes cuenta?</Text>
               <Button onPress={this.onPressJoinButton}  transparent>
-                <Text style={{fontSize: 13,color: '#809AAD'}}>CREA UNA</Text>
+                <Text uppercase={false} style={{fontSize: 13,fontWeight: 'bold',color: '#003459'}}>Crea Una</Text>
               </Button>
             </CardItem>
-            <CardItem style={styles.colorBG} footer>
+            <CardItem style={styles.colorBG} header bordered>
               <Text style={styles.errorMessage}>{this.state.error}</Text>
             </CardItem>
           </Card>
@@ -106,7 +100,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 15,
     padding: 5,
-    backgroundColor: "#264573"
+    backgroundColor: "#0061a6"
   },
 
   containerCentered: {
