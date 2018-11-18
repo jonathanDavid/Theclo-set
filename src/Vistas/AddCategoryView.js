@@ -14,25 +14,33 @@ class AddCategoryView extends Component {
     state={Name:'',Description:'',Photo:'', isAccessingDb:false, isAccessingStg:false};
   }
 
-  async uploadImage(uri, imageName, userId){
+  async uploadImage(uri, imageName, userId, category){
      //const uploadUri =  Platform.OS === 'ios' ? uri.replace('file://','') : uri;
      this.setState({isAccessingStg:true})
      mime = 'image/jpeg'
      const uploadUri = uri;
      const imageStorage = firebase.storage().ref(`Users/${userId}/Categorias/`).child(imageName);
      const categoryReference = firebase.database().ref(`Users/${userId}/Categorias/`);
+     const stgImageRef = `Users/${userId}/Categorias/${imageName}`;
      await fetch(uploadUri).then((response) => {
        response.blob().then((blobResponse) => {
          imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
-           this.setState({isAccessingStg:false})
-         });
+           console.log('Picture uploaded');
+           imageStorage.getDownloadURL().then((url) => {
+             photoURL = url;
+             console.log(`Got URL:${photoURL}`)
+             this.setState({isAccessingStg:false});
+             category['FotoURL'] = photoURL;
+             categoryReference.child(category['id']).set(category).then( () => {
+               this.setState({isAccessingDb:false})
+               categoryReference.once('value', (dataSnapshot) => {
+                 this.props.addCategory(dataSnapshot.val());
+               })
+               this.props.navigation.navigate("CategoriesView");
+             });
+           });
+         }).catch(()=>{console.log('Test 2')});
        })
-     });
-   }
-
-   async getDownloadUrlFromPaths(data){
-     await firebase.storage().ref(data).getDownloadURL().then((url) => {
-       return url;
      });
    }
 
@@ -43,28 +51,29 @@ class AddCategoryView extends Component {
     categoryReference = firebase.database().ref(dbRoute);
     let pushID;
     let categoryData = this.props.navigation.state.params.categoryData;
+    let photoRoute;
     if(categoryData == null){
       pushID = categoryReference.push().key;
+      photoRoute = '';
     }else{
       pushID = categoryData.id;
+      photoRoute = categoryData.Foto;
     }
     let route = myData.Foto;
-    let photoRoute='';
+    let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: photoRoute, FotoURL: ''}
     if(route){
-      if(categoryData!=null && route!=categoryData.Foto){
-        this.uploadImage(route,pushID,userId);
-      }
-      photoRoute = dbRoute+pushID;// Aqui se daberia buscar la ruta en BD
+      photoRoute = dbRoute+pushID;
+      category['Foto'] = photoRoute;
+      this.uploadImage(route,pushID,userId,category);
+    }else{
+      categoryReference.child(pushID).set(category).then( () => {
+        this.setState({isAccessingDb:false})
+        categoryReference.once('value', (dataSnapshot) => {
+          this.props.addCategory(dataSnapshot.val());
+        })
+        this.props.navigation.navigate("CategoriesView");
+      });
     }
-    let category = {Nombre: myData.Nombre, Descripcion: myData.Descripcion, id: pushID, Foto: photoRoute}
-    categoryReference.child(pushID).set(category).then( () => {
-      this.setState({isAccessingDb:false})
-      categoryReference.once('value', (dataSnapshot) => {
-        this.props.addCategory(dataSnapshot.val());
-      })
-      this.props.navigation.navigate("CategoriesView");
-    });
-
   }
 
   onPressBack = ()=>{

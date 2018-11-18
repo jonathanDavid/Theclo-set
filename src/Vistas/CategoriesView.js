@@ -37,17 +37,10 @@ class CategoriesView extends Component{
     return data;
   }
 
-  async getDownloadUrlFromPaths(data){
-    await firebase.storage().ref(data).getDownloadURL().then((url) => {
-      return url;
-    });
-  }
-
-
   categoriesPhoto = () => {
     let data = this.props.Categorias;
     let dataUrl=[]
-    data = _.map(data, 'Foto');
+    data = _.map(data, 'FotoURL');
     return data
   }
 

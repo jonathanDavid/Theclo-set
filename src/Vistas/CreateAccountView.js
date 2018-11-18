@@ -38,7 +38,7 @@ export default class CreateAccountView extends Component {
             this.setState({error: '', dbRequest: false});
             userReference = firebase.database().ref('Users/');
             pushID = userReference.push().key;
-            userReference.child(loggedUser.uid).set({ id:loggedUser.uid, Categorias: {[pushID]: {Nombre: 'Sin clase', Descripcion: 'Categorias sin clase', id: pushID, Photo:'/generic_template'} }}).then(()=>{
+            userReference.child(loggedUser.uid).set({ id:loggedUser.uid, Categorias: {[pushID]: {Nombre: 'Sin clase', Descripcion: 'Categorias sin clase', id: pushID, Foto:'', FotoURL:''} }}).then(()=>{
               this.props.navigation.navigate("LoginView");
             });
           })

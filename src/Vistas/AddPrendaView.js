@@ -16,7 +16,7 @@ class AddPrendaView extends Component {
     state={Name:'',Description:'',Photo:'', id:'', isAccessingDb:false, isAccessingStg:false};
   }
 
- async uploadImage(uri, imageName, userId, categoryId){
+ async uploadImage(uri, imageName, userId, prenda){
     //const uploadUri =  Platform.OS === 'ios' ? uri.replace('file://','') : uri;
     this.setState({isAccessingStg:true})
     mime = 'image/jpeg'
@@ -26,13 +26,22 @@ class AddPrendaView extends Component {
     await fetch(uploadUri).then((response) => {
       response.blob().then((blobResponse) => {
         imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
-          this.setState({isAccessingStg:false})
-          prendasReference.once('value', (dataSnapshot) => {
-            this.props.refreshPrendas(dataSnapshot.val());
-          })
-          this.props.navigation.goBack();
+          console.log('Picture uploaded');
+          imageStorage.getDownloadURL().then((url) => {
+            let photoURL = url;
+            console.log(`URL of pic: ${photoURL}`)
+            prenda['FotoURL'] = photoURL;
+            this.setState({isAccessingStg:false});
+            prendasReference.child(prenda['id']).set(prenda).then( () => {
+              prendasReference.once('value', (dataSnapshot) => {
+                this.props.refreshPrendas(dataSnapshot.val());
+                this.setState({isAccessingDb:false});
+                this.props.navigation.goBack();
+              });
+            });
+          });
         });
-      })
+      });
     });
   }
 
@@ -44,30 +53,30 @@ class AddPrendaView extends Component {
   }
 
   addNewPrenda=(myData)=>{
-    //Aqui se agrega el metodo de agregar prenda
     this.setState({isAccessingDb:true});
     const userId = firebase.auth().currentUser.uid;
     const dbRoute = `Users/${userId}/Prendas/`
     let category = this.props.navigation.state.params.categorySelected;
-    prendaReference = firebase.database().ref(dbRoute);
+    const prendasReference = firebase.database().ref(dbRoute);
     let pushID = myData.id;
     if(!pushID){
-      pushID = prendaReference.push().key;
+      pushID = prendasReference.push().key;
     }
     let route = myData.Foto;
-    console.log(route)
+    let photoRoute = '';
+    let prenda = {Titulo: myData.Nombre, Descripcion: myData.Descripcion, Estado: 0, Categoria: category.id, Foto: photoRoute, id: pushID, FotoURL:''}
     if(route){
-      this.uploadImage(route,pushID,userId,category.id);
-      const photoRoute = dbRoute+pushID;
-      let prenda = {Titulo: myData.Nombre, Descripcion: myData.Descripcion, Estado: 0, Categoria: category.id, Foto: photoRoute, id: pushID}
-      prendaReference.child(pushID).set(prenda).then( () => {
-        this.setState({isAccessingDb:false})
-      });
+      photoRoute = dbRoute+pushID;
+      prenda['Foto'] = photoRoute;
+      console.log(category)
+      this.uploadImage(route,pushID,userId,prenda);
     }else{
-      let prenda = {Titulo: myData.Nombre, Descripcion: myData.Descripcion, Estado: 0, Categoria: category.id, Foto: '',id: pushID}
-      prendaReference.child(pushID).set(prenda)
-      .then( () => {
+      prendasReference.child(pushID).set(prenda).then( () => {
         this.setState({isAccessingDb:false})
+        prendasReference.once('value', (dataSnapshot) => {
+          this.props.refreshPrendas(dataSnapshot.val());
+        })
+        this.props.navigation.goBack();
       });
     }
 

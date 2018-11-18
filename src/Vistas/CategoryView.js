@@ -32,7 +32,7 @@ class CategoryView extends Component{
     let prendas = this.props.Prendas;
     let cat= this.props.navigation.state.params.CategorySelected.id;
     prendas = _.filter(prendas, ['Categoria', cat]);
-    prendas = _.filter(prendas, ['Estado', 0]);
+    prendas = _.filter(prendas, ['Estado', STATUS_CLOSET]);
     return prendas;
   }
 
@@ -66,24 +66,78 @@ class CategoryView extends Component{
 
   }
 
+  onPrendaDelete = (currentPrenda) => {
+    userID = firebase.auth().currentUser.uid;
+    prendasReference = firebase.database().ref(`/Users/${userID}/Prendas/`);
+    if(currentPrenda['FotoURL']){
+      prendaStgRef = firebase.storage().ref(`Users/${userID}/Prendas/${currentPrenda['id']}`);
+      prendaStgRef.delete();
+    }
+    prendaToRemoveReference = prendasReference.child(prendaID).remove().then( () => {
+      prendasReference.once('value',(dataSnapshot) => {
+        this.props.refreshPrendas(dataSnapshot.val());
+      });
+    });
+  }
+
+  findUncategory = () => {
+    let sinCat = this.props.Categorias;
+    sinCat = _.find(sinCat,["Nombre","Sin clase"]);
+    return sinCat
+  }
+
   onDeleteAlertPrendas = ()=>{
     Alert.alert(
     'Eliminar Categoria',
     '¿Desea conservar sus prendas?',
     [
       {text: 'Cancelar', style: 'cancel'},
-      {text: 'Conservar', onPress:  this.deleteCategory },
-      {text: 'Eliminar TODO', onPress: ()=>{}},
+      {text: 'Conservar', onPress:  this.removeAndDelete },
+      {text: 'Eliminar TODO', onPress: this.deleteByCategory},
     ],
     { cancelable: false }
   )
 
   }
 
+  removeAndDelete = () => {
+    let currentCatID = this.props.navigation.state.params.CategorySelected.id;
+    let userID = firebase.auth().currentUser.uid;
+    prendasReference = firebase.database().ref(`Users/${userID}/Prendas`);
+    prendasReference.on('child_added',(dataSnapshot) => {
+      if(dataSnapshot.val()['Categoria'] == currentCatID){
+        unCategoryID = this.findUncategory().id;
+        firebase.database().ref(`Users/${userID}/Prendas/${dataSnapshot.key}`).child("Categoria").set(unCategoryID);
+      }
+    })
+    this.deleteCategory();
+  }
+
+  deleteByCategory = () => {
+    let currentCategory = this.props.navigation.state.params.CategorySelected;
+    let catID = currentCategory.id;
+    let userID = firebase.auth().currentUser.uid;
+    prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
+    prendasReference.on('child_added',(dataSnapshot) => {
+      if(dataSnapshot.val()['Categoria'] == catID){
+        console.log('Found a prenda!');
+        if(dataSnapshot.val()['FotoURL']){
+          firebase.storage().ref(`Users/${userID}/Prendas/${dataSnapshot.key}`).delete();
+        }
+        prendasReference.child(dataSnapshot.key).remove();
+      }
+    });
+    this.deleteCategory();
+  }
+
   deleteCategory=()=>{
     let currentCategory = this.props.navigation.state.params.CategorySelected;
     loggedUser = firebase.auth().currentUser;
     categoryReference = firebase.database().ref(`Users/${loggedUser.uid}/Categorias/`);
+    if(currentCategory.FotoURL){
+      categoryStgRef = firebase.storage().ref(`Users/${loggedUser.uid}/Categorias/${currentCategory.id}`);
+      categoryStgRef.delete();
+    }
     currentCategoryReference = categoryReference.child(`${currentCategory.id}`);
     currentCategoryReference.remove().then(() => {
       categoryReference.once('value', (dataSnapshot) => {
