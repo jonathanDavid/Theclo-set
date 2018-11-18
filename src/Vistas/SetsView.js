@@ -39,7 +39,7 @@ class SetsView extends Component{
     return (
         <Container>
           <CardViewer addNewClothes={this.addNewClothes} Data={this.setsNames()} DataID={this.setsID()} onPressItem={this.onPressItem}
-                  Title="Sets" onPressButtonBack={this.onPressBack} headerColor='#4596ab' onPressNew={this.onPressNew}></CardViewer>
+                  Title="Conjuntos" onPressButtonBack={this.onPressBack} headerColor='#4596ab' onPressNew={this.onPressNew}></CardViewer>
         </Container>
     );
   }

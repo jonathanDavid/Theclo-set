@@ -16,12 +16,12 @@ export default class ItemList extends Component{
       <View style={styles.itemView}>
         <View style={styles.imageView}>
           <Image
-          style={{width: 50, height: 50}}
+          style={{width: 70, height:70,borderRadius: 5,}}
           source={{uri: this.props.imageUrl}}
         />
         </View>
         <View style={styles.itemTextBox}>
-          <Text style={styles.itemTextTitle} >{this.props.itemTitle}</Text>
+          <Text style={{color: this.props.titleColor,fontWeight: 'bold',fontSize: 20,}} >{this.props.itemTitle}</Text>
           <Text style={styles.itemTextCategory} >{this.props.itemCategory}</Text>
         </View>
       </View>
@@ -33,20 +33,15 @@ const styles = StyleSheet.create({
   itemView:{
     flex:1,
     flexDirection: 'row',
-    padding: 5,
+    padding: 0,
   },
 
   imageView:{
-    padding: 5,
+    paddingLeft: 10,
   },
   itemTextBox:{
     paddingLeft: 8,
     paddingTop: 8,
-  },
-  itemTextTitle:{
-    fontWeight: 'bold',
-    color: '#212121',
-    fontSize: 20,
   },
   itemTextCategory:{
     color: '#757575',

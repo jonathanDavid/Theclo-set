@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView,StyleSheet,StatusBar } from 'react-native';
+import { ListView,StyleSheet,StatusBar,TouchableOpacity } from 'react-native';
 import { Container, Header,Title,Left, Content,Body, Button, Icon, List, ListItem, Text } from 'native-base';
 import ItemList from './ItemList';
 
@@ -7,13 +7,11 @@ export default class ListViewer extends Component {
   constructor(props) {
     super(props);
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-
   }
 
 
   render() {
     return (
-      <Container>
         <Content>
           <List
             leftOpenValue={0}
@@ -21,13 +19,14 @@ export default class ListViewer extends Component {
             dataSource={this.ds.cloneWithRows(this.props.listViewData)}
             renderRow={data =>
               <ListItem style={styles.listView}>
-                <ItemList itemCategory={'Clothes Category'} itemTitle={data} imageUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}/>
+                <TouchableOpacity onPress={this.props.onPressItem.bind(this,data.id)}>
+                  <ItemList itemCategory={data.Descripcion} itemTitle={data.Titulo} imageUrl={data.FotoURL}/>
+                </TouchableOpacity>
               </ListItem>}
             renderLeftHiddenRow={()=>{}}
             renderRightHiddenRow={()=>{}}
           />
         </Content>
-      </Container>
     );
   }
 }

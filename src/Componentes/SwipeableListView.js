@@ -69,16 +69,14 @@ export default class SwipeableListView extends Component {
             dataSource={this.ds.cloneWithRows(this.props.listViewData)}
             renderRow={data =>
               <ListItem style={styles.listView}>
-                <ItemList itemCategory={data.Descripcion} itemTitle={data.Titulo} imageUrl={'http://nouveauelevator.com/image/black-icon/gallery.gif'}/>
+                <ItemList itemCategory={data.Descripcion} titleColor={this.props.headerColor} itemTitle={data.Titulo} imageUrl={data.FotoURL}/>
               </ListItem>}
             renderLeftHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressL(secId, rowId, rowMap)}  style={{backgroundColor: this.props.btnLBkgColor}}>
-                {/*<Icon active type="Feather" name="arrow-left" />*/}
                 <Image source={this.props.UrlImageL} style={{ height: 50, width: 50 }} />
               </Button>}
             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressR(secId, rowId, rowMap)} style={{backgroundColor: this.props.btnRBkgColor}}>
-                {/*<Icon active type="Feather"  name="arrow-right">*/}
                 <Image source={this.props.UrlImageR} style={{ height: 50, width: 50 }} />
               </Button>}
           />
@@ -91,5 +89,7 @@ export default class SwipeableListView extends Component {
 const styles = StyleSheet.create({
   listView:{
     flex:1,
+    padding:0,
+    margin:0,
   },
 });

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {StyleSheet,StatusBar,View } from 'react-native';
-import { Container, Header, Title, Content, Footer, Item, Input,FooterTab,Form, Button,Picker, Left, Right, Body, Icon, Text } from 'native-base';
+import {StyleSheet,StatusBar,View,Alert } from 'react-native';
+import { Container, Header, Title, Content, Footer, Item, Input,FooterTab,Form,Drawer, Button,Picker,Label, Left, Right, Body, Icon, Text,Fab } from 'native-base';
 import ListViewer from '../Componentes/ListViewer';
+import SearchMenuView from '../Componentes/SearchMenuView';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
@@ -15,141 +16,110 @@ class AddSetView extends Component {
     super(props);
     this.state = {
       setName:"",
-      selectedCategoria: 0,
-      selectedPrenda: 0,
-      miSet:["NewSet"]
+      setPrendas:[],
     };
   }
 
-  onValueChangeCat(value) {
-    this.setState({
-      selectedCategoria: value
-    });
+  addClothesToList=(id)=>{
+    let arrayPrendas = this.state.setPrendas;
+    arrayPrendas.push(id);
+    this.setState({setPrendas:arrayPrendas})
+    this.closeDrawer();
   }
 
-  onValueChangeClo(value) {
-    this.setState({
-      selectedPrenda: value
-    });
-  }
-
-  categoriasNames = () => {
-    let data = this.props.Categorias;
-    data = _.map(data, 'Nombre');
-    return data;
-  }
-
-  prendasValue = () => {
-    let data = this.props.Prendas;
-    data = _.map(data, 'Titulo');
-    return data;
-  }
-
-  renderCategorias=()=>{
-    let data = this.categoriasNames();
-    let code = [];
-    for (var i=0; i < data.length; i++) {
-       code.push( <Picker.Item label={data[i]} value={i} />);
-     }
-    return code;
-  }
-
-  renderClothes=()=>{
-    let data = this.prendasValue();
-    let code=[];
-    //prendas = this.props.Categorias[this.state.selectedCategorie].slice(1);
-    prendas = data[this.state.selectedCategoria].slice(1);
-    //prendas = prendas.filter(f => !this.state.miSet.includes(f));
-    for(var i=0; i < prendas.length; i++){
-      code.push(<Picker.Item label={prendas[i]} value={i} />)
-    }
-    return code;
-  }
-
-  addClothesToSet=()=>{
-    let data = this.prendasValue();
-    prendas = data[this.state.selectedCategoria].slice(1);
-    prendas = prendas.filter(f => !this.state.miSet.includes(f));
-    item=prendas[this.state.selectedPrenda];
-    this.setState({
-      miSet: [...this.state.miSet,item],
+  getDataToShow=()=>{
+    let prendas = this.props.Prendas;
+    let selectedPrendas = this.state.setPrendas;
+    prendas = _.filter(prendas, function(el){
+        return ~selectedPrendas.indexOf(el.id)
     })
-
+    return prendas;
   }
+
+  onChangeText=(text)=>{
+    this.setState({
+      setName: text,
+    })
+  }
+
+  closeDrawer = () => {
+  this.drawer._root.close()
+  };
+
+  openDrawer = () => {
+    this.drawer._root.open()
+  };
+
+  onPressItem =(id)=>{
+    Alert.alert('Eliminar prenda del Conjunto','',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Eliminar', onPress: ()=>{
+        let arrayPrendas = this.state.setPrendas;
+        arrayPrendas.splice(arrayPrendas.indexOf(id), 1);
+        this.setState({setPrendas:arrayPrendas})
+      }},
+    ],
+    { cancelable: false }
+    )
+  }
+
   addNewSet=()=>{
-    this.props.addSet(this.state.miSet)
+    let setNombre = this.state.setName;
+    let setPrendas = this.state.setPrendas;
+    let ultimaVezUsado = 'Never';
+
+    //Agregar el nuevo set a la BD
+
     this.props.navigation.goBack();
-  }
-
-
-  onChangeText=(Text)=>{
-    this.setState({
-      setName: Text,
-    })
   }
 
   render() {
     return (
-      <Container>
-        <Header style={{backgroundColor: '#4596ab'}}>
-          <StatusBar backgroundColor={'#4596ab'} barStyle="light-content"/>
-          <Left>
-            <Button onPress={this.onPressBack} transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body>
-            <Title>New Set</Title>
-          </Body>
-        </Header>
-        <Content>
-          <Item >
-            <Input  onChangeText={this.onChangeText} placeholder='Set Name'/>
-            <Icon name='close-circle' />
-          </Item>
-          <Form>
-            <View style={{flexDirection: 'row'}}>
-              <Picker
-                note={false}
-                placeholder="Category"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                mode="dropdown"
-                style={{ width: 150 }}
-                selectedValue={this.state.selectedCategorie}
-                onValueChange={this.onValueChangeCat.bind(this)}
-              >
-                {this.renderCategorias()}
-              </Picker>
-              <Picker
-                note={false}
-                mode="dropdown"
-                placeholder="Clothes"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                style={{ width: 150 }}
-                selectedValue={this.state.selectedPrenda}
-                onValueChange={this.onValueChangeClo.bind(this)}
-              >
-                {this.renderClothes()}
+      <Drawer
+        ref={(ref) => { this.drawer = ref; }}
+        content={<SearchMenuView addClothesToList={this.addClothesToList} navigator={this.navigator} />}
+        onClose={() => this.closeDrawer()}>
+        <Container>
+          <Header style={{backgroundColor: '#4596ab'}}>
+            <StatusBar backgroundColor={'#4596ab'} barStyle="light-content"/>
+            <Left>
+              <Button onPress={this.onPressBack} transparent>
+                <Icon name='arrow-back' />
+              </Button>
+            </Left>
+            <Body>
+              <Title>Nuevo Conjunto</Title>
+            </Body>
+            <Right>
+              <Button onPress={this.addNewSet} transparent>
+                <Icon type="FontAwesome" name="save" />
+              </Button>
+            </Right>
+          </Header>
 
-              </Picker>
+          <Content>
+            <View style={styles.mainLayout}>
+              <Item  style={styles.inputLayout} floatingLabel>
+                <Label style={{fontSize: 12}} >Nombre Del Conjunto</Label>
+                <Input style={{fontSize: 15,fontWeight: 'bold',color: '#4596ab'}} onChangeText={this.onChangeText} />
+              </Item>
             </View>
-          </Form>
-          <Button onPress= {this.addClothesToSet} style={[styles.buttonLayout,{backgroundColor: '#4596ab'}]} block>
-            <Text style={{color: 'white'}}>Add Clothes</Text>
-          </Button>
+            <ListViewer onPressItem={this.onPressItem} listViewData={this.getDataToShow()} />
 
-          <ListViewer listViewData={this.state.miSet.slice(1)} ></ListViewer>
-        </Content>
-        <Footer>
-          <FooterTab style ={{backgroundColor: '#ffffff',height: 100}}>
-            <Button onPress= {this.addNewSet} style={[styles.buttonLayoutBottom,{backgroundColor: '#37afce'}]}  block>
-              <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Set</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
+          </Content>
+          <Fab
+              active={this.state.active}
+              direction="up"
+              containerStyle={{ }}
+              style={{ backgroundColor:  '#4596ab'}}
+              position="bottomRight"
+              onPress={this.openDrawer}>
+            <Icon   name="shirt" />
+          </Fab>
+        </Container>
+      </Drawer>
+
     );
   }
 }
@@ -163,11 +133,27 @@ const styles = StyleSheet.create({
     paddingRight:8,
     padding: 5,
   },
+  mainLayout:{
+    paddingBottom:10,
+    paddingTop: 5,
+    paddingRight: 20,
+    paddingLeft:20,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 0.5,
+  },
+
+  colorBGSecn:{
+    backgroundColor: "#ffffff"
+  },
   buttonLayoutBottom:{
     margin: 5,
     padding: 5,
   },
-
+  inputLayout:{
+    padding:5,
+    marginRight:15,
+    borderColor: 'transparent',
+  },
 });
 
 function mapStateToProps(state){
