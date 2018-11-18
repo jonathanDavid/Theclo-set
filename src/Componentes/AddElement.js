@@ -2,14 +2,14 @@
 import React,   { Component } from 'react';
 import { StyleSheet,StatusBar,View,Image } from 'react-native';
 /*Components*/
-import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right,Left } from 'native-base';
+import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right,Left, Spinner } from 'native-base';
 
 
 
 export default class AddElement extends Component {
   constructor(props){
     super(props);
-    state={Nombre:'',Descripcion:'',Foto:null};
+    state={Nombre:'',Descripcion:'',Foto:null,loading:false};
   }
 
   onPressBack = ()=>{
@@ -30,7 +30,9 @@ export default class AddElement extends Component {
   }
 
   OpenCamera=()=>{
-    this.props.OpenCamera(this.returnData.bind(this))
+    if(!this.state.loading){
+      this.props.OpenCamera(this.returnData.bind(this))
+    }
   }
 
   renderImageCamera=()=>{
@@ -39,7 +41,7 @@ export default class AddElement extends Component {
     if(this.state.Foto !== null){
       code.push(
         <Body style={{ flex: 1,alignItems: 'center', flexDirection: 'row',justifyContent: 'center', height: 200  }}>
-         <Image source={{uri: this.state.Foto}} style={{height: 200, width: null, flex: 1}}/>
+          <Image source={{uri: this.state.Foto}} style={{height: 200, width: null, flex: 1}}/>
         </Body>
       )
     }else{
@@ -53,8 +55,25 @@ export default class AddElement extends Component {
   }
 
   addNew=()=>{
-    let data ={Nombre: this.state.Nombre, Descripcion: this.state.Descripcion, Foto: this.state.Foto}
-    this.props.addNew(data);
+      this.setState({loading:true})
+      let data ={Nombre: this.state.Nombre, Descripcion: this.state.Descripcion, Foto: this.state.Foto}
+      this.props.addNew(data);
+  }
+
+  renderButton=()=>{
+    if(this.state.loading){
+      return(
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch',}}>
+          <Spinner color='blue'/>
+        </View>
+      )
+    }else{
+      return(
+        <Button onPress= {this.addNew} style={styles.buttonLayoutBottom} >
+          <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Guardar</Text>
+        </Button>
+      )
+    }
   }
 
   render() {
@@ -87,9 +106,7 @@ export default class AddElement extends Component {
                   <Input value={this.state.Descripcion} onChangeText={(info) => {this.setState({Descripcion:info})}}/>
                 </Item>
                 <View style ={styles.buttonView}>
-                  <Button onPress= {this.addNew} style={styles.buttonLayoutBottom} >
-                    <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Guardar</Text>
-                  </Button>
+                  {this.renderButton()}
                 </View>
             </Form>
           </Content>

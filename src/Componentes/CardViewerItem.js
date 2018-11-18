@@ -5,6 +5,20 @@ import { Image,  TouchableOpacity, } from 'react-native';
 
 export default class CardViewerItem extends Component {
 
+  renderImage=()=>{
+    let code=[]
+      if(this.props.imgUrl==""){
+        code.push(
+          <View style={{flex: 1,justifyContent: 'center',alignItems: 'center'}}>
+            <Image source={require("../Vistas/images/NoFoto.png")} style={{height: 120, width: 120}}/>
+          </View>
+        );
+      }else{
+        code.push(<Image source={{uri:this.props.imgUrl}} style={{height: 120, width: 120, flex: 1}}/>);
+      }
+    return code;
+  }
+
   render() {
     return (
       <Container style={styles.viewMargin}>
@@ -19,7 +33,7 @@ export default class CardViewerItem extends Component {
                 </Left>
               </CardItem>
               <CardItem cardBody>
-                <Image source={{uri:this.props.imgUrl}} style={{height: 120, width: 120, flex: 1}}/>
+                {this.renderImage()}
               </CardItem>
             </Card>
           </TouchableOpacity>

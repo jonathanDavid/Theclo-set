@@ -45,6 +45,19 @@ export default class SwipeableListView extends Component {
     }
   }
 
+  renderActionButtonsClothes(id){
+    let code = [];
+    if( this.props.isEditor ){
+      code.push(
+        <Button onPress={this.props.onDeleteClothes.bind(this,id)}  transparent>
+            <Icon  type="FontAwesome" name="trash"  />
+        </Button>);
+      return code;
+    }else{
+      return null;
+    }
+  }
+
   render() {
     return (
       <Container>
@@ -70,6 +83,7 @@ export default class SwipeableListView extends Component {
             renderRow={data =>
               <ListItem style={styles.listView}>
                 <ItemList itemCategory={data.Descripcion} titleColor={this.props.headerColor} itemTitle={data.Titulo} imageUrl={data.FotoURL}/>
+                {this.renderActionButtonsClothes(data.id)}
               </ListItem>}
             renderLeftHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressL(secId, rowId, rowMap)}  style={{backgroundColor: this.props.btnLBkgColor}}>

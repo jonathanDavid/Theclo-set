@@ -66,14 +66,28 @@ class CategoryView extends Component{
 
   }
 
-  onPrendaDelete = (currentPrenda) => {
+  onDeleteClothesAlert = (id)=>{
+    Alert.alert(
+    'Eliminar Prenda',
+    '¿Esta seguro de eliminar esta Prenda?',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Eliminar', onPress: this.onPrendaDelete.bind(this,id)},
+    ],
+    { cancelable: false }
+  )
+
+  }
+  onPrendaDelete = (id) => {
+    let prendas = this.props.Prendas;
+    let currentPrenda =  _.find(prendas, ['id', id]);
     userID = firebase.auth().currentUser.uid;
-    prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
-    if(currentPrenda['FotoURL']){
-      prendaStgRef = firebase.storage().ref(`Users/${userID}/Prendas/${currentPrenda['id']}`);
+    prendasReference = firebase.database().ref(`/Users/${userID}/Prendas/`);
+    if(currentPrenda.FotoURL){
+      prendaStgRef = firebase.storage().ref(`Users/${userID}/Prendas/${currentPrenda.id}`);
       prendaStgRef.delete();
     }
-    prendaToRemoveReference = prendasReference.child(currentPrenda['id']).remove().then( () => {
+    prendaToRemoveReference = prendasReference.child(currentPrenda.id).remove().then( () => {
       prendasReference.once('value',(dataSnapshot) => {
         this.props.refreshPrendas(dataSnapshot.val());
       });
@@ -107,7 +121,11 @@ class CategoryView extends Component{
     prendasReference.on('child_added',(dataSnapshot) => {
       if(dataSnapshot.val()['Categoria'] == currentCatID){
         unCategoryID = this.findUncategory().id;
-        firebase.database().ref(`Users/${userID}/Prendas/${dataSnapshot.key}`).child("Categoria").set(unCategoryID);
+        firebase.database().ref(`Users/${userID}/Prendas/${dataSnapshot.key}`).child("Categoria").set(unCategoryID).then(()=>{
+          prendasReference.once('value',(dataSnapshot) => {
+            this.props.refreshPrendas(dataSnapshot.val());
+          });
+        });;
       }
     })
     this.deleteCategory();
@@ -124,9 +142,14 @@ class CategoryView extends Component{
         if(dataSnapshot.val()['FotoURL']){
           firebase.storage().ref(`Users/${userID}/Prendas/${dataSnapshot.key}`).delete();
         }
-        prendasReference.child(dataSnapshot.key).remove();
+        prendasReference.child(dataSnapshot.key).remove().then(()=>{
+          prendasReference.once('value',(dataSnapshot) => {
+            this.props.refreshPrendas(dataSnapshot.val());
+          });
+        });
       }
     });
+
     this.deleteCategory();
   }
 
@@ -180,6 +203,7 @@ class CategoryView extends Component{
         isEditor={true}
         onEdit={this.onEditCategory}
         onDelete={this.onDeleteAlert}
+        onDeleteClothes={this.onDeleteClothesAlert}
         UrlImageL={require("./images/laundry_icon.png")}
         UrlImageR={require("./images/socks_icon.png")}
         onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
