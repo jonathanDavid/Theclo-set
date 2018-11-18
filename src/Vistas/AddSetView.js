@@ -7,16 +7,20 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash';
+import firebase from 'firebase';
 
 class AddSetView extends Component {
+
   onPressBack = ()=>{
     this.props.navigation.goBack();
   }
+
   constructor(props) {
     super(props);
     this.state = {
       setName:"",
       setPrendas:[],
+      isAccessingDB:false,
     };
   }
 
@@ -65,13 +69,23 @@ class AddSetView extends Component {
   }
 
   addNewSet=()=>{
+    this.setState({isAccessingDB:true});
     let setNombre = this.state.setName;
     let setPrendas = this.state.setPrendas;
     let ultimaVezUsado = 'Never';
-
+    let userID = firebase.auth().currentUser.uid;
+    setReference = firebase.database().ref(`Users/${userID}/Sets/`);
+    pushID = setReference.push().key;
+    let setObj = {Title: setNombre, Last_used: ultimaVezUsado, id: pushID, Prendas: setPrendas};
+    setReference.child(pushID).set(setObj).then(()=>{
+        // setReference.child(pushID).once('value',(dataSnapshot)=>{
+        //   this.props.refreshSets(dataSnapshot.val());
+        // })
+        this.setState({isAccessingDB:false});
+        this.props.navigation.goBack();
+    })
     //Agregar el nuevo set a la BD
-
-    this.props.navigation.goBack();
+//    this.props.navigation.goBack();
   }
 
   render() {

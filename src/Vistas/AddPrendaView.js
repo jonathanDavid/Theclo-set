@@ -23,6 +23,7 @@ class AddPrendaView extends Component {
     const uploadUri = uri;
     const imageStorage = firebase.storage().ref(`Users/${userId}/Prendas/`).child(imageName);
     const prendasReference = firebase.database().ref(`Users/${userId}/Prendas/`);
+    console.log('Uploading picture...')
     await fetch(uploadUri).then((response) => {
       response.blob().then((blobResponse) => {
         imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
@@ -68,7 +69,6 @@ class AddPrendaView extends Component {
     if(route){
       photoRoute = dbRoute+pushID;
       prenda['Foto'] = photoRoute;
-      console.log(category)
       this.uploadImage(route,pushID,userId,prenda);
     }else{
       prendasReference.child(pushID).set(prenda).then( () => {

@@ -68,12 +68,12 @@ class CategoryView extends Component{
 
   onPrendaDelete = (currentPrenda) => {
     userID = firebase.auth().currentUser.uid;
-    prendasReference = firebase.database().ref(`/Users/${userID}/Prendas/`);
+    prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
     if(currentPrenda['FotoURL']){
       prendaStgRef = firebase.storage().ref(`Users/${userID}/Prendas/${currentPrenda['id']}`);
       prendaStgRef.delete();
     }
-    prendaToRemoveReference = prendasReference.child(prendaID).remove().then( () => {
+    prendaToRemoveReference = prendasReference.child(currentPrenda['id']).remove().then( () => {
       prendasReference.once('value',(dataSnapshot) => {
         this.props.refreshPrendas(dataSnapshot.val());
       });
