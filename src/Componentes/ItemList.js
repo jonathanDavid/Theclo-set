@@ -21,8 +21,8 @@ export default class ItemList extends Component{
         />
         </View>
         <View style={styles.itemTextBox}>
-          <Text style={{color: this.props.titleColor,fontWeight: 'bold',fontSize: 20,}} >{this.props.itemTitle}</Text>
-          <Text style={styles.itemTextCategory} >{this.props.itemCategory}</Text>
+          <Text numberOfLines={1} style={{color: this.props.titleColor,fontWeight: 'bold',fontSize: 15,}} >{this.props.itemTitle}</Text>
+          <Text numberOfLines={2} style={styles.itemTextCategory} >{this.props.itemCategory}</Text>
         </View>
       </View>
     );
@@ -42,9 +42,10 @@ const styles = StyleSheet.create({
   itemTextBox:{
     paddingLeft: 8,
     paddingTop: 8,
+    flex:1,
   },
   itemTextCategory:{
     color: '#757575',
-    fontSize: 15,
+    fontSize: 10,
   },
 });

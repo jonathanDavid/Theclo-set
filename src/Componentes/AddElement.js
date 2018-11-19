@@ -2,7 +2,7 @@
 import React,   { Component } from 'react';
 import { StyleSheet,StatusBar,View,Image } from 'react-native';
 /*Components*/
-import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right,Left, Spinner } from 'native-base';
+import { Container,Card,Label,Header,Form,Content,Button,Text,CardItem,Item,Body,Title,Input,Icon,Right,Left, Spinner, Textarea  } from 'native-base';
 
 
 
@@ -101,10 +101,7 @@ export default class AddElement extends Component {
                   <Label>Nombre</Label>
                   <Input value={this.state.Nombre} onChangeText={(info) => {this.setState({Nombre:info})}}/>
                 </Item>
-                <Item style ={styles.inputLayout} floatingLabel require>
-                  <Label>Descripcion</Label>
-                  <Input value={this.state.Descripcion} onChangeText={(info) => {this.setState({Descripcion:info})}}/>
-                </Item>
+                <Textarea style={styles.textareaLayout} rowSpan={5} placeholder="Descripcion" value={this.state.Descripcion} onChangeText={(info) => {this.setState({Descripcion:info})}} />
                 <View style ={styles.buttonView}>
                   {this.renderButton()}
                 </View>
@@ -129,7 +126,7 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   buttonLayoutBottom:{
-    marginTop: 50,
+    marginTop: 20,
     padding: 5,
     backgroundColor: '#6432c8',
   },
@@ -139,6 +136,18 @@ const styles = StyleSheet.create({
 
   inputLayout:{
     marginRight:15,
+    borderColor: 'transparent',
+  },
+  textareaLayout:{
+    flex: 1,
+    marginTop:10,
+    marginRight:15,
+    marginLeft:5,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 0.5,
+    borderTopColor: '#bbb',
+    borderTopWidth: 0.5,
+    paddingTop:5
   },
   container: {
     flex: 1,

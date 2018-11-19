@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { Container, Header, Content,Footer,Button,FooterTab, Card,Item,Input, CardItem, Body,Icon, Text } from 'native-base';
+import { Container, Header, Left,Title, Content,Footer,Button,FooterTab, Card,Item,Input,Right, CardItem, Body,Icon, Text } from 'native-base';
 
-import {Platform, StyleSheet, View, Image} from 'react-native';
+import {Platform, StyleSheet,StatusBar, View, Image,Alert} from 'react-native';
 
-import SwipeableListView from '../Componentes/SwipeableListView';
+import ListViewer from '../Componentes/ListViewer';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
-import _ from 'lodash'
+import _ from 'lodash';
 
 
 
@@ -22,30 +22,6 @@ class SetView extends Component{
     this.props.navigation.goBack();
   }
 
-  prendasActivas=()=>{
-    let prendas = this.props.Prendas;
-    let cat= this.props.navigation.state.params.setSelected.Nombre;
-    prendas = _.filter(prendas, ['Categoria', cat]);
-    prendas = _.filter(prendas, ['Estado', 0]);
-    return prendas;
-  }
-
-  onSwipeL=(index)=>{
-    this.props.sendLoundry(index);
-  }
-
-  onEditSet = () => {
-    let currentSet = this.props.navigation.state.params.setSelected;
-    this.navigation.navigate("AddSetView",{ setData: currentSet});
-  }
-
-  onSwipeR=(index)=>{
-    prendas = this.prendasActivas();
-    item = prendas[index];
-    item.Estado=2;
-    this.props.sendMissing(item);
-  }
-
   addNewClothes=()=>{
     alert(this.state.inputText);
     this.props.addChothes(this.state.inputText);
@@ -56,29 +32,89 @@ class SetView extends Component{
     })
   }
 
+  getDataToShow=()=>{
+    let prendas = this.props.Prendas;
+    let selectedPrendas =this.props.navigation.state.params.setSelected.Prendas;
+    prendas = _.filter(prendas, function(el){
+        return ~selectedPrendas.indexOf(el.id)
+    })
+    return prendas;
+  }
+
+  onDeleteItem =(id)=>{
+    Alert.alert('Eliminar prenda del Conjunto','',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Eliminar', onPress: ()=>{
+        let arrayPrendas = this.state.sets.Prendas;
+        arrayPrendas.splice(arrayPrendas.indexOf(id), 1);
+
+        //arrayPrendas tiene el nuevo arreglo de Prendas hay que agregarlo a ba BD
+
+      }},
+    ],
+    { cancelable: false }
+    )
+  }
+
+  onDeleteSET =()=>{
+    Alert.alert('Eliminar el Conjunto','',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Eliminar', onPress: ()=>{
+        let setId = this.props.navigation.state.params.setSelected.id;
+
+        //eliminar el set con el setId
+
+      }},
+    ],
+    { cancelable: false }
+    )
+  }
+
+  onPressTagSET =()=>{
+    Alert.alert('Desea usar este Conjunto?','',
+    [
+      {text: 'Cancelar', style: 'cancel'},
+      {text: 'Aceptar', onPress: ()=>{
+        let setId = this.props.navigation.state.params.setSelected.id;
+        let date = new Date();
+        let last_used = date.toString()
+
+        //establecer EnUso como true, y la fecha de Last_used como la fecha de hoy
+        //Poner el estado de la ropa del set e Loumdry
+      }},
+    ],
+    { cancelable: false }
+    )
+  }
+
+
   render() {
     return (
       <Container>
-        <SwipeableListView
-        isEditor={true}
-        onEditCategory={this.onEditSet}
-        UrlImageL={require("./images/laundry_icon.png")}
-        UrlImageR={require("./images/socks_icon.png")}
-        onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
-        onPressButtonBack={this.onPressBack} listViewData={this.prendasActivas()}
-        btnRBkgColor='#be1e2d' btnLBkgColor='#0b6623' headerColor='#4596ab'
-        Title={this.props.navigation.state.params.setSelected.Nombre}></SwipeableListView>
-
-        <Item>
-          <Input onChangeText={this.onChangeText} placeholder='Set Name'/>
-        </Item>
-        <Footer>
-          <FooterTab style ={{backgroundColor: '#ffffff',height: 100}}>
-            <Button onPress={this.addNewClothes} style={[styles.buttonLayoutBottom,{backgroundColor: '#4596ab'}]}  block>
-              <Text style={{color: 'white',fontWeight: 'bold',fontSize: 16}}>Add Clothes</Text>
+        <Header style={{backgroundColor:'#4596ab'}}>
+          <StatusBar backgroundColor={"#4596ab"} barStyle="light-content"/>
+          <Left>
+            <Button onPress={this.onPressBack} transparent>
+              <Icon name='arrow-back' />
             </Button>
-          </FooterTab>
-        </Footer>
+          </Left>
+          <Body>
+             <Title>{this.props.navigation.state.params.setSelected.Nombre}</Title>
+          </Body>
+          <Right>
+            <Button onPress={this.onPressTagSET} transparent>
+              <Icon type="FontAwesome" name='tag' />
+            </Button>
+            <Button onPress={this.onDeleteSET} transparent>
+              <Icon type="FontAwesome" name='trash' />
+            </Button>
+          </Right>
+        </Header>
+        <Content>
+          <ListViewer isAdding onPressItem={this.onDeleteItem} listViewData={this.getDataToShow()}></ListViewer>
+        </Content>
       </Container>
     );
   }

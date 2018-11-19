@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListView,StyleSheet,StatusBar,TouchableOpacity } from 'react-native';
+import { ListView,StyleSheet,StatusBar,TouchableWithoutFeedback } from 'react-native';
 import { Container, Header,Title,Left, Content,Body, Button, Icon, List, ListItem, Text } from 'native-base';
 import ItemList from './ItemList';
 
@@ -9,6 +9,18 @@ export default class ListViewer extends Component {
     this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
   }
 
+  renderActionButtonsClothes(id){
+    let code = [];
+    if( this.props.isAdding ){
+      code.push(
+        <Button info onPress={this.props.onPressItem.bind(this,id)}  transparent>
+            <Icon type="FontAwesome" name="trash"  />
+        </Button>);
+      return code;
+    }else{
+      return null;
+    }
+  }
 
   render() {
     return (
@@ -18,11 +30,10 @@ export default class ListViewer extends Component {
             rightOpenValue={0}
             dataSource={this.ds.cloneWithRows(this.props.listViewData)}
             renderRow={data =>
-              <ListItem style={styles.listView}>
-                <TouchableOpacity onPress={this.props.onPressItem.bind(this,data.id)}>
-                  <ItemList itemCategory={data.Descripcion} itemTitle={data.Titulo} imageUrl={data.FotoURL}/>
-                </TouchableOpacity>
-              </ListItem>}
+                  <ListItem style={styles.listView}>
+                    <ItemList titleColor={'#4596ab'} itemCategory={data.Descripcion} itemTitle={data.Titulo} imageUrl={data.FotoURL}/>
+                    {this.renderActionButtonsClothes(data.id)}
+                  </ListItem>}
             renderLeftHiddenRow={()=>{}}
             renderRightHiddenRow={()=>{}}
           />

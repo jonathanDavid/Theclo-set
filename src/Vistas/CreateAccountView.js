@@ -26,7 +26,7 @@ export default class CreateAccountView extends Component {
 
   onRegisterPress = () => {
     const {user, email, password1, password2} = this.state;
-    const uncatIMG = 'https://firebasestorage.googleapis.com/v0/b/theclosetapp-4962f.appspot.com/o/uncategorized2.png?alt=media&token=4f8c9643-b392-4216-97c8-450835e0b2c6';
+    const uncatIMG = 'https://firebasestorage.googleapis.com/v0/b/theclosetapp-4962f.appspot.com/o/uncategorized2.png?alt=media&token=548f9262-c3e3-43bf-b55b-522d76af7137';
     this.setState({dbRequest: true});
     if(password1 === password2){
       if(password1 == ""){

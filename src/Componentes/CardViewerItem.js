@@ -28,7 +28,7 @@ export default class CardViewerItem extends Component {
               <CardItem>
                 <Left>
                   <Body>
-                    <Text numberOfLines={1} style={{fontWeight: 'bold'}}>{this.props.Title}</Text>
+                    <Text numberOfLines={1} style={{color: '#6432c8',fontWeight: 'bold',fontSize: 15,}}>{this.props.Title}</Text>
                   </Body>
                 </Left>
               </CardItem>

@@ -72,20 +72,19 @@ class AddSetView extends Component {
     this.setState({isAccessingDB:true});
     let setNombre = this.state.setName;
     let setPrendas = this.state.setPrendas;
-    let ultimaVezUsado = 'Never';
+    let ultimaVezUsado = 'Nunca';
+    let currentSet = false;
     let userID = firebase.auth().currentUser.uid;
     setReference = firebase.database().ref(`Users/${userID}/Sets/`);
     pushID = setReference.push().key;
-    let setObj = {Title: setNombre, Last_used: ultimaVezUsado, id: pushID, Prendas: setPrendas};
+    let setObj = {Nombre: setNombre, Last_used: ultimaVezUsado, id: pushID, Prendas: setPrendas, EnUso: currentSet};
     setReference.child(pushID).set(setObj).then(()=>{
-        // setReference.child(pushID).once('value',(dataSnapshot)=>{
-        //   this.props.refreshSets(dataSnapshot.val());
-        // })
+         setReference.once('value',(dataSnapshot)=>{
+          this.props.refreshSets(dataSnapshot.val());
+         })
         this.setState({isAccessingDB:false});
         this.props.navigation.goBack();
     })
-    //Agregar el nuevo set a la BD
-//    this.props.navigation.goBack();
   }
 
   render() {
@@ -112,14 +111,13 @@ class AddSetView extends Component {
             </Right>
           </Header>
 
-          <Content>
+          <Content  style={styles.colorBGMain}>
             <View style={styles.mainLayout}>
-              <Item  style={styles.inputLayout} floatingLabel>
-                <Label style={{fontSize: 12}} >Nombre Del Conjunto</Label>
-                <Input style={{fontSize: 15,fontWeight: 'bold',color: '#4596ab'}} onChangeText={this.onChangeText} />
+              <Item  style={styles.inputLayout}  inlineLabel>
+                <Input style={{fontSize: 15,fontWeight: 'bold',color: '#4596ab'}} onChangeText={this.onChangeText} placeholder="¡Digite el Nombre del Conjunto!"/>
               </Item>
             </View>
-            <ListViewer onPressItem={this.onPressItem} listViewData={this.getDataToShow()} />
+            <ListViewer isAdding onPressItem={this.onPressItem} listViewData={this.getDataToShow()} />
 
           </Content>
           <Fab
@@ -152,12 +150,11 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingRight: 20,
     paddingLeft:20,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 0.5,
+    backgroundColor: "#fff",
   },
 
-  colorBGSecn:{
-    backgroundColor: "#ffffff"
+  colorBGMain:{
+    backgroundColor: "#fafafa"
   },
   buttonLayoutBottom:{
     margin: 5,
@@ -181,7 +178,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
   return{
-
+    refreshSets: bindActionCreators(Actions.refreshSets,dispatch),
   };
 }
 
