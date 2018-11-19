@@ -7,6 +7,7 @@ import { Spinner } from '../Componentes/Spinner';
 /*Database and Auth*/
 import firebase from 'firebase';
 
+
 export default class CreateAccountView extends Component {
 
   state = {user: '', email: '', password1: '', password2: '', error: '', dbRequest: false}
@@ -25,6 +26,7 @@ export default class CreateAccountView extends Component {
 
   onRegisterPress = () => {
     const {user, email, password1, password2} = this.state;
+    const uncatIMG = 'https://firebasestorage.googleapis.com/v0/b/theclosetapp-4962f.appspot.com/o/uncategorized2.png?alt=media&token=4f8c9643-b392-4216-97c8-450835e0b2c6';
     this.setState({dbRequest: true});
     if(password1 === password2){
       if(password1 == ""){
@@ -38,7 +40,7 @@ export default class CreateAccountView extends Component {
             this.setState({error: '', dbRequest: false});
             userReference = firebase.database().ref('Users/');
             pushID = userReference.push().key;
-            userReference.child(loggedUser.uid).set({ id:loggedUser.uid, Categorias: {[pushID]: {Nombre: 'Sin clase', Descripcion: 'Categorias sin clase', id: pushID, Foto:'', FotoURL:''} }}).then(()=>{
+            userReference.child(loggedUser.uid).set({ id:loggedUser.uid, Categorias: {[pushID]: {Nombre: 'Sin clase', Descripcion: 'Categorias sin clase', id: pushID, Foto:'uncategorized2', FotoURL:uncatIMG} }}).then(()=>{
               this.props.navigation.navigate("LoginView");
             });
           })
