@@ -17,6 +17,7 @@ class SetView extends Component{
     super(props)
     this.state={
       inputText:"",
+      update:false,
     }
   }
   onPressBack = ()=>{
@@ -45,9 +46,12 @@ class SetView extends Component{
   updatePrendasArray = (prendas) => {
     let userID = firebase.auth().currentUser.uid;
     let setID = this.props.navigation.state.params.setSelected.id;
-    let setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
+    setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
     setsReference.child("Prendas").set(prendas).then(()=>{
-      Alert.alert('Se han actualizado las prendas del conjunto!');
+      firebase.database().ref(`Users/${userID}/Sets/`).once('value',(dataSnapshot)=>{
+        this.setState({update:true})
+        this.props.refreshSets(dataSnapshot.val());
+      })
     });
   }
 
@@ -56,7 +60,7 @@ class SetView extends Component{
     [
       {text: 'Cancelar', style: 'cancel'},
       {text: 'Eliminar', onPress: ()=>{
-        let arrayPrendas = this.state.sets.Prendas;
+        let arrayPrendas = this.props.navigation.state.params.setSelected.Prendas;
         arrayPrendas.splice(arrayPrendas.indexOf(id), 1);
         this.updatePrendasArray(arrayPrendas);
       }},
@@ -69,7 +73,9 @@ class SetView extends Component{
     let userID = firebase.auth().currentUser.uid;
     let setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
     setsReference.remove().then(()=>{
-      Alert.alert('Se ha borrado el conjunto!');
+       firebase.database().ref(`Users/${userID}/Sets/`).once('value',(dataSnapshot)=>{
+       this.props.refreshSets(dataSnapshot.val());
+      })
       this.props.navigation.goBack();
     });
   }
@@ -95,11 +101,27 @@ class SetView extends Component{
     let prendaReference = firebase.database().ref(`Users/${userID}/Prendas`);
     setsReference.child("LastUsed").set(lastUsed);
     setsReference.child("EnUso").set(true);
+
     setsReference.on('value',(dataSnapshot) => {
       let currentSet = dataSnapshot.val();
       _.forEach(currentSet.Prendas, (prendaID) => {
         prendaReference.child(`${prendaID}/Estado`).set(STATUS_LAUNDRY);
       })
+      firebase.database().ref(`Users/${userID}/Prendas/`).once('value',(dataSnapshot)=>{
+          this.props.refreshPrendas(dataSnapshot.val());
+      })
+    })
+
+    let sets = Object.values(this.props.Sets)
+    for(var i=0; i < sets.length; i=i+1){
+      if(sets[i].id!= setID){
+        let setsReferencetemp = firebase.database().ref(`Users/${userID}/Sets/${sets[i].id}`);
+        setsReferencetemp.child("EnUso").set(false)
+      }
+    }
+
+    firebase.database().ref(`Users/${userID}/Sets/`).once('value',(dataSnapshot)=>{
+      this.props.refreshSets(dataSnapshot.val());
     })
   }
 
@@ -167,16 +189,18 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state){
-    const {Categorias,Prendas} = state;
+    const {Categorias,Prendas,Sets} = state;
     return{
       Categorias,
-      Prendas
+      Prendas,
+      Sets
     };
 }
 
 function mapDispatchToProps(dispatch){
   return{
-
+      refreshSets: bindActionCreators(Actions.refreshSets,dispatch),
+      refreshPrendas: bindActionCreators(Actions.refreshPrendas,dispatch),
   };
 }
 

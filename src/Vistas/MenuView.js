@@ -59,17 +59,7 @@ import firebase from 'firebase'
                 </TouchableOpacity>
               </View>
             </View>
-            <View style={[styles.s2b91d5ce, { flexDirection: "row" }]}>
-              <View style={styles.s5fdf9abe}>
-                <View style={styles.s552591c4} />
-                <View style={styles.s5dc5a3b9} />
-              </View>
-              <View style={styles.sa8d6afc2} />
-              <View style={styles.s37ff9f25}>
-                <View style={styles.s64de01b3} />
-                <View style={styles.sacf81b4d} />
-              </View>
-            </View>
+
             <View style={[styles.s4dbff5ed, { flexDirection: "row" }]}>
               <View style={styles.s317ff90f}>
                 <TouchableOpacity onPress={this.onPressLaundry}>
@@ -87,9 +77,7 @@ import firebase from 'firebase'
               <View style={[styles.s923b1cd6, { flexDirection: "row" }]}>
                 <View style={styles.s617c1fc1} />
                 <View style={styles.s4d5fab9b}>
-
                   <TouchableWithoutFeedback onPress={this.onPressLogOut}>
-
                     <Image source={require("./images/Captura.png")} style={styles.sb6e3e2b9} />
                   </TouchableWithoutFeedback>
                   <View style={styles.s97acb6cf}>
@@ -98,7 +86,6 @@ import firebase from 'firebase'
                 </View>
                 <View style={styles.sb6315268} />
               </View>
-              {/*<Text>Bienvenido, usuario {this.state.name} !</Text>*/}
           </View>
     );
   }
@@ -176,7 +163,7 @@ const styles = StyleSheet.create({
     width: `100%`
   },
   sa8d6afc2: {
-    backgroundColor: `rgba(255, 235, 59, 1)`,
+    backgroundColor: `rgba(0, 0, 0, 1)`,
     flex: 1,
     maxHeight: `100%`,
     minHeight: `100%`,
@@ -262,7 +249,7 @@ const styles = StyleSheet.create({
   },
   s923b1cd6: { backgroundColor: `rgba(255, 255, 255, 1)`, flex: 0.3 },
   s8ab8b2a6: {
-    backgroundColor: `rgba(255, 235, 59,1)`,
+    backgroundColor: `rgba(0, 0, 0,1)`,
     borderWidth: 2,
     flex: 1,
     flexWrap: `wrap`
