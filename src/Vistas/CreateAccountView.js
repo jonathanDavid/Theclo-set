@@ -20,9 +20,6 @@ export default class CreateAccountView extends Component {
     this.props.navigation.goBack();
   }
 
-  onReturnPress = () => {
-    this.props.navigation.navigate("LoginView");
-  }
 
   onRegisterPress = () => {
     const {user, email, password1, password2} = this.state;
@@ -87,17 +84,6 @@ export default class CreateAccountView extends Component {
     return (
       <Container style={styles.colorBG}>
         <StatusBar backgroundColor={"#003459"} barStyle="light-content"/>
-        {/*<Header style={{backgroundColor: "#03A9F4"}}>
-          <StatusBar backgroundColor={"#0288D1"} barStyle="light-content"/>
-          <Left>
-            <Button onPress={this.onPressBack} transparent>
-              <Icon name='arrow-back' />
-            </Button>
-          </Left>
-          <Body>
-             <Title>Create Account</Title>
-          </Body>
-        </Header>*/}
         <Content style ={styles.contentStyle}>
           <Card  style ={styles.cardMainLayout}>
             {this.renderRegister()}

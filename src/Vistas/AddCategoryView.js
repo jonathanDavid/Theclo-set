@@ -25,10 +25,8 @@ class AddCategoryView extends Component {
      await fetch(uploadUri).then((response) => {
        response.blob().then((blobResponse) => {
          imageStorage.put(blobResponse, {contentType: mime}).then(()=>{
-           console.log('Picture uploaded');
            imageStorage.getDownloadURL().then((url) => {
              photoURL = url;
-             console.log(`Got URL:${photoURL}`)
              this.setState({isAccessingStg:false});
              category['FotoURL'] = photoURL;
              categoryReference.child(category['id']).set(category).then( () => {
@@ -39,7 +37,7 @@ class AddCategoryView extends Component {
                this.props.navigation.navigate("CategoriesView");
              });
            });
-         }).catch(()=>{console.log('Test 2')});
+         }).catch(()=>{console.log('Error')});
        })
      });
    }

@@ -40,7 +40,10 @@ class SetsView extends Component{
       data = _.map(data, 'LastUsed');
       for (var i=0; i < data.length; i=i+1) {
         let date = new Date(data[i])
-        data[i] = date.toLocaleDateString("es-CO")
+        if(data[i]!="Nunca"){
+          data[i] = date.toLocaleDateString("es-CO")
+        }
+
       }
       return data;
     }
@@ -58,14 +61,15 @@ class SetsView extends Component{
       for (var i=0; i < sets.length; i=i+1) {
         let selectedPrendas =  sets[i].Prendas
         let prendas = this.props.Prendas;
-        prendas =  _.filter(prendas, function(el){
-            return  ~selectedPrendas.indexOf(el.id)
-        })
-        console.log(prendas);
-        images[i] = _.map(prendas,'FotoURL')
-
+        if(selectedPrendas){
+          prendas =  _.filter(prendas, function(el){
+              return  ~selectedPrendas.indexOf(el.id)
+          })
+          images[i] = _.map(prendas,'FotoURL')
+        }else{
+          images[i]=[]
+        }
       }
-      console.log(images);
     }
     return images
   }

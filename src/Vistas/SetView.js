@@ -37,10 +37,15 @@ class SetView extends Component{
   getDataToShow=()=>{
     let prendas = this.props.Prendas;
     let selectedPrendas =this.props.navigation.state.params.setSelected.Prendas;
-    prendas = _.filter(prendas, function(el){
-        return ~selectedPrendas.indexOf(el.id)
-    })
-    return prendas;
+    if(selectedPrendas){
+      prendas = _.filter(prendas, function(el){
+          return ~selectedPrendas.indexOf(el.id)
+      })
+      return prendas;
+    }else{
+      return []
+    }
+
   }
 
   updatePrendasArray = (prendas) => {

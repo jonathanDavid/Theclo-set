@@ -12,6 +12,10 @@ import firebase from 'firebase'
   static navigationOptions = { title: "Main" };
   constructor(props) {
     super(props);
+    currentUser = firebase.auth().currentUser;
+    firebase.database().ref(`Users/${currentUser.uid}`).once('value', (dataSnapshot) => {
+      this.props.setState(dataSnapshot.val());
+    });
   }
   onPressCloset = ()=>{
     this.props.navigation.navigate("CategoriesView")
@@ -40,6 +44,7 @@ import firebase from 'firebase'
     });
     this.setState({ name : currentUser.displayName});
   }
+
 
   render() {
     return (

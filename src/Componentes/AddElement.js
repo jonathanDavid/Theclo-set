@@ -25,13 +25,13 @@ export default class AddElement extends Component {
     }
   }
 
-  returnData(uri) {
+  returnData=(uri)=>{
     this.setState({Foto: uri});
   }
 
   OpenCamera=()=>{
     if(!this.state.loading){
-      this.props.OpenCamera(this.returnData.bind(this))
+      this.props.OpenCamera(this.returnData /*.bind(this)*/)
     }
   }
 

@@ -138,7 +138,6 @@ class CategoryView extends Component{
     prendasReference = firebase.database().ref(`Users/${userID}/Prendas/`);
     prendasReference.on('child_added',(dataSnapshot) => {
       if(dataSnapshot.val()['Categoria'] == catID){
-        console.log('Found a prenda!');
         if(dataSnapshot.val()['FotoURL']){
           firebase.storage().ref(`Users/${userID}/Prendas/${dataSnapshot.key}`).delete();
         }
@@ -196,11 +195,21 @@ class CategoryView extends Component{
     this.props.navigation.navigate("AddPrendaView",{ prendaData: null, categorySelected: this.props.navigation.state.params.CategorySelected});
   }
 
+  isEditor=()=>{
+    let cats = this.props.Categorias;
+    let cat = _.find(cats,["Nombre", "Sin clase"])
+    if(cat.id == this.props.navigation.state.params.CategorySelected.id){
+      return false
+    }else{
+      return true
+    }
+  }
+
   render() {
     return (
       <Container>
         <SwipeableListView
-        isEditor={true}
+        isEditor={this.isEditor()}
         onEdit={this.onEditCategory}
         onDelete={this.onDeleteAlert}
         onDeleteClothes={this.onDeleteClothesAlert}

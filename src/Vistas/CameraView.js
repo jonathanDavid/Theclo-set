@@ -115,15 +115,20 @@ export default class CameraView extends React.Component {
 
   takePicture = () => {
     if (this.camera) {
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
-      this.props.navigation.goBack();
+      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved })
     }
   };
 
   handleMountError = ({ message }) => console.error(message);
 
   onPictureSaved = async photo => {
-    this.props.navigation.state.params.returnData(photo.uri);
+    console.log("Toma 2")
+    console.log(photo.uri)
+    //this.props.navigation.state.params.returnData(photo.uri);
+    //this.props.navigation.goBack();
+    const { navigation } = this.props;
+    navigation.goBack();
+    navigation.state.params.returnData(photo.uri);
   }
 
   onBarCodeScanned = code => {
