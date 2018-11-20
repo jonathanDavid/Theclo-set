@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actionsCreator as Actions} from '../Redux/Actions';
 import _ from 'lodash';
+import firebase from 'firebase'
 
 
 
@@ -41,6 +42,15 @@ class SetView extends Component{
     return prendas;
   }
 
+  updatePrendasArray = (prendas) => {
+    let userID = firebase.auth().currentUser.uid;
+    let setID = this.props.navigation.state.params.setSelected.id;
+    let setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
+    setsReference.child("Prendas").set(prendas).then(()=>{
+      Alert.alert('Se han actualizado las prendas del conjunto!');
+    });
+  }
+
   onDeleteItem =(id)=>{
     Alert.alert('Eliminar prenda del Conjunto','',
     [
@@ -48,13 +58,20 @@ class SetView extends Component{
       {text: 'Eliminar', onPress: ()=>{
         let arrayPrendas = this.state.sets.Prendas;
         arrayPrendas.splice(arrayPrendas.indexOf(id), 1);
-
-        //arrayPrendas tiene el nuevo arreglo de Prendas hay que agregarlo a ba BD
-
+        this.updatePrendasArray(arrayPrendas);
       }},
     ],
     { cancelable: false }
     )
+  }
+
+  deleteCurrentSet = (setID) => {
+    let userID = firebase.auth().currentUser.uid;
+    let setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
+    setsReference.remove().then(()=>{
+      Alert.alert('Se ha borrado el conjunto!');
+      this.props.navigation.goBack();
+    });
   }
 
   onDeleteSET =()=>{
@@ -62,14 +79,28 @@ class SetView extends Component{
     [
       {text: 'Cancelar', style: 'cancel'},
       {text: 'Eliminar', onPress: ()=>{
-        let setId = this.props.navigation.state.params.setSelected.id;
-
-        //eliminar el set con el setId
-
+        let setID = this.props.navigation.state.params.setSelected.id;
+        this.deleteCurrentSet(setID);
       }},
     ],
     { cancelable: false }
     )
+  }
+
+
+  updateLastUsedSet = (setID,lastUsed) => {
+    const STATUS_LAUNDRY = 1;
+    let userID = firebase.auth().currentUser.uid;
+    let setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
+    let prendaReference = firebase.database().ref(`Users/${userID}/Prendas`);
+    setsReference.child("LastUsed").set(lastUsed);
+    setsReference.child("EnUso").set(true);
+    setsReference.on('value',(dataSnapshot) => {
+      let currentSet = dataSnapshot.val();
+      _.forEach(currentSet.Prendas, (prendaID) => {
+        prendaReference.child(`${prendaID}/Estado`).set(STATUS_LAUNDRY);
+      })
+    })
   }
 
   onPressTagSET =()=>{
@@ -77,11 +108,10 @@ class SetView extends Component{
     [
       {text: 'Cancelar', style: 'cancel'},
       {text: 'Aceptar', onPress: ()=>{
-        let setId = this.props.navigation.state.params.setSelected.id;
+        let setID = this.props.navigation.state.params.setSelected.id;
         let date = new Date();
-        let last_used = date.toString()
-
-        //establecer EnUso como true, y la fecha de Last_used como la fecha de hoy
+        let lastUsed = date.toString();
+        this.updateLastUsedSet(setID,lastUsed);
         //Poner el estado de la ropa del set e Loumdry
       }},
     ],

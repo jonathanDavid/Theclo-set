@@ -77,7 +77,7 @@ class AddSetView extends Component {
     let userID = firebase.auth().currentUser.uid;
     setReference = firebase.database().ref(`Users/${userID}/Sets/`);
     pushID = setReference.push().key;
-    let setObj = {Nombre: setNombre, Last_used: ultimaVezUsado, id: pushID, Prendas: setPrendas, EnUso: currentSet};
+    let setObj = {Nombre: setNombre, LastUsed: ultimaVezUsado, id: pushID, Prendas: setPrendas, EnUso: currentSet};
     setReference.child(pushID).set(setObj).then(()=>{
          setReference.once('value',(dataSnapshot)=>{
           this.props.refreshSets(dataSnapshot.val());
