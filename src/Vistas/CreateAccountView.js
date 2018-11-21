@@ -60,21 +60,17 @@ export default class CreateAccountView extends Component {
     }
     return(
       <Form>
-          <Item style ={styles.inputLayout} floatingLabel require>
-            <Label style={{fontSize: 13, color: '#809AAD'}}>Usuario</Label>
-            <Input value={this.state.user} onChangeText={(user) => {this.setState({user: user})}}/>
+          <Item style ={styles.inputLayout}>
+            <Input style={{fontSize: 13, color: '#809AAD'}}  placeholder="Usuario" value={this.state.user} onChangeText={(user) => {this.setState({user: user})}}/>
           </Item>
-          <Item style ={styles.inputLayout} floatingLabel>
-            <Label style={{fontSize: 13, color: '#809AAD'}}>Correo</Label>
-            <Input value={this.state.email} onChangeText={(email) => {this.setState({email: email})}}/>
+          <Item style ={styles.inputLayout}>
+            <Input style={{fontSize: 13, color: '#809AAD'}}  placeholder="Correo Electronico" value={this.state.email} onChangeText={(email) => {this.setState({email: email})}}/>
           </Item>
-          <Item style ={styles.inputLayout} floatingLabel>
-            <Label style={{fontSize: 13, color: '#809AAD'}}>Contraseña</Label>
-            <Input secureTextEntry={true} value={this.state.password1} onChangeText={(password1) => {this.setState({password1: password1})}}/>
+          <Item style ={styles.inputLayout}>
+            <Input style={{fontSize: 13, color: '#809AAD'}}  placeholder="Contraseña" secureTextEntry={true} value={this.state.password1} onChangeText={(password1) => {this.setState({password1: password1})}}/>
           </Item>
-          <Item style ={styles.inputLayout} floatingLabel>
-            <Label style={{fontSize: 13, color: '#809AAD'}}>Confirmar Contraseña</Label>
-            <Input secureTextEntry={true} value={this.state.password2} onChangeText={(password2) => {this.setState({password2: password2})}}/>
+          <Item style ={styles.inputLayout}>
+            <Input style={{fontSize: 13, color: '#809AAD'}}  placeholder="Confirmar Contraseña" secureTextEntry={true} value={this.state.password2} onChangeText={(password2) => {this.setState({password2: password2})}}/>
           </Item>
       </Form>
     );
@@ -128,7 +124,6 @@ const styles = StyleSheet.create({
 
   cardMainLayout:{
      borderRadius: 15,
-     paddingBottom: 35,
   },
 
   colorBG:{

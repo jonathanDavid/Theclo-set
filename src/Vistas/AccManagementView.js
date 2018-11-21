@@ -54,17 +54,15 @@ export default class AccManagementView extends Component {
               <Text>Information</Text>
             </CardItem>
             <CardItem>
-              <Item floatingLabel>
-               <Label>Email</Label>
+              <Item>
                <Icon active name='mail' />
-               <Input value={this.state.email} onChangeText={(email) => {this.setState({email: email})}}/>
+               <Input value={this.state.email} placeholder="Email" onChangeText={(email) => {this.setState({email: email})}}/>
               </Item>
             </CardItem>
             <CardItem>
-              <Item floatingLabel>
-                <Label>Password</Label>
+              <Item>
                 <Icon active name='lock' />
-                <Input value={this.state.password} onChangeText={(password) => {this.setState({password: password})}}/>
+                <Input value={this.state.password} placeholder="Password" onChangeText={(password) => {this.setState({password: password})}}/>
               </Item>
             </CardItem>
           </Card>

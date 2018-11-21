@@ -97,9 +97,8 @@ export default class AddElement extends Component {
                   {this.renderImageCamera()}
                 </CardItem>
               </Card>
-                <Item style ={styles.inputLayout} floatingLabel require>
-                  <Label>Nombre</Label>
-                  <Input value={this.state.Nombre} onChangeText={(info) => {this.setState({Nombre:info})}}/>
+                <Item style ={styles.inputLayout}>
+                  <Input value={this.state.Nombre} placeholder="Nombre" onChangeText={(info) => {this.setState({Nombre:info})}}/>
                 </Item>
                 <Textarea style={styles.textareaLayout} rowSpan={5} placeholder="Descripcion" value={this.state.Descripcion} onChangeText={(info) => {this.setState({Descripcion:info})}} />
                 <View style ={styles.buttonView}>

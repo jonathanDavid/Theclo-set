@@ -46,13 +46,11 @@ export default class LoginView extends Component {
     //De lo contrario
     return(
       <Form>
-        <Item style ={styles.inputLayout} floatingLabel>
-          <Label style={{fontSize: 13, color: '#809AAD'}}>Correo Electronico</Label>
-          <Input  onChangeText={ (email) => {this.setState({email: email})} }/>
+        <Item style ={styles.inputLayout}>
+          <Input style={{fontSize: 13, color: '#809AAD'}}  placeholder="Correo Electronico" onChangeText={ (email) => {this.setState({email: email})} }/>
         </Item>
-        <Item style ={styles.inputLayout} floatingLabel>
-          <Label style={{fontSize: 13,color: '#809AAD'}}>Clave</Label>
-          <Input  secureTextEntry={true} onChangeText={ (passw) => {this.setState({password: passw})} } />
+        <Item style ={styles.inputLayout}>
+          <Input style={{fontSize: 13, color: '#809AAD'}}  secureTextEntry={true} placeholder="Clave"  onChangeText={ (passw) => {this.setState({password: passw})} } />
         </Item>
       </Form>
     );
@@ -116,7 +114,6 @@ const styles = StyleSheet.create({
 
   cardMainLayout:{
      borderRadius: 15,
-     paddingBottom: 35,
   },
 
   contentStyle:{
