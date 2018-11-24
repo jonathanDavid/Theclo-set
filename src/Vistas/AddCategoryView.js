@@ -15,7 +15,6 @@ class AddCategoryView extends Component {
   }
 
   async uploadImage(uri, imageName, userId, category){
-     //const uploadUri =  Platform.OS === 'ios' ? uri.replace('file://','') : uri;
      this.setState({isAccessingStg:true})
      mime = 'image/jpeg'
      const uploadUri = uri;

@@ -74,9 +74,8 @@ export default class App extends Component{
    }else{
      return (
         <Provider store={store}>
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch',}}>
-            <Spinner color='black'/>
-            <Text style={{fontSize: 20, textAlign: 'center' , fontWeight: `bold`}}>Espere...</Text>
+          <View style={{ flex: 1,backgroundColor: '#433489', flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch',}}>
+            <Spinner color='white'/>
           </View>
         </Provider>
      );

@@ -59,7 +59,7 @@ export default class CameraView extends React.Component {
     autoFocus: 'on',
     type: 'back',
     whiteBalance: 'auto',
-    ratio: '16:9',
+    ratio: '4:3',
     ratios: [],
     barcodeScanning: false,
     faceDetecting: false,
@@ -115,17 +115,13 @@ export default class CameraView extends React.Component {
 
   takePicture = () => {
     if (this.camera) {
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved })
+      this.camera.takePictureAsync({quality:0, onPictureSaved: this.onPictureSaved })
     }
   };
 
   handleMountError = ({ message }) => console.error(message);
 
   onPictureSaved = async photo => {
-    console.log("Toma 2")
-    console.log(photo.uri)
-    //this.props.navigation.state.params.returnData(photo.uri);
-    //this.props.navigation.goBack();
     const { navigation } = this.props;
     navigation.goBack();
     navigation.state.params.returnData(photo.uri);
@@ -148,7 +144,7 @@ export default class CameraView extends React.Component {
       if (Platform.OS === 'ios') {
         pictureSizeId = pictureSizes.indexOf('High');
       } else {
-        pictureSizeId = pictureSizes.length-1;
+        pictureSizeId = pictureSizes.indexOf("640x480");
       }
       this.setState({ pictureSizes, pictureSizeId, pictureSize: pictureSizes[pictureSizeId] });
     }
