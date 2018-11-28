@@ -22,11 +22,6 @@ class AddPrendaView extends Component {
     const uploadUri = uri;
     const imageStorage = firebase.storage().ref(`Users/${userId}/Prendas/`).child(imageName);
     const prendasReference = firebase.database().ref(`Users/${userId}/Prendas/`);
-    //alert(uploadUri.substr(1,32))
-    //uploadUri.replace(new RegExp("/\s/g"), '');
-    //imageStorage.putString(uploadUri, 'data_url').then(function(snapshot) {
-    //  console.log(snapshot);
-    //});
     await fetch(uploadUri).then((response) => {
       response.blob().then((blobResponse) => {
         imageStorage.put(blobResponse, {contentType: mime}).then(()=>{

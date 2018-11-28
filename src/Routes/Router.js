@@ -19,6 +19,7 @@ import LoginView from '../Vistas/LoginView';
 import CreateAccountView from '../Vistas/CreateAccountView';
 import CardViewer from '../Componentes/CardViewer';
 import AccManagementView from '../Vistas/AccManagementView';
+import CalendarView from '../Vistas/CalendarView';
 
 export const SignedIn = createStackNavigator({
   MenuView:{
@@ -29,6 +30,12 @@ export const SignedIn = createStackNavigator({
   },
   AddPrendaView:{
     screen:AddPrendaView,
+    navigationOptions:{
+      header:null,
+    },
+  },
+  CalendarView:{
+    screen:CalendarView,
     navigationOptions:{
       header:null,
     },

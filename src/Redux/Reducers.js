@@ -1,4 +1,4 @@
-import {REFRESH_CATEGORY,REFRESH_PRENDAS,SET_STATE,REFRESH_SETS} from './Types';
+import {REFRESH_CATEGORY, REFRESH_PRENDAS, SET_STATE, REFRESH_SETS, REFRESH_LOG} from './Types';
 import firebase from 'firebase';
 import ApiKeys from '../Database/ApiKeys';
 import _ from 'lodash'
@@ -29,6 +29,13 @@ function applyRefreshSets(state,payload){
   };
 }
 
+function applyRefreshLog(state,payload){
+  return{
+    ...state,
+    Registro:{...payload},
+  };
+}
+
 function applySetState(state,payload){
   return{
     ...payload
@@ -52,6 +59,9 @@ export default Reducer = (state=initialState, action)=>{
     break;
     case REFRESH_SETS:
       return applyRefreshSets(state,payload)
+    break;
+    case REFRESH_LOG:
+      return applyRefreshLog(state,payload)
     break;
     case SET_STATE:
       return applySetState(state,payload)

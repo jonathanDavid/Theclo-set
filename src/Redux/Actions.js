@@ -1,4 +1,4 @@
-import {REFRESH_CATEGORY,REFRESH_PRENDAS,SET_STATE,REFRESH_SETS} from './Types';
+import {REFRESH_CATEGORY, REFRESH_PRENDAS, SET_STATE, REFRESH_SETS, REFRESH_LOG} from './Types';
 
 function setState(state){
     return {type: SET_STATE, payload: state};
@@ -15,11 +15,16 @@ function refreshPrendas(item){
     return {type: REFRESH_PRENDAS, payload: item};
 }
 
+function refreshLog(item){
+    return {type: REFRESH_LOG, payload: item};
+}
+
+
 
 
 
 const actionsCreator ={
-  addCategory, setState,refreshSets,refreshPrendas
+  addCategory, setState, refreshSets, refreshPrendas, refreshLog
 };
 
 export {actionsCreator};

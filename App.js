@@ -38,7 +38,6 @@ export default class App extends Component{
   }
 
   componentDidMount(){
-    //Inicializar authentication listener
     if(!firebase.apps.length){
       firebase.initializeApp(ApiKeys.FirebaseConfig);
     }
@@ -51,7 +50,6 @@ export default class App extends Component{
     });
   }
 
-  /*Stop listening auth changes*/
   componentWillUnmount() {
     this.authListener();
   }

@@ -98,7 +98,7 @@ export default class AddElement extends Component {
                 </CardItem>
               </Card>
                 <Item style ={styles.inputLayout}>
-                  <Input value={this.state.Nombre} placeholder="Nombre" onChangeText={(info) => {this.setState({Nombre:info})}}/>
+                  <Input style={{color: '#6432c8',fontWeight: 'bold',fontSize: 15,}} value={this.state.Nombre} placeholder="Nombre" onChangeText={(info) => {this.setState({Nombre:info})}}/>
                 </Item>
                 <Textarea style={styles.textareaLayout} rowSpan={5} placeholder="Descripcion" value={this.state.Descripcion} onChangeText={(info) => {this.setState({Descripcion:info})}} />
                 <View style ={styles.buttonView}>
@@ -134,19 +134,15 @@ const styles = StyleSheet.create({
   },
 
   inputLayout:{
-    marginRight:15,
     borderColor: 'transparent',
   },
   textareaLayout:{
     flex: 1,
     marginTop:10,
-    marginRight:15,
-    marginLeft:5,
-    borderBottomColor: '#bbb',
-    borderBottomWidth: 0.5,
-    borderTopColor: '#bbb',
-    borderTopWidth: 0.5,
-    paddingTop:5
+    marginLeft:10,
+    paddingTop:5,
+    color: '#757575',
+    fontSize: 10,
   },
   container: {
     flex: 1,

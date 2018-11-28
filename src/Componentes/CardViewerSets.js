@@ -51,7 +51,7 @@ export default class CardViewer extends Component {
             <Title>{this.props.Title}</Title>
           </Body>
           <Right>
-            <Button onPress={this.props.onPressButtonBack} transparent>
+            <Button onPress={this.props.onPressCalendar} transparent>
               <Icon type="FontAwesome" name='calendar' />
             </Button>
           </Right>
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
   duoCategory:{
     flexDirection: 'row',
     justifyContent: 'center',
-    height: 160,
-    margin: 5,
+    height: 180,
+    margin: 0,
   },
 
   titleText: {

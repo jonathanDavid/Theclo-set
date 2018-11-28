@@ -130,6 +130,18 @@ class SetView extends Component{
     })
   }
 
+    addRegisterLog=(setID,date)=>{
+      let userID = firebase.auth().currentUser.uid;
+      let registroReference = firebase.database().ref(`Users/${userID}/Registro`);
+      let pushID = registroReference.push().key;
+      let registro= {id: pushID, Date: date, SetID: setID}
+      registroReference.child(pushID).set(registro).then( () => {
+        registroReference.once('value', (dataSnapshot) => {
+          this.props.refreshLog(dataSnapshot.val());
+        })
+      });
+    }
+
   onPressTagSET =()=>{
     Alert.alert('Desea usar este Conjunto?','',
     [
@@ -137,9 +149,9 @@ class SetView extends Component{
       {text: 'Aceptar', onPress: ()=>{
         let setID = this.props.navigation.state.params.setSelected.id;
         let date = new Date();
-        let lastUsed = date.toString();
+        let lastUsed = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate();
+        this.addRegisterLog(setID,lastUsed);
         this.updateLastUsedSet(setID,lastUsed);
-        //Poner el estado de la ropa del set e Loumdry
       }},
     ],
     { cancelable: false }
@@ -194,18 +206,20 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state){
-    const {Categorias,Prendas,Sets} = state;
+    const {Categorias,Registro,Prendas,Sets} = state;
     return{
       Categorias,
       Prendas,
+      Registro,
       Sets
     };
 }
 
 function mapDispatchToProps(dispatch){
   return{
-      refreshSets: bindActionCreators(Actions.refreshSets,dispatch),
-      refreshPrendas: bindActionCreators(Actions.refreshPrendas,dispatch),
+      refreshSets: bindActionCreators(Actions.refreshSets, dispatch),
+      refreshPrendas: bindActionCreators(Actions.refreshPrendas, dispatch),
+      refreshLog: bindActionCreators(Actions.refreshLog, dispatch),
   };
 }
 

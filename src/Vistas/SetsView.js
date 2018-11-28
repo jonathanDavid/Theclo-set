@@ -74,10 +74,14 @@ class SetsView extends Component{
     return images
   }
 
+  onPressCalendar=()=>{
+        this.props.navigation.navigate("CalendarView");
+  }
+
   render() {
     return (
         <Container>
-          <CardViewerSets addNewClothes={this.addNewClothes} Data={this.setsNames()} DataID={this.setsID()} DataFoto={this.setsPhoto()} DataDetails={this.setsDetails()} DataUsed={this.setsCurrent()} onPressItem={this.onPressItem}
+          <CardViewerSets onPressCalendar={this.onPressCalendar} addNewClothes={this.addNewClothes} Data={this.setsNames()} DataID={this.setsID()} DataFoto={this.setsPhoto()} DataDetails={this.setsDetails()} DataUsed={this.setsCurrent()} onPressItem={this.onPressItem}
                   Title="Conjuntos" onPressButtonBack={this.onPressBack} headerColor='#4596ab' onPressNew={this.onPressNew}></CardViewerSets>
         </Container>
     );

@@ -91,13 +91,9 @@ export default class CameraView extends React.Component {
 
   toggleView = () => this.props.navigation.goBack();//this.setState({ showGallery: !this.state.showGallery, newPhotos: false });
 
-  toggleMoreOptions = () => this.setState({ showMoreOptions: !this.state.showMoreOptions });
-
   toggleFacing = () => this.setState({ type: this.state.type === 'back' ? 'front' : 'back' });
 
   toggleFlash = () => this.setState({ flash: flashModeOrder[this.state.flash] });
-
-  setRatio = ratio => this.setState({ ratio });
 
   toggleWB = () => this.setState({ whiteBalance: wbOrder[this.state.whiteBalance] });
 
@@ -149,21 +145,6 @@ export default class CameraView extends React.Component {
       this.setState({ pictureSizes, pictureSizeId, pictureSize: pictureSizes[pictureSizeId] });
     }
   };
-
-  previousPictureSize = () => this.changePictureSize(1);
-  nextPictureSize = () => this.changePictureSize(-1);
-
-  changePictureSize = direction => {
-    let newId = this.state.pictureSizeId + direction;
-    const length = this.state.pictureSizes.length;
-    if (newId >= length) {
-      newId = 0;
-    } else if (newId < 0) {
-      newId = length -1;
-    }
-    this.setState({ pictureSize: this.state.pictureSizes[newId], pictureSizeId: newId });
-  }
-
 
   renderFace({ bounds, faceID, rollAngle, yawAngle }) {
     return (
@@ -271,34 +252,6 @@ export default class CameraView extends React.Component {
       </TouchableOpacity>
     </View>
 
-  renderMoreOptions = () =>
-    (
-      <View style={styles.options}>
-        <View style={styles.detectors}>
-          <TouchableOpacity onPress={this.toggleFaceDetection}>
-            <MaterialIcons name="tag-faces" size={32} color={this.state.faceDetecting ? "white" : "#858585" } />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.toggleBarcodeScanning}>
-            <MaterialCommunityIcons name="barcode-scan" size={32} color={this.state.barcodeScanning ? "white" : "#858585" } />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.pictureSizeContainer}>
-          <Text style={styles.pictureQualityLabel}>Picture quality</Text>
-          <View style={styles.pictureSizeChooser}>
-            <TouchableOpacity onPress={this.previousPictureSize} style={{ padding: 6 }}>
-              <Ionicons name="md-arrow-dropleft" size={14} color="white" />
-            </TouchableOpacity>
-            <View style={styles.pictureSizeLabel}>
-              <Text style={{color: 'white'}}>{this.state.pictureSize}</Text>
-            </View>
-            <TouchableOpacity onPress={this.nextPictureSize} style={{ padding: 6 }}>
-              <Ionicons name="md-arrow-dropright" size={14} color="white" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View>
-    );
 
   renderCamera = () =>
     (
@@ -332,7 +285,6 @@ export default class CameraView extends React.Component {
         </Camera>
         {this.state.faceDetecting && this.renderFaces()}
         {this.state.faceDetecting && this.renderLandmarks()}
-        {this.state.showMoreOptions && this.renderMoreOptions()}
       </View>
     );
 
@@ -340,7 +292,7 @@ export default class CameraView extends React.Component {
     const cameraScreenContent = this.state.permissionsGranted
       ? this.renderCamera()
       : this.renderNoPermissions();
-    const content = /*this.state.showGallery ? this.renderGallery() :*/ cameraScreenContent;
+    const content = cameraScreenContent;
     return <View style={styles.container}>{content}</View>;
   }
 }
@@ -362,7 +314,6 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight / 2,
   },
   bottomBar: {
-  //  paddingBottom: isIPhoneX ? 25 : 5,
     backgroundColor: 'transparent',
     alignSelf: 'flex-end',
     justifyContent: 'space-between',
