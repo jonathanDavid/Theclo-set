@@ -38,7 +38,8 @@ export default class AccManagementView extends Component {
   render() {
     return (
       <Container>
-        <Header>
+        <Header style={{backgroundColor: "#003459"}}>
+          <StatusBar backgroundColor={"#003459"} barStyle="light-content"/>
           <Left>
             <Button onPress={this.onButtonBackPress} transparent>
               <Icon name='arrow-back' />

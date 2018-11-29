@@ -87,11 +87,11 @@ export default class SwipeableListView extends Component {
               </ListItem>}
             renderLeftHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressL(secId, rowId, rowMap)}  style={{backgroundColor: this.props.btnLBkgColor}}>
-                <Image source={this.props.UrlImageL} style={{ height: 50, width: 50 }} />
+                <Image source={this.props.UrlImageL} style={{ height: 50, width: 50,resizeMode: 'contain' }} />
               </Button>}
             renderRightHiddenRow={(data, secId, rowId, rowMap) =>
               <Button full onPress={() => this.onPressR(secId, rowId, rowMap)} style={{backgroundColor: this.props.btnRBkgColor}}>
-                <Image source={this.props.UrlImageR} style={{ height: 50, width: 50 }} />
+                <Image source={this.props.UrlImageR} style={{ height: 50, width: 50,resizeMode: 'contain' }} />
               </Button>}
           />
         </Content>
