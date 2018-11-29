@@ -9,7 +9,7 @@ import firebase from 'firebase';
 const infoArray = [
   { title: "Que es Theclo-set?", content: "Una pequeña aplicacion desarrollada para facilitar la organizacion de TU ropa" },
   { title: "Quienes Somos?", content: "Somos estudiantes de la Universidad del Norte, en busqueda de conocimeinto y renombre" },
-  { title: "Github link", content: "https://github.com/Schurches/Theclo-set" }
+  { title: "Github link", content: "https://github.com/jonathanDavid/Theclo-set" }
 ];
 
 export default class AccManagementView extends Component {
@@ -50,23 +50,7 @@ export default class AccManagementView extends Component {
           </Body>
         </Header>
         <Content>
-          <Card>
-            <CardItem header>
-              <Text>Information</Text>
-            </CardItem>
-            <CardItem>
-              <Item>
-               <Icon active name='mail' />
-               <Input value={this.state.email} placeholder="Email" onChangeText={(email) => {this.setState({email: email})}}/>
-              </Item>
-            </CardItem>
-            <CardItem>
-              <Item>
-                <Icon active name='lock' />
-                <Input value={this.state.password} placeholder="Password" onChangeText={(password) => {this.setState({password: password})}}/>
-              </Item>
-            </CardItem>
-          </Card>
+
 
           <Card>
             <CardItem header>

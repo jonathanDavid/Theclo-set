@@ -4,11 +4,13 @@ import {StyleSheet,StatusBar } from 'react-native';
 /*Components*/
 import { Container,Card,Label, Header,Form, Content,Left,Button,Text,CardItem , Item,Body,Title, Input, Icon } from 'native-base';
 import { Spinner } from '../Componentes/Spinner';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {actionsCreator as Actions} from '../Redux/Actions';
 /*Database and Auth*/
 import firebase from 'firebase';
 
-
-export default class CreateAccountView extends Component {
+class CreateAccountView extends Component {
 
   state = {user: '', email: '', password1: '', password2: '', error: '', dbRequest: false}
 
@@ -23,7 +25,7 @@ export default class CreateAccountView extends Component {
 
   onRegisterPress = () => {
     const {user, email, password1, password2} = this.state;
-    const uncatIMG = 'https://firebasestorage.googleapis.com/v0/b/theclosetapp-4962f.appspot.com/o/uncategorized2.png?alt=media&token=548f9262-c3e3-43bf-b55b-522d76af7137';
+    const uncatIMG = 'https://firebasestorage.googleapis.com/v0/b/theclosetapp-4962f.appspot.com/o/uncategorized.png?alt=media&token=0512ffab-a7fc-4e68-8995-7d0b23292679';
     this.setState({dbRequest: true});
     if(password1 === password2){
       if(password1 == ""){
@@ -37,8 +39,11 @@ export default class CreateAccountView extends Component {
             this.setState({error: '', dbRequest: false});
             userReference = firebase.database().ref('Users/');
             pushID = userReference.push().key;
-            userReference.child(loggedUser.uid).set({ id:loggedUser.uid, Categorias: {[pushID]: {Nombre: 'Sin clase', Descripcion: 'Categorias sin clase', id: pushID, Foto:'uncategorized2', FotoURL:uncatIMG} }}).then(()=>{
-              this.props.navigation.navigate("LoginView");
+            userReference.child(loggedUser.uid).set({ id:loggedUser.uid, Categorias: {[pushID]: {Nombre: 'Sin clase', Descripcion: 'Categorias sin clase', id: pushID, Foto:'uncategorized', FotoURL:uncatIMG} }}).then(()=>{
+              firebase.database().ref(`Users/${loggedUser.uid}`).once('value', (dataSnapshot) => {
+                this.props.setState(dataSnapshot.val());
+                this.props.navigation.navigate("LoginView");
+              });
             });
           })
           .catch((error) => {
@@ -108,6 +113,21 @@ export default class CreateAccountView extends Component {
   }
 }
 
+function mapStateToProps(state){
+    const {Categories} = state;
+    return{
+      Categories
+    };
+
+}
+
+function mapDispatchToProps(dispatch){
+  return{
+    setState: bindActionCreators(Actions.setState,dispatch)
+  };
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(CreateAccountView);
 
 const styles = StyleSheet.create({
   buttonLayout:{
