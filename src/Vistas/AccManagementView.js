@@ -50,8 +50,6 @@ export default class AccManagementView extends Component {
           </Body>
         </Header>
         <Content>
-
-
           <Card>
             <CardItem header>
               <Text>FAQ's</Text>
@@ -71,7 +69,6 @@ export default class AccManagementView extends Component {
               </Button>
             </CardItem>
           </Card>
-
         </Content>
       </Container>
     );
