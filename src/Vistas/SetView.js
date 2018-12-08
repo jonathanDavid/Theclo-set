@@ -77,26 +77,6 @@ class SetView extends Component{
   deleteCurrentSet = (setID) => {
     let userID = firebase.auth().currentUser.uid;
     let setsReference = firebase.database().ref(`Users/${userID}/Sets/${setID}`);
-    let registroReference = firebase.database().ref(`Users/${userID}/Registro`);
-    let newRegistro = Object.values(this.props.Registro);
-
-    _.remove(obj.subTopics, function(currentObject) {
-        return ~currentObject.subTopicId === stToDelete;
-    });
-
-
-    console.log(newRegistro)
-    var registro = {};
-    for (var i=0; i<newRegistro.length; i++) {
-      registro[newRegistro[i].id] = {Date: newRegistro[i].Date, SetID: newRegistro[i].SetID, id: newRegistro[i].id};
-    }
-    console.log(registro)
-    registroReference.set(registro).then(()=>{
-      registroReference.once('value', (dataSnapshot) => {
-        this.props.refreshLog(dataSnapshot.val());
-      })
-    });
-
     setsReference.remove().then(()=>{
        firebase.database().ref(`Users/${userID}/Sets/`).once('value',(dataSnapshot)=>{
        this.props.refreshSets(dataSnapshot.val());
@@ -129,14 +109,12 @@ class SetView extends Component{
 
     setsReference.on('value',(dataSnapshot) => {
       let currentSet = dataSnapshot.val();
-      if(currentSet){
-        _.forEach(currentSet.Prendas, (prendaID) => {
-          prendaReference.child(`${prendaID}/Estado`).set(STATUS_LAUNDRY);
-        })
-        firebase.database().ref(`Users/${userID}/Prendas/`).once('value',(dataSnapshot)=>{
-            this.props.refreshPrendas(dataSnapshot.val());
-        })
-      }
+      _.forEach(currentSet.Prendas, (prendaID) => {
+        prendaReference.child(`${prendaID}/Estado`).set(STATUS_LAUNDRY);
+      })
+      firebase.database().ref(`Users/${userID}/Prendas/`).once('value',(dataSnapshot)=>{
+          this.props.refreshPrendas(dataSnapshot.val());
+      })
     })
 
     let sets = Object.values(this.props.Sets)
