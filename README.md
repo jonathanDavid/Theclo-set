@@ -8,7 +8,7 @@ Go to the root folder by using:
 > cd theclo-set
 
 Install node modules:
-> npm i.
+> npm i
 
 **Note**: this project use expo cli, so you should have it already installed on your system, if you have not, then run:
 > npm install -g expo-cli
