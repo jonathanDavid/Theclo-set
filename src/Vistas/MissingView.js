@@ -60,7 +60,7 @@ class MissingView extends Component{
           UrlImageR={require("./images/closet_icon.png")}
           onSwipeL={this.onSwipeL} onSwipeR={this.onSwipeR}
           onPressButtonBack={this.onPressBack} listViewData={this.loadPrendas()}
-          btnRBkgColor='#6432c8' btnLBkgColor='#0b6623' headerColor='#be1e2d' Title={"Missing"}></SwipeableListView>
+          btnRBkgColor='#6432c8' btnLBkgColor='#0b6623' headerColor='#be1e2d' Title={"Perdido"}></SwipeableListView>
       </Container>
     );
   }

@@ -69,13 +69,13 @@ import firebase from 'firebase'
               <View style={styles.s317ff90f}>
                 <TouchableOpacity onPress={this.onPressLaundry}>
                   <Image source={require("./images/laundry_icon.png")} style={styles.sfc68a166} />
-                  <Text style={styles.sedb32a67}>LAUNDRY</Text>
+                  <Text style={styles.sedb32a67}>LAVANDERIA</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.s444f37d1}>
                 <TouchableOpacity onPress={this.onPressMissing}>
                   <Image source={require("./images/socks_icon.png")} style={styles.sc36b1c8e} />
-                  <Text style={styles.s8c9efc64}>MISSING</Text>
+                  <Text style={styles.s8c9efc64}>PERDIDO</Text>
                 </TouchableOpacity>
               </View>
             </View>
